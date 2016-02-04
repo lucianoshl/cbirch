@@ -1,0 +1,29 @@
+<html>
+	<style>
+		.results li { display: inline-block; }
+		.results li div { width: 200px; height: 200px; background-size: 100%;  }
+		.query { width: 200px; height: 200px; background-size: 100%;  }
+		.hits { background-color: white; font-weight: bold;}
+	</style>
+	<body>
+		{{#each this}}
+		<div>
+			{{#with query}}
+			<div style="background:url('{{image}}');  background-size: cover; " class="query"> 
+			<span class="hits">query</span>
+			</div> <br>
+			{{/with}}
+			<ul class="results">
+			{{#each queryResult}}
+				<li>
+					<div style="background:url('{{image.image}}');  background-size: cover; "> 
+					<span class="hits">Hits: {{hits}}</span>
+					</div>
+				</li>
+			{{/each}}
+			</ul>
+		</div>
+		<hr>
+		{{/each}}
+	</body>
+</html>
