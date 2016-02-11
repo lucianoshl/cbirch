@@ -43,6 +43,22 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.4.0</version>
+				<configuration>
+					<executable>java</executable>
+					<arguments>
+						<argument>-Xmx4096m</argument>
+						<argument>-javaagent:/home/lucianos/birch-experiment/src/main/resources/SizeOf.jar</argument>
+						<argument>-classpath</argument>
+						<classpath />
+						<argument>br.edu.ufu.comp.pos.db.imageretrieval.Launcher</argument>
+					</arguments>
+				</configuration>
+			</plugin>
 		</plugins>
+
 	</build>
 </project>

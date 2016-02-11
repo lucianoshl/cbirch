@@ -646,11 +646,11 @@ public class CFNode {
 		return buff.toString();
 	}
 
-	public CFEntry findCloserCluster(CFEntry fakeEntry) {
+	public CFEntry findClosestCluster(CFEntry fakeEntry) {
 		CFEntry closest = findClosestEntry(fakeEntry);
 
 		if (closest.hasChild()) {
-			return closest.getChild().findCloserCluster(fakeEntry);
+			return closest.getChild().findClosestCluster(fakeEntry);
 		} else {
 			return closest;
 		}

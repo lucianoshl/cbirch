@@ -179,6 +179,19 @@ public class CFTree extends IndexedTree {
 	public void setMemoryLimitMB(long limit) {
 		this.memLimit = limit * 1024 * 1024;
 	}
+	
+
+
+	/**
+	 * 
+	 * @param limit
+	 *            memory limit in Gbytes
+	 */
+	public void setMemoryLimitGB(long limit) {
+		this.memLimit = limit * 1024 * 1024 * 1024;
+	}
+	
+	
 
 	/**
 	 * 
@@ -285,25 +298,28 @@ public class CFTree extends IndexedTree {
 	 */
 	private boolean rebuildIfAboveMemLimit() {
 		if (hasReachedMemoryLimit(this, memLimit)) {
-			// System.out.println("############## Size of Tree is reaching or
-			// has exceeded the memory limit");
-			// System.out.println("############## Rebuilding the Tree...");
-
-			// System.out.println("############## Current Threshold = " +
-			// root.getDistThreshold());
-			double newThreshold = computeNewThreshold(leafListStart, root.getDistFunction(),
-					root.getDistThreshold());
-			// System.out.println("############## New Threshold = " +
-			// newThreshold);
-
-			CFTree newTree = this.rebuildTree(root.getMaxNodeEntries(), newThreshold,
-					root.getDistFunction(), root.applyMergingRefinement(), false);
-			copyTree(newTree);
-
+			rebuildTree();
 			return true;
 		}
 
 		return false;
+	}
+
+	public void rebuildTree() {
+		// System.out.println("############## Size of Tree is reaching or
+		// has exceeded the memory limit");
+		// System.out.println("############## Rebuilding the Tree...");
+
+		// System.out.println("############## Current Threshold = " +
+		// root.getDistThreshold());
+		double newThreshold = computeNewThreshold(leafListStart, root.getDistFunction(),
+				root.getDistThreshold());
+		// System.out.println("############## New Threshold = " +
+		// newThreshold);
+
+		CFTree newTree = this.rebuildTree(root.getMaxNodeEntries(), newThreshold,
+				root.getDistFunction(), root.applyMergingRefinement(), false);
+		copyTree(newTree);
 	}
 
 	/**
@@ -714,17 +730,16 @@ public class CFTree extends IndexedTree {
 	}
 
 	public void index(Image img) {
-		img.scan((sift) -> putInIndex(findLeaf(sift), img));
+		img.scan((sift) -> putInIndex(findClosestCluster(sift), img));
 	}
 
-	private CFEntry findLeaf(double[] sift) {
-		CFEntry result = this.root.findCloserCluster(new CFEntry(sift));
-		return result;
+	private CFEntry findClosestCluster(double[] sift) {
+		return this.root.findClosestCluster(new CFEntry(sift));
 	}
 
 	public List<ImageHits> queryImage(Image image) {
 		ImageCounter counter = new ImageCounter();
-		image.scan((sift) -> counter.count(getOcurrencesInIndex(findLeaf(sift))));
+		image.scan((sift) -> counter.count(getImagesInLeaf(findClosestCluster(sift))));
 		return counter.rank();
 	}
 

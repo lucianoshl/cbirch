@@ -21,7 +21,7 @@ public class IndexedTree {
 		set.add(img);
 	}
 	
-	protected Set<Image> getOcurrencesInIndex(CFEntry leaf){
+	protected Set<Image> getImagesInLeaf(CFEntry leaf){
 		return this.index.get(leaf);
 	}
 
