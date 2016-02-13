@@ -49,35 +49,34 @@ public class Launcher {
 		ResultReport result = new ResultReport();
 		result.setStartAt(new Date());
 
-		Dataset dataset = new Dataset(datasetsFolder,datasetName);
+		Dataset dataset = new Dataset(datasetsFolder, datasetName);
 
 		CFTree tree = new CFTree(b, t, 1, true);
-		tree.setPeriodicMemLimitCheck(1000000);
+		tree.setPeriodicMemLimitCheck(50000);
 		tree.setAutomaticRebuild(true);
 		tree.setMemoryLimitMB(memory);
 
-		result.benchmark("Building tree",() -> {
+		result.benchmark("Building tree", () -> {
 			dataset.scanSifts((sift) -> tree.insertEntry(sift));
 		});
-		
 
-		result.benchmark("Rebuild tree twice",() -> {
+		result.benchmark("Rebuild tree twice", () -> {
 			tree.rebuildTree();
 			tree.rebuildTree();
 		});
 
-		result.benchmark("Building image index in tree",() -> {
+		result.benchmark("Building image index in tree", () -> {
 			dataset.scan((img) -> tree.index(img));
 		});
-		
+
 		List<QueryResult> queryResults = new ArrayList<QueryResult>();
-		result.benchmark("Query images in tree",() -> {
+		result.benchmark("Query images in tree", () -> {
 			dataset.scan((queryImage) -> {
 				List<ImageHits> queryResult = tree.queryImage(queryImage);
 				queryResults.add(new QueryResult(queryImage, queryResult));
 			});
 		});
-		
+
 		result.setBranchingFactor(b);
 		result.setThreshold(t);
 		result.setMemory(tree.getMemoryLimit());
@@ -92,45 +91,41 @@ public class Launcher {
 		String fileName = dateFormat.format(new Date());
 		File outJsonFile = generateJsonFile(result, resultFolderPath, fileName);
 		File outHtmlFile = createHtmlFile(resultFolderPath, fileName, outJsonFile);
-		
+
 		System.out.println("saved in");
 		System.out.println(outHtmlFile);
 	}
 
 	private static File createHtmlFile(String resultFolderPath, String fileName, File outJsonFile) throws IOException {
-		File outHtmlFile = new File(resultFolderPath,fileName + ".html");
-		
-		Map<String, String> map = new HashMap<String,String>();
+		File outHtmlFile = new File(resultFolderPath, fileName + ".html");
+
+		Map<String, String> map = new HashMap<String, String>();
 		map.put("libsPath", Launcher.class.getClassLoader().getResource("templates/libs").getFile());
 		map.put("jsonName", outJsonFile.getAbsolutePath());
-		
+
 		Handlebars handlebars = new Handlebars();
 		handlebars.setStartDelimiter("<%");
 		handlebars.setEndDelimiter("%>");
-		
-		  Context context = Context
-				    .newBuilder(map)
-				    .resolver(MapValueResolver.INSTANCE)
-				    .build();
-		
+
+		Context context = Context.newBuilder(map).resolver(MapValueResolver.INSTANCE).build();
+
 		Template template = handlebars
 				.compileInline(IOUtils.toString(Launcher.class.getClassLoader().getResource("templates/results.html")));
-		FileUtils.writeStringToFile(outHtmlFile,
-				template.apply(context));
-		
+		FileUtils.writeStringToFile(outHtmlFile, template.apply(context));
+
 		template.apply(context);
-		
+
 		return outHtmlFile;
 	}
 
 	private static File generateJsonFile(ResultReport result, String resultFolderPath, String fileName)
 			throws IOException {
-		File jsonFolder = new File(resultFolderPath,"json");
-		if (!jsonFolder.exists()){
+		File jsonFolder = new File(resultFolderPath, "json");
+		if (!jsonFolder.exists()) {
 			jsonFolder.mkdir();
 		}
-		File outJsonFile = new File(jsonFolder,fileName + ".json");
-		
+		File outJsonFile = new File(jsonFolder, fileName + ".json");
+
 		Handlebars handlebars = new Handlebars();
 		Template template = handlebars
 				.compileInline(IOUtils.toString(Launcher.class.getClassLoader().getResource("templates/results.js")));

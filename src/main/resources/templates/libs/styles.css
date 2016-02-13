@@ -88,13 +88,18 @@ body {
 }
 
 .img-small {
-	width: 100px;
+	width: 125px;
 	margin: 5px;
 	vertical-align: top;
 }
 
 .img-selected {
 	border: 3px red dotted;
+}
+
+.img-listing {
+	overflow-y: auto;
+    height: 460px;
 }
 
 .img-listing > div {
