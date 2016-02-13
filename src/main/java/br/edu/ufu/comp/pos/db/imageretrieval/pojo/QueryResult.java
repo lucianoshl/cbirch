@@ -4,15 +4,15 @@ import java.util.List;
 
 public class QueryResult {
 
-	private final Image query;
+	private final int query;
 	private final List<ImageHits> queryResult;
 
 	public QueryResult(Image queryImage, List<ImageHits> queryResult) {
-		this.query = queryImage;
+		this.query = queryImage.getId();
 		this.queryResult = queryResult;
 	}
 
-	public Image getQuery() {
+	public int getQuery() {
 		return query;
 	}
 

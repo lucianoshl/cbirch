@@ -3,10 +3,10 @@ package br.edu.ufu.comp.pos.db.imageretrieval.pojo;
 public class ImageHits {
 
 	private final Integer hits;
-	private final Image image;
+	private final int image;
 
 	public ImageHits(Image image, Integer hits) {
-		this.image = image;
+		this.image = image.getId();
 		this.hits = hits;
 	}
 
@@ -14,8 +14,9 @@ public class ImageHits {
 		return hits;
 	}
 
-	public Image getImage() {
+	public int getImage() {
 		return image;
 	}
 
+	
 }

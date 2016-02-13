@@ -8,7 +8,9 @@ import java.util.function.Consumer;
 public class Image {
 
 	private int id;
+	
 	private File image;
+	
 	private File sift;
 
 	public Image(int id, File image, File sift) {

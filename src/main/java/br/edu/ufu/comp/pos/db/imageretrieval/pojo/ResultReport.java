@@ -21,9 +21,13 @@ public class ResultReport {
 
 	private long memory;
 	
-	private Map<String, Long> benchmarks = new HashMap<String, Long>();
-
 	private List<QueryResult> queryResults;
+	
+	private Map<String, Long> benchmarks = new HashMap<String, Long>();
+	
+	private Map<Integer,String> images = new HashMap<Integer, String>();
+	
+	private String datasetBasePath;
 
 	public void benchmark(String label,Mapper a){
 		System.out.println("Start:" + label);
@@ -33,6 +37,19 @@ public class ResultReport {
 		clock.stop();
 		this.benchmarks.put(label, clock.getTime());
 		System.out.println("Stop:" + label);
+	}
+	
+	public void addImage(Image img){
+		this.images.put(img.getId(), img.getImage().getName());
+	}
+
+
+	public String getDatasetBasePath() {
+		return datasetBasePath;
+	}
+
+	public void setDatasetBasePath(String datasetBasePath) {
+		this.datasetBasePath = datasetBasePath;
 	}
 
 	public Date getStartAt() {

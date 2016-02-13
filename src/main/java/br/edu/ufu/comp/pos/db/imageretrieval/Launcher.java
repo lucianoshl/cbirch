@@ -72,6 +72,7 @@ public class Launcher {
 		List<QueryResult> queryResults = new ArrayList<QueryResult>();
 		result.benchmark("Query images in tree", () -> {
 			dataset.scan((queryImage) -> {
+				result.addImage(queryImage);
 				List<ImageHits> queryResult = tree.queryImage(queryImage);
 				queryResults.add(new QueryResult(queryImage, queryResult));
 			});
@@ -82,6 +83,7 @@ public class Launcher {
 		result.setMemory(tree.getMemoryLimit());
 		result.setQueryResults(queryResults);
 		result.setFinalThreshold(tree.getThreshold());
+		result.setDatasetBasePath(dataset.getDatasetPath());
 
 		saveReport(result, dataset.getResultFolder());
 	}
@@ -94,6 +96,7 @@ public class Launcher {
 
 		System.out.println("saved in");
 		System.out.println(outHtmlFile);
+		System.out.println(outJsonFile);
 	}
 
 	private static File createHtmlFile(String resultFolderPath, String fileName, File outJsonFile) throws IOException {
