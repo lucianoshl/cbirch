@@ -122,13 +122,11 @@ public class CFTree extends IndexedTree {
 	 * @param applyMergingRefinement
 	 *            if true, activates merging refinement after each node split
 	 */
-	public CFTree(int maxNodeEntries, double distThreshold, int distFunction,
-			boolean applyMergingRefinement) {
+	public CFTree(int maxNodeEntries, double distThreshold, int distFunction, boolean applyMergingRefinement) {
 		if (distFunction < D0_DIST || distFunction > D4_DIST)
 			distFunction = D0_DIST;
 
-		root = new CFNode(maxNodeEntries, distThreshold, distFunction, applyMergingRefinement,
-				true);
+		root = new CFNode(maxNodeEntries, distThreshold, distFunction, applyMergingRefinement, true);
 		leafListStart = new CFNode(0, 0, distFunction, applyMergingRefinement, true); // this
 																						// is
 																						// a
@@ -179,8 +177,6 @@ public class CFTree extends IndexedTree {
 	public void setMemoryLimitMB(long limit) {
 		this.memLimit = limit * 1024 * 1024;
 	}
-	
-
 
 	/**
 	 * 
@@ -190,8 +186,6 @@ public class CFTree extends IndexedTree {
 	public void setMemoryLimitGB(long limit) {
 		this.memLimit = limit * 1024 * 1024 * 1024;
 	}
-	
-	
 
 	/**
 	 * 
@@ -306,19 +300,17 @@ public class CFTree extends IndexedTree {
 	}
 
 	public void rebuildTree() {
-		// System.out.println("############## Size of Tree is reaching or
-		// has exceeded the memory limit");
-		// System.out.println("############## Rebuilding the Tree...");
+		System.out.println("############## Size of Tree is reaching or has exceeded the memory limit");
+		System.out.println("############## Rebuilding the Tree...");
 
-		// System.out.println("############## Current Threshold = " +
-		// root.getDistThreshold());
-		double newThreshold = computeNewThreshold(leafListStart, root.getDistFunction(),
-				root.getDistThreshold());
-		// System.out.println("############## New Threshold = " +
-		// newThreshold);
+		System.out.println("############## Current Threshold = " + root.getDistThreshold());
+		double newThreshold = computeNewThreshold(leafListStart, root.getDistFunction(), root.getDistThreshold());
+		System.out.println("############## New Threshold = " + newThreshold);
 
-		CFTree newTree = this.rebuildTree(root.getMaxNodeEntries(), newThreshold,
-				root.getDistFunction(), root.applyMergingRefinement(), false);
+		CFTree newTree = this.rebuildTree(root.getMaxNodeEntries(), newThreshold, root.getDistFunction(),
+				root.applyMergingRefinement(), false);
+
+		System.out.println("#################### new Tree Size = " + SizeOf.humanReadable(computeMemorySize(newTree)));
 		copyTree(newTree);
 	}
 
@@ -335,18 +327,18 @@ public class CFTree extends IndexedTree {
 		CFEntryPair p = root.findFarthestEntryPair(root.getEntries());
 
 		CFEntry newEntry1 = new CFEntry();
-		CFNode newNode1 = new CFNode(root.getMaxNodeEntries(), root.getDistThreshold(),
-				root.getDistFunction(), root.applyMergingRefinement(), root.isLeaf());
+		CFNode newNode1 = new CFNode(root.getMaxNodeEntries(), root.getDistThreshold(), root.getDistFunction(),
+				root.applyMergingRefinement(), root.isLeaf());
 		newEntry1.setChild(newNode1);
 
 		CFEntry newEntry2 = new CFEntry();
-		CFNode newNode2 = new CFNode(root.getMaxNodeEntries(), root.getDistThreshold(),
-				root.getDistFunction(), root.applyMergingRefinement(), root.isLeaf());
+		CFNode newNode2 = new CFNode(root.getMaxNodeEntries(), root.getDistThreshold(), root.getDistFunction(),
+				root.applyMergingRefinement(), root.isLeaf());
 		newEntry2.setChild(newNode2);
 
 		// the new root that hosts the new entries
-		CFNode newRoot = new CFNode(root.getMaxNodeEntries(), root.getDistThreshold(),
-				root.getDistFunction(), root.applyMergingRefinement(), false);
+		CFNode newRoot = new CFNode(root.getMaxNodeEntries(), root.getDistThreshold(), root.getDistFunction(),
+				root.applyMergingRefinement(), false);
 		newRoot.addToEntryList(newEntry1);
 		newRoot.addToEntryList(newEntry2);
 
@@ -394,8 +386,7 @@ public class CFTree extends IndexedTree {
 	 * @param currentThreshold
 	 * @return the new threshold
 	 */
-	public double computeNewThreshold(CFNode leafListStart, int distFunction,
-			double currentThreshold) {
+	public double computeNewThreshold(CFNode leafListStart, int distFunction, double currentThreshold) {
 		double avgDist = 0;
 		int n = 0;
 
@@ -445,8 +436,7 @@ public class CFTree extends IndexedTree {
 	private boolean hasReachedMemoryLimit(CFTree tree, long limit) {
 		long memory = computeMemorySize(tree);
 
-		// System.out.println("#################### Tree Size = " +
-		// SizeOf.humanReadable(memory));
+		System.out.println("#################### Tree Size = " + SizeOf.humanReadable(memory));
 		if (memory >= (limit - limit / (double) MEM_LIM_FRAC)) {
 			return true;
 		}
@@ -506,10 +496,9 @@ public class CFTree extends IndexedTree {
 	 * 
 	 * @return the new (usually more compact) CFTree
 	 */
-	public CFTree rebuildTree(int newMaxEntries, double newThreshold, int distFunction,
-			boolean applyMergingRefinement, boolean discardOldTree) {
-		CFTree newTree = new CFTree(newMaxEntries, newThreshold, distFunction,
-				applyMergingRefinement);
+	public CFTree rebuildTree(int newMaxEntries, double newThreshold, int distFunction, boolean applyMergingRefinement,
+			boolean discardOldTree) {
+		CFTree newTree = new CFTree(newMaxEntries, newThreshold, distFunction, applyMergingRefinement);
 		newTree.instanceIndex = this.instanceIndex;
 		newTree.memLimit = this.memLimit;
 
@@ -741,6 +730,10 @@ public class CFTree extends IndexedTree {
 		ImageCounter counter = new ImageCounter();
 		image.scan((sift) -> counter.count(getImagesInLeaf(findClosestCluster(sift))));
 		return counter.rank();
+	}
+	
+	public double getThreshold(){
+		return this.root.getDistThreshold();
 	}
 
 }

@@ -5,10 +5,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 import org.apache.commons.io.FileUtils;
 
-public class Oxford {
+import br.edu.ufu.comp.pos.db.imageretrieval.pojo.Image;
+
+public class Oxford extends Dataset {
 	private File binaryFile;
 	private File imageFolder;
 	private File outputFolder;
@@ -17,54 +20,81 @@ public class Oxford {
 
 	public static void main(String[] args) throws IOException {
 
-		Oxford dataset = new Oxford(
-				"/home/lucianos/birch-experiment/datasets/raw/oxford/feat_oxc1_hesaff_sift.bin",
-				"/home/lucianos/birch-experiment/datasets/raw/oxford/word_oxc1_hesaff_sift_16M_1M",
-				"/home/lucianos/birch-experiment/datasets/raw/oxford/images",
-				"/home/lucianos/birch-experiment/datasets/raw/oxford/README2.txt",
-				"/home/lucianos/birch-experiment/datasets/formated/oxford");
-
-		dataset.process();
+		createFromBase("/home/void/workspace/birch-experiment/datasets").process();
 
 	}
 
-	public Oxford(String binaryFile, String rangeSwiftInBinary, String imagesFolderPath,
-			String orderInBinaryFile, String outputFolderPath) {
+	private static Oxford createFromBase(String projectBase) {
+		return new Oxford( //
+				projectBase + "/raw/oxford/feat_oxc1_hesaff_sift.bin", //
+				projectBase + "/raw/oxford/word_oxc1_hesaff_sift_16M_1M", //
+				projectBase + "/raw/oxford/images", //
+				projectBase + "/raw/oxford/README2.txt", //
+				projectBase + "/formated/oxford");
+	}
+
+	public Oxford(String binaryFile, String siftSizeFolderDescriptor, String imagesFolderPath, String orderInBinaryFile,
+			String outputFolderPath) {
+		super(null,null);
 		this.binaryFile = new File(binaryFile);
-		this.rangeSwiftInBinary = new File(rangeSwiftInBinary);
+		this.rangeSwiftInBinary = new File(siftSizeFolderDescriptor);
 		this.imageFolder = new File(imagesFolderPath);
 		this.orderInBinaryFile = new File(orderInBinaryFile);
 		this.outputFolder = new File(outputFolderPath);
 	}
 
+	@Override
+	public void scan(Consumer<Image> c) {
+		try {
+			FileInputStream binFileReader = new FileInputStream(binaryFile);
+
+			Scanner fileOrder = new Scanner(orderInBinaryFile);
+			int id = 0;
+			while (fileOrder.hasNext()) {
+				String orderElement = fileOrder.next();
+				String imageName = orderElement.replace("oxc1_", "");
+				String imageFileName = imageName + ".jpg";
+				byte[] buffer = readFromBinary(binFileReader, orderElement + ".txt");
+				File imgOrigin = new File(imageFolder, imageFileName);
+				File siftTmpFile = File.createTempFile(imageFileName, ".sift");
+				FileUtils.writeByteArrayToFile(siftTmpFile, buffer);
+
+				c.accept(new Image(id, imgOrigin, siftTmpFile));
+				id++;
+			}
+			fileOrder.close();
+			binFileReader.close();
+		} catch (Exception e) {
+			throw new IllegalStateException(e);
+		}
+
+	}
+
+	private byte[] readFromBinary(FileInputStream binFileReader, String siftMetadataFilePath) throws IOException {
+		Integer swiftsTotal = readSwiftsNumber(new File(rangeSwiftInBinary, siftMetadataFilePath));
+		byte[] buffer = new byte[swiftsTotal * 128];
+		binFileReader.read(buffer);
+		return buffer;
+	}
+
 	public void process() throws IOException {
 
-		FileInputStream binFileReader = new FileInputStream(binaryFile);
+		this.scan((img -> {
 
-		Scanner fileOrder = new Scanner(orderInBinaryFile);
-		int totalSift = 0; 
-		while (fileOrder.hasNext()) {
-			String element = fileOrder.next();
-			String imageName = element.replace("oxc1_", "");
-			String imageFileName = imageName + ".jpg";
-			String siftMetadata = element + ".txt";
-			String siftFileName = imageName + ".sift";
-			Integer swiftsTotal = readSwiftsNumber(new File(rangeSwiftInBinary, siftMetadata));
-			totalSift += swiftsTotal;
-			byte[] buffer = new byte[swiftsTotal * 128];
-			binFileReader.read(buffer);
+			String imageFileName = String.format("%05d", img.getId()) + "_" + img.getImage().getName();
+			String siftFileName = imageFileName.replace(".jpg", "") + ".sift";
 
 			File imgOutput = new File(outputFolder, imageFileName);
-			File imgOrigin = new File(imageFolder, imageFileName);
-			FileUtils.copyFile(imgOrigin, imgOutput);
+			File siftOutput = new File(outputFolder, siftFileName);
 
-			File siftFile = new File(outputFolder, siftFileName);
-			FileUtils.writeByteArrayToFile(siftFile, buffer);
+			try {
+				FileUtils.copyFile(img.getImage(), imgOutput);
+				FileUtils.copyFile(img.getSift(), siftOutput);
+			} catch (Exception e) {
+				throw new IllegalStateException(e);
+			}
 
-		}
-		FileUtils.write(new File(outputFolder,"total"), String.valueOf(totalSift));
-		fileOrder.close();
-		binFileReader.close();
+		}));
 
 	}
 

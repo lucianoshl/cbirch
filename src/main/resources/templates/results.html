@@ -1,79 +1,113 @@
-<!doctype html>
-	<html ng-app="birch">
-	<head>
-		<script src="http://zeptojs.com/zepto.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
-		<script type="text/javascript">
 
-		angular.module('birch', [])
-		.controller('ResultsCtrl', function($scope) {
-			$scope.selected = null;
-			$scope.select = function(el){
-				if ($scope.selected == el){
-					$scope.selected = null;
-				} else {
-					$scope.selected = el;	
-				}
-			};
-			$scope.results = [
-				<%#each this%>
-				{
-					<%#with query%>
-					query : '<%image%>',
-					rank : [
-						<%#each queryResult%>
-						{
-							image : '<%image.image%>',
-							hits: <%hits%>
-						},
-						<%/each%>
-					]
-					<%/with%>
-				},
-				<%/each%>
-			];
+<!DOCTYPE html>
+<html lang="en" ng-app="birch">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-			$scope.test = "test";
-		});
+  <title>birch-experiment</title>
 
-</script>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-<style type="text/css">
-	ul { list-style: none}
-	.border { border: 1px solid black; padding: 20px; }
-	/*.img-small { width: 50px; height: 50px; border: 1px solid black}*/
+  <script src="<%jsonName%>"></script>
+  <script src="<%libsPath%>/zepto.min.js"></script>
+  <script src="<%libsPath%>/angular.min.js"></script>
+  <script src="<%libsPath%>/scripts.js"></script>
 
-	.img-small { width: 75px; height: 75px; border: 1px solid black}
-	.img { width: 100px; height: 100px; border: 1px solid black}
+  <link rel="stylesheet" href="<%libsPath%>/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="<%libsPath%>/styles.css"/>
+</head>
 
-	.listing { overflow-y: scroll; height: 300px}
-	.listing > li { display: inline-block; padding:5px; }
-	.rank > li { display: inline-block; padding:10px; }
-	.hits { font-family: verdana; font-size: 15px; font-weight: bold; color: white; background-color: black;}
-	.jumbotron { padding: 20px; }
-</style>
-	</head>
-<body ng-controller="ResultsCtrl">
+<body>
 
-	<ul ng-if="selected" class="rank jumbotron" > 
-		<li>
-			<div style="background:url('{{selected.query}}'); background-size: cover;" class="img"  ng-click="select(result)">
-				<span class="hits">query</span>
-			</div>
-		</li>
-		<li ng-repeat="rankElement in selected.rank | limitTo:19">
-			<div style="background:url('{{rankElement.image}}'); background-size: cover;" class="img">
-				<span class="hits">{{rankElement.hits}}</span>
-			</div>
-		</li>
-	</ul>
+  <div class="container-fluid" ng-controller="MainCtrl">
+    <div class="header clearfix">
+      <nav>
+        <ul class="nav nav-pills pull-right">
+          <li role="presentation" ng-repeat="tab in tabs" ng-class="{active: tabActive == tab}" ng-click="active(tab)">
+            <a href="#">{{tab}}</a>
+          </li>
+        </ul>
+      </nav>
+      <h3 class="text-muted">birch-experiment</h3>
+    </div>
+
+    <div class="row" ng-if="tabActive == 'results'" ng-controller="ResultsCtrl">
+      <div class="col-lg-8 img-listing">
+        <h4>Dataset</h4>
+        <div ng-repeat="qResult in results.queryResults" class="img-small">
+          <img
+          src="{{qResult.query.image.path}}"
+          title="{{qResult.query.image.path}}"
+          class="img-rounded img-responsive"
+          ng-class="{'img-selected': qResult == selected}"
+          ng-dblclick="openImage(qResult.query.image.path)"
+          ng-click="select(qResult)"/>
+        </div>
+      </div>
+
+      <div class="col-lg-4 img-listing">
+        <h4>Query Results</h4>
+        <div ng-repeat="qResult in selected.queryResult" class="img-small">
+          <span class="label label-default pull-left">R: {{$index}}</span>
+          <span class="label label-default pull-right">H: {{qResult.hits}}</span>
+          <img
+          src="{{qResult.image.image.path}}"
+          title="{{qResult.image.image.path}}"
+          class="img-rounded img-responsive"
+          ng-dblclick="openImage(qResult.image.image.path)"/>
+        </div>
+      </div>
+    </div>
+
+    <div ng-if="tabActive == 'runtime'">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>description</th> <th>time spent (s)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="(name,time) in results.benchmarks">
+            <td>{{name}}</td> <td>{{time/1000}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div ng-if="tabActive == 'parameters'">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>description</th> <th>value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>branchingFactor</td> <td>{{results['branchingFactor']}}</td>
+          </tr>
+          <tr>
+            <td>threshold</td> <td>{{results['threshold']}}</td>
+          </tr>
+          <tr>
+            <td>finalThreshold</td> <td>{{results['finalThreshold']}}</td>
+          </tr>
+          <tr>
+            <td>memory</td> <td>{{results['memory']/1024/1024}} MB</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
 
-	<ul class="listing" >
-		<li ng-repeat="result in results">
-			<div style="background:url('{{result.query}}'); background-size: cover;" class="img-small"  ng-click="select(result)">
-			</div>
-		</li>
-	</ul>
+
+    <footer class="footer">
+      <p>Universidade Federal de Uberlândia</p>
+    </footer>
+
+  </div> <!-- /container -->
+
+
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
 </html>

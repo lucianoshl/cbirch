@@ -110,6 +110,7 @@ public class CFEntry {
 		return subclusterID;
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected void update(CFEntry e) {
 		this.n += e.n;
 		

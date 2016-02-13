@@ -1,0 +1,3 @@
+to launch
+
+mvn exec:exec -DbranchingFactor=100 -Dthreshold=1 -Dmemory=512 -DdsWorkspace=$HOME/workspace/birch-experiment/datasets -Dds=oxford-trinity-20

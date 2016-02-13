@@ -46,15 +46,28 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.4.0</version>
+				<version>1.2.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>java</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
 					<executable>java</executable>
+					<workingDirectory>target/classes</workingDirectory>
 					<arguments>
-						<argument>-Xmx4096m</argument>
-						<argument>-javaagent:/home/lucianos/birch-experiment/src/main/resources/SizeOf.jar</argument>
+						<argument>-Xmx5120m</argument>
+						<argument>-javaagent:${project.build.directory}/classes/SizeOf.jar</argument>
 						<argument>-classpath</argument>
-						<classpath />
+						<classpath/>
 						<argument>br.edu.ufu.comp.pos.db.imageretrieval.Launcher</argument>
+						<argument>${branchingFactor}</argument>
+						<argument>${threshold}</argument>
+						<argument>${memory}</argument>
+						<argument>${dsWorkspace}</argument>
+						<argument>${ds}</argument>
 					</arguments>
 				</configuration>
 			</plugin>

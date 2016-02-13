@@ -19,9 +19,12 @@ import java.util.Set;
  * @see java#lang#instrument#Instrument
  * @version 0.5
  */
+//@SuppressWarnings({"rawtypes","unused"})
 public class SizeOf
 {
 	private static OutputStream out = System.out;
+//	private static int modifier = System.getProperty("os.arch").contains("amd64") ? 2 : 1;
+	private static int modifier = 1;
 	
 	/**
 	 * Instance of java.lang.instrument.Instrument injected by the Java VM 
@@ -53,10 +56,11 @@ public class SizeOf
 	{
 		if (inst == null)
 			throw new IllegalStateException("Instrumentation is null");
-		return inst.getObjectSize(object);
+		
+		return inst.getObjectSize(object) * modifier;
 	}
 
-	private static String[] unit = { "b", "Kb", "Mb" };
+	private static String[] unit = { "b", "Kb", "Mb", "Gb" };
 
 	/**
 	 * Format size in a human readable format
@@ -69,7 +73,7 @@ public class SizeOf
 	{
 		int i;
 		double dSize = size;//new Double(size);
-		for (i = 0; i < 3; ++i)
+		for (i = 0; i < 4; ++i)
 		{
 			if (dSize < 1024)
 				break;
@@ -121,7 +125,6 @@ public class SizeOf
 		else {
 
 			Field[] fields = o.getClass().getDeclaredFields();
-
 			for (Field f : fields)
 			{
 				f.setAccessible(true);
@@ -134,7 +137,7 @@ public class SizeOf
 		return size;
 	}
 	
-	private static boolean isAPrimitiveType(Class c)
+	private static boolean isAPrimitiveType( Class c)
 	{
 		 if (c==java.lang.Boolean.TYPE) return true;
 

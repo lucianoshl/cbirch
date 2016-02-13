@@ -573,9 +573,9 @@ public class CFNode {
 	 * @param n
 	 *            the node from which entries are copied
 	 */
-	private void replaceEntries(CFNode n) {
-		this.entries = n.entries;
-	}
+//	private void replaceEntries(CFNode n) {
+//		this.entries = n.entries;
+//	}
 
 	private void resetEntries() {
 		this.entries = new ArrayList<CFEntry>();
