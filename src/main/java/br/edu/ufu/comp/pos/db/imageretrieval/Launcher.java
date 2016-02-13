@@ -130,7 +130,7 @@ public class Launcher {
 		Template template = handlebars
 				.compileInline(IOUtils.toString(Launcher.class.getClassLoader().getResource("templates/results.js")));
 		FileUtils.writeStringToFile(outJsonFile,
-				template.apply(new GsonBuilder().setPrettyPrinting().create().toJson(result)));
+				template.apply(new GsonBuilder().create().toJson(result)));
 		return outJsonFile;
 	}
 
