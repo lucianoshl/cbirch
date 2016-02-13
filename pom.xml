@@ -58,7 +58,7 @@
 					<executable>java</executable>
 					<workingDirectory>target/classes</workingDirectory>
 					<arguments>
-						<argument>-Xmx5120m</argument>
+						<argument>-Xmx6656m</argument>
 						<argument>-javaagent:${project.build.directory}/classes/SizeOf.jar</argument>
 						<argument>-classpath</argument>
 						<classpath/>
