@@ -1,11 +1,17 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.pojo;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JWindow;
+
 import org.apache.commons.lang3.time.StopWatch;
+
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonWriter;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Mapper;
 
@@ -106,6 +112,48 @@ public class ResultReport {
 
 	public void setFinalThreshold(double finalThreshold) {
 		this.finalThreshold = finalThreshold;
+	}
+
+	public void writeJson(JsonWriter jwriter) throws IOException {
+		Gson gson = new Gson();
+		jwriter.beginObject();
+//		jwriter.setHtmlSafe(false);
+		
+		putItem(jwriter, gson, "startAt",startAt);
+		putItem(jwriter, gson, "endAt",endAt);
+		putItem(jwriter, gson, "branchingFactor",branchingFactor);
+		putItem(jwriter, gson, "threshold",threshold);
+		putItem(jwriter, gson, "finalThreshold",finalThreshold);
+		putItem(jwriter, gson, "memory",memory);
+		putItem(jwriter, gson, "benchmarks",benchmarks);
+		putItem(jwriter, gson, "images",images);
+		putItem(jwriter, gson, "datasetBasePath",datasetBasePath);
+		
+		
+		jwriter.name("queryResults");
+		jwriter.beginArray();
+		for (QueryResult queryResult : queryResults) {
+			jwriter.beginObject();
+			jwriter.name("query").value(queryResult.getQuery());
+			jwriter.name("queryResult");
+			jwriter.beginArray();
+			List<ImageHits> rank = queryResult.getQueryResult();
+			for (ImageHits imageHits : rank) {
+				gson.toJson(imageHits,imageHits.getClass(),jwriter);
+			}
+			jwriter.endArray();
+			jwriter.endObject();
+		}
+		jwriter.endArray();
+		
+		
+		jwriter.endObject();
+		
+	}
+
+	private void putItem(JsonWriter jwriter, Gson gson, String name,Object obj) throws IOException {
+		jwriter.name(name);
+		gson.toJson(obj,obj.getClass(),jwriter);
 	}
 
 }

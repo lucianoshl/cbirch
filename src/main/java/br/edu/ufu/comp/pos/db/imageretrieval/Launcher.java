@@ -3,6 +3,7 @@ package br.edu.ufu.comp.pos.db.imageretrieval;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.context.MapValueResolver;
-import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonWriter;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree.CFTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
@@ -114,6 +115,7 @@ public class Launcher {
 		result.setQueryResults(queryResults);
 		result.setFinalThreshold(tree.getThreshold());
 		result.setDatasetBasePath(dataset.getDatasetPath());
+		result.setEndAt(new Date());
 		return result;
 	}
 
@@ -161,7 +163,15 @@ public class Launcher {
 		Handlebars handlebars = new Handlebars();
 		Template template = handlebars
 				.compileInline(IOUtils.toString(Launcher.class.getClassLoader().getResource("templates/results.js")));
-		FileUtils.writeStringToFile(outJsonFile, template.apply(new GsonBuilder().create().toJson(result)));
+
+//		FileWriter writer = new FileWriter(outJsonFile);
+		StringWriter stringWriter = new StringWriter();
+		JsonWriter jwriter = new JsonWriter(stringWriter);
+		result.writeJson(jwriter);
+		FileUtils.writeStringToFile(outJsonFile, template.apply(stringWriter.toString()));
+		jwriter.close();
+		stringWriter.close();
+//		writer.close();
 		return outJsonFile;
 	}
 
