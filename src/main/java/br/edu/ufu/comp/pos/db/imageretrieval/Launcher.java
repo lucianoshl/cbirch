@@ -3,6 +3,7 @@ package br.edu.ufu.comp.pos.db.imageretrieval;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,10 +47,39 @@ public class Launcher {
 	private static void runExperiment(int b, double t, int memory, String datasetsFolder, String datasetName)
 			throws FileNotFoundException, IOException {
 
+		Dataset dataset = new Dataset(datasetsFolder, datasetName);
+
+		ResultReport result = executeExperiment(b, t, memory, dataset);
+
+		logMemory();
+		System.out.println("Running garbage colector");
+		System.gc();
+		logMemory();
+
+		saveReport(result, dataset.getResultFolder());
+	}
+
+	private static void logMemory() {
+		Runtime runtime = Runtime.getRuntime();
+
+		NumberFormat format = NumberFormat.getInstance();
+
+		long maxMemory = runtime.maxMemory();
+		long allocatedMemory = runtime.totalMemory();
+		long freeMemory = runtime.freeMemory();
+
+		System.out.println("#######################################");
+		System.out.println("free memory: " + format.format(freeMemory / 1024));
+		System.out.println("allocated memory: " + format.format(allocatedMemory / 1024));
+		System.out.println("max memory: " + format.format(maxMemory / 1024));
+		System.out.println(
+				"total free memory: " + format.format((freeMemory + (maxMemory - allocatedMemory)) / 1024));
+		System.out.println("#######################################");
+	}
+
+	private static ResultReport executeExperiment(int b, double t, int memory, Dataset dataset) {
 		ResultReport result = new ResultReport();
 		result.setStartAt(new Date());
-
-		Dataset dataset = new Dataset(datasetsFolder, datasetName);
 
 		CFTree tree = new CFTree(b, t, 1, true);
 		tree.setPeriodicMemLimitCheck(50000);
@@ -84,8 +114,7 @@ public class Launcher {
 		result.setQueryResults(queryResults);
 		result.setFinalThreshold(tree.getThreshold());
 		result.setDatasetBasePath(dataset.getDatasetPath());
-
-		saveReport(result, dataset.getResultFolder());
+		return result;
 	}
 
 	protected static void saveReport(ResultReport result, String resultFolderPath) throws IOException {
@@ -132,8 +161,7 @@ public class Launcher {
 		Handlebars handlebars = new Handlebars();
 		Template template = handlebars
 				.compileInline(IOUtils.toString(Launcher.class.getClassLoader().getResource("templates/results.js")));
-		FileUtils.writeStringToFile(outJsonFile,
-				template.apply(new GsonBuilder().create().toJson(result)));
+		FileUtils.writeStringToFile(outJsonFile, template.apply(new GsonBuilder().create().toJson(result)));
 		return outJsonFile;
 	}
 
