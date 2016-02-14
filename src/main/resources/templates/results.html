@@ -35,26 +35,27 @@
       <div class="col-lg-8 img-listing">
         <h4>Dataset</h4>
         <div ng-repeat="qResult in results.queryResults" class="img-small">
+
           <img
-          src="{{qResult.query.image.path}}"
-          title="{{qResult.query.image.path}}"
+          src="{{results.datasetBasePath + '/' +results.images[qResult.query]}}"
+          title="{{results.images[qResult.query]}}"
           class="img-rounded img-responsive"
           ng-class="{'img-selected': qResult == selected}"
-          ng-dblclick="openImage(qResult.query.image.path)"
+          ng-dblclick="openImage(results.datasetBasePath + '/' +results.images[qResult.query])"
           ng-click="select(qResult)"/>
         </div>
       </div>
 
-      <div class="col-lg-4 img-listing">
+      <div class="col-lg-4 img-listing qResults">
         <h4>Query Results</h4>
         <div ng-repeat="qResult in selected.queryResult" class="img-small">
           <span class="label label-default pull-left">R: {{$index}}</span>
           <span class="label label-default pull-right">H: {{qResult.hits}}</span>
           <img
-          src="{{qResult.image.image.path}}"
-          title="{{qResult.image.image.path}}"
+          src="{{results.datasetBasePath + '/' +results.images[qResult.image]}}"
+          title="{{results.images[qResult.image]}}"
           class="img-rounded img-responsive"
-          ng-dblclick="openImage(qResult.image.image.path)"/>
+          ng-dblclick="openImage(results.datasetBasePath + '/' +results.images[qResult.image])"/>
         </div>
       </div>
     </div>

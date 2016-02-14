@@ -10,6 +10,7 @@ angular.module('birch', [])
 .controller('ResultsCtrl', function($scope,$window) {
 	$scope.selected = $scope.results.queryResults[0];
 	$scope.select = function(el){
+		$(".qResults").scrollTop(0);
 		$scope.selected = el;
 	};
 	$scope.openImage = function(url){
