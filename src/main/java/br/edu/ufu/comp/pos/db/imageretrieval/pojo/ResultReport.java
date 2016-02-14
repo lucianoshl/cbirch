@@ -198,7 +198,7 @@ public class ResultReport {
 			throws IOException {
 		File jsonFolder = new File(resultFolderPath, "json");
 		if (!jsonFolder.exists()) {
-			jsonFolder.mkdir();
+			jsonFolder.mkdirs();
 		}
 		File outJsonFile = new File(jsonFolder, fileName + ".json");
 
