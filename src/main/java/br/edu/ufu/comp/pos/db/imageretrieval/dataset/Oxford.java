@@ -20,7 +20,7 @@ public class Oxford extends Dataset {
 
 	public static void main(String[] args) throws IOException {
 
-		createFromBase("/home/void/workspace/birch-experiment/datasets").process();
+		createFromBase("/home/void/birch-experiment/datasets").process();
 
 	}
 
