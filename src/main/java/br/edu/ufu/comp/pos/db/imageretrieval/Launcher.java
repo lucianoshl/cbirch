@@ -82,7 +82,7 @@ public class Launcher {
 		result.setStartAt(new Date());
 
 		CFTree tree = new CFTree(b, t, 1, true);
-		tree.setPeriodicMemLimitCheck(50000);
+//		tree.setPeriodicMemLimitCheck(50000);
 		tree.setAutomaticRebuild(true);
 		tree.setMemoryLimitMB(memory);
 
