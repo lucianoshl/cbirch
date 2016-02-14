@@ -202,14 +202,13 @@ public class ResultReport {
 		}
 		File outJsonFile = new File(jsonFolder, fileName + ".json");
 
-//		Handlebars handlebars = new Handlebars();
-//		Template template = handlebars
-//				.compileInline(IOUtils.toString(Launcher.class.getClassLoader().getResource("templates/results.js")));
-
 		FileWriter stringWriter =  new FileWriter(outJsonFile);
+		stringWriter.write("window.result =");
 		JsonWriter jwriter = new JsonWriter(stringWriter);
+		
 		result.writeJson(jwriter);
-//		FileUtils.writeStringToFile(outJsonFile, template.apply(stringWriter.toString()));
+		stringWriter.write(";");
+		
 		jwriter.close();
 		stringWriter.close();
 		return outJsonFile;
