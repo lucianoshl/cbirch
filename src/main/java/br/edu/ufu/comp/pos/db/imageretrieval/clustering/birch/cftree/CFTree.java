@@ -726,9 +726,9 @@ public class CFTree extends IndexedTree {
 		return this.root.findClosestCluster(new CFEntry(sift));
 	}
 
-	public List<ImageHits> queryImage(Image image) {
+	public List<ImageHits> queryImage(Image query) {
 		ImageCounter counter = new ImageCounter();
-		image.scan((sift) -> counter.count(getImagesInLeaf(findClosestCluster(sift))));
+		query.scan((sift) -> counter.count(getImagesInLeaf(findClosestCluster(sift))));
 		return counter.rank();
 	}
 	

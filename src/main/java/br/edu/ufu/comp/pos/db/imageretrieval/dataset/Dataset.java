@@ -18,15 +18,16 @@ public class Dataset {
 		this.resultFolder = datasetsFolder + "/results/" + datasetName;
 	}
 
-	public void scanSifts(Consumer<double[]> c){
-		this.scan((image) -> image.scan(c) );
+	public void scanSifts(Consumer<double[]> c) {
+		this.scan((image) -> image.scan(c));
 	}
-	
+
 	public void scan(Consumer<Image> c) {
 		File[] sifts = listFiles("sift");
 		File[] images = listFiles("jpg");
-		Arrays.sort(sifts);
-
+		
+		Arrays.sort(sifts, (File a, File b) -> a.getName().compareTo(b.getName()));
+		
 		System.out.println("Scanning DB:");
 		for (int i = 0; i < sifts.length; i++) {
 			c.accept(new Image(i, images[i], sifts[i]));
@@ -48,6 +49,5 @@ public class Dataset {
 	public String getResultFolder() {
 		return resultFolder;
 	}
-	
-	
+
 }

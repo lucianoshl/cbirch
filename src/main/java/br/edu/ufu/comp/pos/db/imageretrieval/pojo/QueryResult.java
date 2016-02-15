@@ -9,7 +9,7 @@ public class QueryResult {
 
 	public QueryResult(Image queryImage, List<ImageHits> queryResult) {
 		this.query = queryImage.getId();
-		this.queryResult = queryResult.subList(0, 20);
+		this.queryResult = queryResult.subList(0, 30);
 	}
 
 	public int getQuery() {

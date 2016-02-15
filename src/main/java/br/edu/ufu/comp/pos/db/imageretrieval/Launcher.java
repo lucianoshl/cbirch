@@ -46,28 +46,11 @@ public class Launcher {
 
 	}
 
-	private static void logMemory() {
-		Runtime runtime = Runtime.getRuntime();
-
-		NumberFormat format = NumberFormat.getInstance();
-
-		long maxMemory = runtime.maxMemory();
-		long allocatedMemory = runtime.totalMemory();
-		long freeMemory = runtime.freeMemory();
-
-		System.out.println("#######################################");
-		System.out.println("free memory: " + format.format(freeMemory / 1024));
-		System.out.println("allocated memory: " + format.format(allocatedMemory / 1024));
-		System.out.println("max memory: " + format.format(maxMemory / 1024));
-		System.out.println("total free memory: " + format.format((freeMemory + (maxMemory - allocatedMemory)) / 1024));
-		System.out.println("#######################################");
-	}
-
-	private static ResultReport executeExperiment(int b, double t, int memory, Dataset dataset) {
+	private static ResultReport executeExperiment(int branchingFactor, double threshold, int memory, Dataset dataset) {
 		ResultReport result = new ResultReport();
 		result.setStartAt(new Date());
 
-		CFTree tree = new CFTree(b, t, 1, true);
+		CFTree tree = new CFTree(branchingFactor, threshold, 1, true);
 		tree.setAutomaticRebuild(true);
 		tree.setMemoryLimitMB(memory);
 
@@ -93,14 +76,33 @@ public class Launcher {
 			});
 		});
 
-		result.setBranchingFactor(b);
-		result.setThreshold(t);
+		result.setBranchingFactor(branchingFactor);
+		result.setThreshold(threshold);
 		result.setMemory(tree.getMemoryLimit());
 		result.setQueryResults(queryResults);
 		result.setFinalThreshold(tree.getThreshold());
 		result.setDatasetBasePath(dataset.getDatasetPath());
 		result.setEndAt(new Date());
 		return result;
+	}
+	
+
+
+	private static void logMemory() {
+		Runtime runtime = Runtime.getRuntime();
+
+		NumberFormat format = NumberFormat.getInstance();
+
+		long maxMemory = runtime.maxMemory();
+		long allocatedMemory = runtime.totalMemory();
+		long freeMemory = runtime.freeMemory();
+
+		System.out.println("#######################################");
+		System.out.println("free memory: " + format.format(freeMemory / 1024));
+		System.out.println("allocated memory: " + format.format(allocatedMemory / 1024));
+		System.out.println("max memory: " + format.format(maxMemory / 1024));
+		System.out.println("total free memory: " + format.format((freeMemory + (maxMemory - allocatedMemory)) / 1024));
+		System.out.println("#######################################");
 	}
 
 }

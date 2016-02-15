@@ -1,4 +1,4 @@
-angular.module('birch', [])
+angular.module('birch', ['angularLazyImg'])
 .controller('MainCtrl', function($scope) {
 	$scope.tabs = ["results","runtime","parameters"];
 	$scope.tabActive = $scope.tabs[0];

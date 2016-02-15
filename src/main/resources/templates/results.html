@@ -11,6 +11,7 @@
   <script src="<%jsonName%>"></script>
   <script src="<%libsPath%>/zepto.min.js"></script>
   <script src="<%libsPath%>/angular.min.js"></script>
+  <script src="<%libsPath%>/jquery.lazyload.js"></script>
   <script src="<%libsPath%>/scripts.js"></script>
 
   <link rel="stylesheet" href="<%libsPath%>/bootstrap.min.css">
@@ -32,14 +33,15 @@
     </div>
 
     <div class="row" ng-if="tabActive == 'results'" ng-controller="ResultsCtrl">
-      <div class="col-lg-8 img-listing">
+      <div class="col-lg-8 img-listing" lazy-img-container>
         <h4>Dataset</h4>
         <div ng-repeat="qResult in results.queryResults" class="img-small">
 
           <img
-          src="{{results.datasetBasePath + '/' +results.images[qResult.query]}}"
+          src="<%libsPath%>/loading.gif"
+          lazy-img="{{results.datasetBasePath + '/' +results.images[qResult.query]}}"
           title="{{results.images[qResult.query]}}"
-          class="img-rounded img-responsive"
+          class="img-rounded img-responsive lazy"
           ng-class="{'img-selected': qResult == selected}"
           ng-dblclick="openImage(results.datasetBasePath + '/' +results.images[qResult.query])"
           ng-click="select(qResult)"/>
@@ -54,7 +56,7 @@
           <img
           src="{{results.datasetBasePath + '/' +results.images[qResult.image]}}"
           title="{{results.images[qResult.image]}}"
-          class="img-rounded img-responsive"
+          class="img-rounded img-responsive lazy"
           ng-dblclick="openImage(results.datasetBasePath + '/' +results.images[qResult.image])"/>
         </div>
       </div>
@@ -109,6 +111,6 @@
 
 
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-  <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
 </body>
 </html>
