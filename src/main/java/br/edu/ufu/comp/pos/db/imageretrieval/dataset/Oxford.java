@@ -43,9 +43,9 @@ public class Oxford extends Dataset {
         File baseFolder = new File(datasetFolder,"raw/oxford");
         baseFolder.mkdirs();
         String externalPage = "http://www.robots.ox.ac.uk/~vgg/data/oxbuildings/";
-//        download( baseFolder, externalPage, "oxbuild_images.tgz" );
-//        download( baseFolder, externalPage, "feat_oxc1_hesaff_sift.bin.tgz" );
-//        download( baseFolder, externalPage, "word_oxc1_hesaff_sift_16M_1M.tgz" );
+        download( baseFolder, externalPage, "oxbuild_images.tgz" );
+        download( baseFolder, externalPage, "feat_oxc1_hesaff_sift.bin.tgz" );
+        download( baseFolder, externalPage, "word_oxc1_hesaff_sift_16M_1M.tgz" );
         download( baseFolder, externalPage, "README2.txt" );
     }
 
