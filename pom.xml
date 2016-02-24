@@ -43,7 +43,7 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-<!-- 			<plugin>
+ 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.2.1</version>
@@ -70,7 +70,7 @@
 						<argument>${ds}</argument>
 					</arguments>
 				</configuration>
-			</plugin> -->
+			</plugin>
 		</plugins>
 
 	</build>
