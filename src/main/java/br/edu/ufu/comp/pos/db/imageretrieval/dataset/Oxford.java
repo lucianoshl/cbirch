@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
@@ -35,18 +33,6 @@ public class Oxford extends Dataset {
             projectBase + "/raw/oxford/images", //
             projectBase + "/raw/oxford/README2.txt", //
             projectBase + "/formated/oxford" ).process();
-    }
-    
-
-    protected static File download( File baseFolder, String externalPage, String file )
-        throws IOException,
-        MalformedURLException {
-
-        URL url = new URL( externalPage + file );
-        System.out.println( "start download " + url );
-        File result = new File( baseFolder, file );
-        FileUtils.copyURLToFile( url, result );
-        return result;
     }
 
     public Oxford(
