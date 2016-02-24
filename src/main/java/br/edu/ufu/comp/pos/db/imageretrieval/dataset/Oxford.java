@@ -27,50 +27,27 @@ public class Oxford extends Dataset {
 
     private File orderInBinaryFile;
 
-
-    public static void main( String[] args )
-        throws IOException {
-
-        if ( args.length > 0 ) {
-            String datasetsFolder = args[ 0 ];
-            downloadDataset( datasetsFolder );
-            createFromBase( datasetsFolder ).process();
-        }
-    }
-
-
-    private static void downloadDataset( String datasetFolder ) throws MalformedURLException, IOException {
-        File baseFolder = new File(datasetFolder,"raw/oxford");
-        baseFolder.mkdirs();
-        String externalPage = "http://www.robots.ox.ac.uk/~vgg/data/oxbuildings/";
-        download( baseFolder, externalPage, "README2.txt" );
-        download( baseFolder, externalPage, "oxbuild_images.tgz" );
-        download( baseFolder, externalPage, "feat_oxc1_hesaff_sift.bin.tgz" );
-        download( baseFolder, externalPage, "word_oxc1_hesaff_sift_16M_1M.tgz" );
-    }
-
-
-    protected static void download( File baseFolder, String externalPage, String file )
-        throws IOException,
-        MalformedURLException {
-
-        URL url = new URL( externalPage
-                + file );
-        System.out.println( "start download " + url );
-        FileUtils.copyURLToFile(url, new File(baseFolder,file));
-    }
-
-
-    private static Oxford createFromBase( String projectBase ) {
-
-        return new Oxford( //
+    public static void main(String[] args) throws IOException{
+        String projectBase = args[0];
+        new Oxford( //
             projectBase + "/raw/oxford/feat_oxc1_hesaff_sift.bin", //
             projectBase + "/raw/oxford/word_oxc1_hesaff_sift_16M_1M", //
             projectBase + "/raw/oxford/images", //
             projectBase + "/raw/oxford/README2.txt", //
-            projectBase + "/formated/oxford" );
+            projectBase + "/formated/oxford" ).process();
     }
+    
 
+    protected static File download( File baseFolder, String externalPage, String file )
+        throws IOException,
+        MalformedURLException {
+
+        URL url = new URL( externalPage + file );
+        System.out.println( "start download " + url );
+        File result = new File( baseFolder, file );
+        FileUtils.copyURLToFile( url, result );
+        return result;
+    }
 
     public Oxford(
         String binaryFile,
