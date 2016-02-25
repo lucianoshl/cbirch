@@ -25,8 +25,11 @@ public class Oxford extends Dataset {
 
     private File orderInBinaryFile;
 
-    public static void main(String[] args) throws IOException{
-        String projectBase = args[0];
+
+    public static void main( String[] args )
+        throws IOException {
+
+        String projectBase = args[ 0 ];
         new Oxford( //
             projectBase + "/raw/oxford/feat_oxc1_hesaff_sift.bin", //
             projectBase + "/raw/oxford/word_oxc1_hesaff_sift_16M_1M", //
@@ -34,6 +37,7 @@ public class Oxford extends Dataset {
             projectBase + "/raw/oxford/README2.txt", //
             projectBase + "/formated/oxford" ).process();
     }
+
 
     public Oxford(
         String binaryFile,
