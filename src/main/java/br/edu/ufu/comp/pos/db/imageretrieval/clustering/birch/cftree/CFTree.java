@@ -341,7 +341,7 @@ public class CFTree extends IndexedTree {
             newThreshold,
             root.getDistFunction(),
             root.applyMergingRefinement(),
-            false );
+            true );
 
         System.out
             .println( "#################### new Tree Size = " + SizeOf.humanReadable( computeMemorySize( newTree ) ) );
