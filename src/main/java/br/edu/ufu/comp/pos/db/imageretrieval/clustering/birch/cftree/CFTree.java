@@ -319,7 +319,7 @@ public class CFTree extends IndexedTree {
         boolean rebuild = false;
         if ( hasReachedMemoryLimit( this, memLimit ) ) {
             rebuildTree();
-            System.gc();
+//            System.gc();
             rebuild = true;
         }
 
