@@ -24,7 +24,9 @@ public class DatasetFactory {
             System.out.println( "Dataset Location: " + formattedPath );
             return new Dataset( workspace, datasetName );
         } else if ( isRaw ) {
-            return resolveDatasetByName( workspace, datasetName );
+            Dataset dataset = resolveDatasetByName( workspace, datasetName );
+            System.out.println( "Dataset Location: " + dataset.getClass()  );
+            return dataset;
         } else {
             throw new IllegalStateException(
                 String.format( "Dataset not found formatted=%s raw=%s", formattedPath, rawPath ) );

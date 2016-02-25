@@ -1,3 +1,4 @@
 Launcher
 
 mvn exec:exec -Dargs="birch /home/lucianos/birch-experiment/datasets all-souls-min 100 10 128"
+mvn exec:exec -Dargs="birch /home/void/workspace/datasets oxford 100 10 3096"
