@@ -1,6 +1,3 @@
-to launch
+Launcher
 
-mvn exec:exec -DbranchingFactor=100 -Dthreshold=1 -Dmemory=512 -DdsWorkspace=$HOME/workspace/birch-experiment/datasets -Dds=oxford-trinity-20
-
-download oxford dataset
-mvn exec:java -Dexec.mainClass="br.edu.ufu.comp.pos.db.imageretrieval.dataset.Oxford" -Dexec.args="/home/void/workspace/datasets"
+mvn exec:exec -Dargs="birch /home/lucianos/birch-experiment/datasets all-souls-min 100 10 128"

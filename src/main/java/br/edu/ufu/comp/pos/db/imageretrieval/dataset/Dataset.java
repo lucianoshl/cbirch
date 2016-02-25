@@ -13,13 +13,13 @@ import br.edu.ufu.comp.pos.db.imageretrieval.pojo.Image;
 
 public class Dataset {
 
-    private final String datasetPath;
+    private final File datasetPath;
 
     private final String resultFolder;
 
 
     public Dataset( String datasetsFolder, String datasetName ) {
-        this.datasetPath = datasetsFolder + "/formated/" + datasetName;
+        this.datasetPath = new File(datasetsFolder + "/formated/" + datasetName);
         this.resultFolder = datasetsFolder + "/results/" + datasetName;
     }
 
@@ -49,20 +49,21 @@ public class Dataset {
     private File[] listFiles( String extension ) {
 
         FileFilter suffixFileFilter = FileFilterUtils.suffixFileFilter( "." + extension );
-        File[] files = new File( datasetPath ).listFiles( suffixFileFilter );
+        File[] files = datasetPath.listFiles( suffixFileFilter );
         return files;
-    }
-
-
-    public String getDatasetPath() {
-
-        return datasetPath;
     }
 
 
     public String getResultFolder() {
 
         return resultFolder;
+    }
+
+
+    public Dataset getTestSet() {
+
+       return null;
+        
     }
 
 }

@@ -12,7 +12,6 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.time.StopWatch;
 
 import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Handlebars;
@@ -21,8 +20,8 @@ import com.github.jknack.handlebars.context.MapValueResolver;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonWriter;
 
-import br.edu.ufu.comp.pos.db.imageretrieval.Launcher;
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Mapper;
+import sun.misc.Launcher;
 
 
 public class ResultReport {
@@ -50,13 +49,13 @@ public class ResultReport {
 
     public void benchmark( String label, Mapper a ) {
 
-        System.out.println( "Start:" + label );
-        StopWatch clock = new StopWatch();
-        clock.start();
+//        System.out.println( "Start:" + label );
+//        StopWatch clock = new StopWatch();
+//        clock.start();
         a.action();
-        clock.stop();
-        this.benchmarks.put( label, clock.getTime() );
-        System.out.println( "Stop:" + label );
+//        clock.stop();
+//        this.benchmarks.put( label, clock.getTime() );
+//        System.out.println( "Stop:" + label );
     }
 
 
@@ -169,15 +168,15 @@ public class ResultReport {
         jwriter.beginObject();
         // jwriter.setHtmlSafe(false);
 
-        putItem( jwriter, gson, "startAt", startAt );
-        putItem( jwriter, gson, "endAt", endAt );
-        putItem( jwriter, gson, "branchingFactor", branchingFactor );
-        putItem( jwriter, gson, "threshold", threshold );
-        putItem( jwriter, gson, "finalThreshold", finalThreshold );
-        putItem( jwriter, gson, "memory", memory );
-        putItem( jwriter, gson, "benchmarks", benchmarks );
-        putItem( jwriter, gson, "images", images );
-        putItem( jwriter, gson, "datasetBasePath", datasetBasePath );
+//        putItem( jwriter, gson, "startAt", startAt );
+//        putItem( jwriter, gson, "endAt", endAt );
+//        putItem( jwriter, gson, "branchingFactor", branchingFactor );
+//        putItem( jwriter, gson, "threshold", threshold );
+//        putItem( jwriter, gson, "finalThreshold", finalThreshold );
+//        putItem( jwriter, gson, "memory", memory );
+//        putItem( jwriter, gson, "benchmarks", benchmarks );
+//        putItem( jwriter, gson, "images", images );
+//        putItem( jwriter, gson, "datasetBasePath", datasetBasePath );
 
         jwriter.name( "queryResults" );
         jwriter.beginArray();
@@ -211,6 +210,7 @@ public class ResultReport {
     public void save( String resultFolderPath )
         throws IOException {
 
+        System.gc();
         SimpleDateFormat dateFormat = new SimpleDateFormat( "dd-MM-yyyy-HH:mm:ss" );
         String fileName = dateFormat.format( new Date() );
         File outJsonFile = generateJsonFile( this, resultFolderPath, fileName );
@@ -228,7 +228,7 @@ public class ResultReport {
         File outHtmlFile = new File( resultFolderPath, fileName + ".html" );
 
         Map< String, String > map = new HashMap< String, String >();
-        map.put( "libsPath", Launcher.class.getClassLoader().getResource( "templates/libs" ).getFile() );
+        map.put( "libsPath", this.getClass().getClassLoader().getResource( "templates/libs" ).getFile() );
         map.put( "jsonName", outJsonFile.getAbsolutePath() );
 
         Handlebars handlebars = new Handlebars();
@@ -238,7 +238,7 @@ public class ResultReport {
         Context context = Context.newBuilder( map ).resolver( MapValueResolver.INSTANCE ).build();
 
         Template template = handlebars.compileInline(
-            IOUtils.toString( Launcher.class.getClassLoader().getResource( "templates/results.html" ) ) );
+            IOUtils.toString( this.getClass().getClassLoader().getResource( "templates/results.html" ) ) );
         FileUtils.writeStringToFile( outHtmlFile, template.apply( context ) );
 
         template.apply( context );

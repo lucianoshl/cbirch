@@ -159,7 +159,6 @@ public class SizeOf {
 
         Field[] result = fieldsCache.get( clazz );
         if ( result == null ) {
-            System.out.println( "miss cache" );
             result = clazz.getDeclaredFields();
             fieldsCache.put( clazz, result );
         }

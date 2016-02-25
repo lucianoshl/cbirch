@@ -30,12 +30,18 @@ public class Oxford extends Dataset {
         throws IOException {
 
         String projectBase = args[ 0 ];
-        new Oxford( //
-            projectBase + "/raw/oxford/feat_oxc1_hesaff_sift.bin", //
-            projectBase + "/raw/oxford/word_oxc1_hesaff_sift_16M_1M", //
-            projectBase + "/raw/oxford/images", //
-            projectBase + "/raw/oxford/README2.txt", //
-            projectBase + "/formated/oxford" ).process();
+        createFromBase( projectBase, "oxford" ).process();
+    }
+
+
+    public static Oxford createFromBase( String projectBase, String datasetName ) {
+
+        return new Oxford( //
+            projectBase + "/raw/" + datasetName + "/feat_oxc1_hesaff_sift.bin", //
+            projectBase + "/raw/" + datasetName + "/word_oxc1_hesaff_sift_16M_1M", //
+            projectBase + "/raw/" + datasetName + "/images", //
+            projectBase + "/raw/" + datasetName + "/README2.txt", //
+            projectBase + "/formated/oxford" );
     }
 
 
@@ -59,7 +65,9 @@ public class Oxford extends Dataset {
 
         try {
             FileInputStream binFileReader = new FileInputStream( binaryFile );
-
+            
+            int totalImages = FileUtils.readFileToString( orderInBinaryFile ).split( "\n" ).length;
+            
             Scanner fileOrder = new Scanner( orderInBinaryFile );
             int id = 0;
             while ( fileOrder.hasNext() ) {
@@ -70,9 +78,10 @@ public class Oxford extends Dataset {
                 File imgOrigin = new File( imageFolder, imageFileName );
                 File siftTmpFile = File.createTempFile( imageFileName, ".sift" );
                 FileUtils.writeByteArrayToFile( siftTmpFile, buffer );
-
+                
                 c.accept( new Image( id, imgOrigin, siftTmpFile ) );
                 id++;
+                System.out.println( ( ( id + 1 ) / Double.valueOf( totalImages ) ) * 100.0 + "%" );
             }
             fileOrder.close();
             binFileReader.close();
