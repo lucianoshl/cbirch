@@ -36,7 +36,9 @@ public class Oxford extends Dataset {
 
     public static Oxford createFromBase( String projectBase, String datasetName ) {
 
-        return new Oxford( //
+        return new Oxford( 
+            projectBase, //
+            datasetName, //
             projectBase + "/raw/" + datasetName + "/feat_oxc1_hesaff_sift.bin", //
             projectBase + "/raw/" + datasetName + "/word_oxc1_hesaff_sift_16M_1M", //
             projectBase + "/raw/" + datasetName + "/images", //
@@ -46,12 +48,14 @@ public class Oxford extends Dataset {
 
 
     public Oxford(
+        String projectBase,
+        String datasetName,
         String binaryFile,
         String siftSizeFolderDescriptor,
         String imagesFolderPath,
         String orderInBinaryFile,
         String outputFolderPath ) {
-        super( null, null );
+        super( projectBase, datasetName );
         this.binaryFile = new File( binaryFile );
         this.rangeSwiftInBinary = new File( siftSizeFolderDescriptor );
         this.imageFolder = new File( imagesFolderPath );

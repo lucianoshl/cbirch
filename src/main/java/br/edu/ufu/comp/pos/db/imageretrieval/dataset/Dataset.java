@@ -13,9 +13,9 @@ import br.edu.ufu.comp.pos.db.imageretrieval.pojo.Image;
 
 public class Dataset {
 
-    private final File datasetPath;
+    private File datasetPath;
 
-    private final String resultFolder;
+    private String resultFolder;
 
 
     public Dataset( String datasetsFolder, String datasetName ) {
