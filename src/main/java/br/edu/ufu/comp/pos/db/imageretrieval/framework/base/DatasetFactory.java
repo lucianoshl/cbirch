@@ -3,8 +3,10 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework.base;
 
 import java.io.File;
 
+import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Oxford;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.OxfordDataset;
 
 
 public class DatasetFactory {
@@ -14,23 +16,33 @@ public class DatasetFactory {
         String workspace = args[ 1 ];
         String datasetName = args[ 2 ];
 
-        String formattedPath = workspace + "/formated/" + datasetName;
-        String rawPath = workspace + "/raw/" + datasetName;
-
-        boolean isFormatted = new File( formattedPath ).exists();
-        boolean isRaw = new File( rawPath ).exists();
-
-        if ( isFormatted ) {
-            System.out.println( "Dataset Location: " + formattedPath );
-            return new Dataset( workspace, datasetName );
-        } else if ( isRaw ) {
-            Dataset dataset = resolveDatasetByName( workspace, datasetName );
-            System.out.println( "Dataset Location: " + dataset.getClass()  );
-            return dataset;
+        File datasetPath = Utils.getDatesetPath(workspace,datasetName);
+        
+        if (new File(datasetPath,"README2.txt").exists()){
+            OxfordDataset.createFromBase( workspace, datasetName );
         } else {
-            throw new IllegalStateException(
-                String.format( "Dataset not found formatted=%s raw=%s", formattedPath, rawPath ) );
+            throw new IllegalStateException();
         }
+        
+        
+        return null;
+
+    }
+    
+    public OxfordDataset create2( String[] args ) {
+
+        String workspace = args[ 1 ];
+        String datasetName = args[ 2 ];
+
+        File datasetPath = Utils.getDatesetPath(workspace,datasetName);
+        
+        if (new File(datasetPath,"README2.txt").exists()){
+            return OxfordDataset.createFromBase( workspace, datasetName );
+        } else {
+            throw new IllegalStateException();
+        }
+        
+        
 
     }
 

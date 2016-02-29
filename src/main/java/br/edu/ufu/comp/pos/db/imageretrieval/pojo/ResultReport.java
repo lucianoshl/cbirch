@@ -207,8 +207,10 @@ public class ResultReport {
     }
 
 
-    public void save( String resultFolderPath )
+    public void save( File resultFolder )
         throws IOException {
+        
+        String resultFolderPath = resultFolder.getAbsolutePath();
 
         System.gc();
         SimpleDateFormat dateFormat = new SimpleDateFormat( "dd-MM-yyyy-HH:mm:ss" );
