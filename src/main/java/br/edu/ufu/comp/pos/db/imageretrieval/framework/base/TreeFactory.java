@@ -8,9 +8,9 @@ public class TreeFactory {
         String treeName = args[0];
         
         if (treeName.equals( "birch" )){
-            Integer memory = Integer.valueOf( args[5] );
-            Double threshold = Double.valueOf( args[4] );
-            Integer branchingFactor = Integer.valueOf( args[3] );
+            Integer branchingFactor = Integer.valueOf( args[2] );
+            Double threshold = Double.valueOf( args[3] );
+            Integer memory = Integer.valueOf( args[4] );
             
             System.out.println( "Tree: Birch" );
             System.out.println( "Branching factor: "+branchingFactor );

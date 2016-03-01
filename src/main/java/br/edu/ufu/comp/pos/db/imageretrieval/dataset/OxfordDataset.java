@@ -2,8 +2,6 @@ package br.edu.ufu.comp.pos.db.imageretrieval.dataset;
 
 
 import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,10 +10,10 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.DatasetFactory;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 
 
-public class OxfordDataset {
+public class OxfordDataset extends Dataset {
 
     private File binaryFile;
 
@@ -25,49 +23,31 @@ public class OxfordDataset {
 
     private File gtFilesFolder;
 
-//    private String workspace;
-
     private File datasetFolder;
 
     private File orderInBinaryFile;
 
     private Set< String > queryFiles;
 
-    static OxfordImage test;
-
-
-    public static void main( String[] args )
-        throws IOException {
-
-        OxfordDataset create2 = new DatasetFactory().create2( args );
-
-        File binFile = new File( args[ 1 ], "/datasets/"+args[ 2 ]+"/feat_oxc1_hesaff_sift.bin" ); 
-
-        create2.scan( ( img ) -> test = img, false );
-
-        System.out.println( test );
-
-        RandomAccessFile randomAccessFile = new RandomAccessFile( binFile, "r" );
-        randomAccessFile.seek( test.offset + test.size * 128 );
-        for ( int i = 0; i < 12; i++ ) {
-            randomAccessFile.read();
-
-        }
-        if ( randomAccessFile.read() != -1 ) {
-            randomAccessFile.close();
-            throw new IllegalStateException( "O arquivo binario está sendo parseado de forma incorreta" );
-        }
-        randomAccessFile.close();
-    }
-
-
-    public void scan( Consumer< OxfordImage > c, boolean queryImages ) {
+    protected void scan( Consumer< OxfordImage > c, boolean queryImages ) {
 
         this.scanAllImages( ( image ) -> {
             if ( isQueryFile( image ) == queryImages ) {
                 c.accept( image );
             }
         } );
+    }
+
+
+    @Override
+    public void scanTrainSet( Consumer< OxfordImage > c ) {
+
+        this.scan( c, false );
+    }
+
+    public void scanTestSet( Consumer< OxfordImage > c ) {
+
+        this.scan( c, true );
     }
 
 
@@ -90,7 +70,7 @@ public class OxfordDataset {
     }
 
 
-    private void scanAllImages( Consumer< OxfordImage > c ) {
+    protected void scanAllImages( Consumer< OxfordImage > c ) {
 
         Map< String, Long > aux = new HashMap< String, Long >();
         aux.put( "aux", 0l );
@@ -126,8 +106,8 @@ public class OxfordDataset {
 
     public static OxfordDataset createFromBase( String workspace, String datasetName ) {
 
-        return new OxfordDataset( workspace, datasetName, "feat_oxc1_hesaff_sift.bin", "word_oxc1_hesaff_sift_16M_1M",
-            "images", "gt_files", "README2.txt" );
+        return new OxfordDataset( workspace, datasetName, "feat_oxc1_hesaff_sift.bin",
+            "word_oxc1_hesaff_sift_16M_1M", "images", "gt_files", "README2.txt" );
     }
 
 
@@ -140,7 +120,7 @@ public class OxfordDataset {
         String gtFiles,
         String orderInBinaryFile ) {
 
-//        this.workspace = workspace;
+        // this.workspace = workspace;
         this.datasetFolder = Utils.getDatesetPath( workspace, datasetName );
         this.binaryFile = new File( datasetFolder, binaryFile );
         this.rangeSwiftInBinary = new File( datasetFolder, siftSizeFolderDescriptor );

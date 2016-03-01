@@ -7,21 +7,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
+
+
 
 public class ImageCounter {
 
-    Map< Image, Integer > counter = new HashMap< Image, Integer >();
+    Map< OxfordImage, Integer > counter = new HashMap< OxfordImage, Integer >();
 
 
-    public void count( Set< Image > set ) {
+    public void count( Set< OxfordImage > set ) {
 
-        for ( Image image : set ) {
+        for ( OxfordImage image : set ) {
             count( image );
         }
     }
 
 
-    protected void count( Image image ) {
+    protected void count( OxfordImage image ) {
 
         Integer ocurrences = counter.get( image );
         if ( ocurrences == null ) {
@@ -36,8 +39,8 @@ public class ImageCounter {
 
         List< ImageHits > result = new ArrayList< ImageHits >();
 
-        Set< Image > keys = counter.keySet();
-        for ( Image image : keys ) {
+        Set< OxfordImage > keys = counter.keySet();
+        for ( OxfordImage image : keys ) {
             result.add( new ImageHits( image, counter.get( image ) ) );
         }
         result.sort( ( ImageHits a, ImageHits b ) -> b.getHits().compareTo( a.getHits() ) );

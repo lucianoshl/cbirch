@@ -4,8 +4,8 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework.tree;
 import java.util.List;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree.CFTree;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
-import br.edu.ufu.comp.pos.db.imageretrieval.pojo.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.pojo.ImageHits;
 
 
@@ -32,7 +32,7 @@ public class BirchTree implements ClusterTree {
     }
 
     @Override
-    public void index( Image img ) {
+    public void index( OxfordImage img ) {
         tree.index( img );
     }
 
@@ -42,14 +42,14 @@ public class BirchTree implements ClusterTree {
     }
 
     @Override
-    public void findTopK( Image query, int i ) {
+    public void findTopK( OxfordImage query, int i ) {
 
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public List< ImageHits > queryImage( Image queryImage ) {
+    public List< ImageHits > queryImage( OxfordImage queryImage ) {
 
         return tree.queryImage( queryImage );
     }

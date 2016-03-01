@@ -1,15 +1,16 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.pojo;
 
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 
 public class ImageHits {
 
     private final Integer hits;
 
-    private final int image;
+    private final String image;
 
 
-    public ImageHits( Image image, Integer hits ) {
-        this.image = image.getId();
+    public ImageHits( OxfordImage image, Integer hits ) {
+        this.image = image.getImage().getName();
         this.hits = hits;
     }
 
@@ -20,7 +21,7 @@ public class ImageHits {
     }
 
 
-    public int getImage() {
+    public String getImage() {
 
         return image;
     }

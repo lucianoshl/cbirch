@@ -12,10 +12,8 @@ public class Utils {
 
         double[] result = new double[ buffer.length ];
         for ( int i = 0; i < buffer.length; i++ ) {
-            System.out.print( buffer[ i ] + " " );
             result[ i ] = buffer[ i ];
         }
-        System.out.println(  );
         return result;
     }
 

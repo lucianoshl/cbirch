@@ -1,4 +1,4 @@
-package br.edu.ufu.comp.pos.db.imageretrieval.dataset;
+package br.edu.ufu.comp.pos.db.imageretrieval.dataset.image;
 
 
 import java.io.File;

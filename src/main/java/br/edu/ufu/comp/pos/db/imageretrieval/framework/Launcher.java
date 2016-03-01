@@ -8,52 +8,33 @@ import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.DatasetFactory;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.TreeFactory;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.tree.BirchTree;
-import br.edu.ufu.comp.pos.db.imageretrieval.pojo.ResultReport;
 
 
 public class Launcher {
 
     public static void main( String[] args )
         throws IOException {
-        args = args[0].split( " " );
         
         if ( args.length == 0 ) {
-            String.format( "tree name is required" );
+            throw new IllegalArgumentException( "tree name is required" );
         }
-        
+
         Dataset dataset = new DatasetFactory().create( args );
         BirchTree tree = new TreeFactory().create( args );
-        
-        ResultReport result = new Launcher().run( dataset, tree );
-        result.save( dataset.getResultFolder() );
+        new Launcher().run( dataset, tree );
+
     }
 
 
-    public ResultReport run( Dataset dataset, ClusterTree tree )
+    public void run( Dataset dataset, ClusterTree tree )
         throws IOException {
 
-        ResultReport result = new ResultReport();
-
-        dataset.scanSifts( ( sift ) -> tree.insertEntry( sift ) );
+        dataset.scanTestSetSifts( ( sift ) -> tree.insertEntry( sift ) );
 
         tree.optimize();
 
-        dataset.scan( ( img ) -> tree.index( img ) );
+        dataset.scanTestSet( ( img ) -> tree.index( img ) );
 
         tree.finishBuild();
-        
-//        for ( Image image : queries ) {
-//            tree.findTopK(image,4);
-//        }
-
-//        List< QueryResult > queryResults = new ArrayList< QueryResult >();
-//        result.setQueryResults( queryResults );
-//        dataset.scan( ( queryImage ) -> {
-//            result.addImage( queryImage );
-//            List< ImageHits > queryResult = tree.queryImage( queryImage );
-//            queryResults.add( new QueryResult( queryImage, queryResult ) );
-//        } );
-
-        return result;
     }
 }

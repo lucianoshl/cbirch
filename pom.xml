@@ -31,6 +31,13 @@
 			<artifactId>gson</artifactId>
 			<version>2.5</version>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -44,7 +51,7 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-  			<plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.2.1</version>
@@ -58,15 +65,6 @@
 				<configuration>
 					<executable>java</executable>
 					<workingDirectory>target/classes</workingDirectory>
-					<arguments>
-						<argument>-Xmx6656m</argument>
-						<argument>-javaagent:${project.build.directory}/classes/SizeOf.jar</argument>
-						<argument>-classpath</argument>
-						<classpath/> 
-						<argument>${mainClass}</argument> 
-						<argument>${args}</argument> 
-					</arguments>
-
 				</configuration>
 			</plugin>
 		</plugins>

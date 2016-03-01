@@ -5,7 +5,6 @@ import java.io.File;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
-import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Oxford;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.OxfordDataset;
 
 
@@ -13,47 +12,19 @@ public class DatasetFactory {
 
     public Dataset create( String[] args ) {
 
-        String workspace = args[ 1 ];
-        String datasetName = args[ 2 ];
+        String workspace = System.getenv().get( "DATASET_WORKSPACE" );
+        String datasetName = args[ 1 ];
 
-        File datasetPath = Utils.getDatesetPath(workspace,datasetName);
-        
-        if (new File(datasetPath,"README2.txt").exists()){
-            OxfordDataset.createFromBase( workspace, datasetName );
-        } else {
-            throw new IllegalStateException();
-        }
-        
-        
-        return null;
+        File datasetPath = Utils.getDatesetPath( workspace, datasetName );
 
-    }
-    
-    public OxfordDataset create2( String[] args ) {
+        System.out.println( datasetPath );
 
-        String workspace = args[ 1 ];
-        String datasetName = args[ 2 ];
-
-        File datasetPath = Utils.getDatesetPath(workspace,datasetName);
-        
-        if (new File(datasetPath,"README2.txt").exists()){
+        if ( new File( datasetPath, "README2.txt" ).exists() ) {
             return OxfordDataset.createFromBase( workspace, datasetName );
         } else {
-            throw new IllegalStateException();
+            throw new UnsupportedOperationException("unsupported dataset in "+datasetPath.getAbsolutePath());
         }
-        
-        
 
-    }
-
-
-    protected Dataset resolveDatasetByName( String workspace, String datasetName ) {
-
-        if ( datasetName.equals( "oxford" ) ) {
-            return Oxford.createFromBase( workspace, datasetName );
-        } else {
-            throw new UnsupportedOperationException();
-        }
     }
 
 }
