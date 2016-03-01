@@ -2,10 +2,12 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework;
 
 
 import java.io.IOException;
+import java.util.List;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.DatasetFactory;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Histogram;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.TreeFactory;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.tree.BirchTree;
 
@@ -29,12 +31,18 @@ public class Launcher {
     public void run( Dataset dataset, ClusterTree tree )
         throws IOException {
 
-        dataset.scanTestSetSifts( ( sift ) -> tree.insertEntry( sift ) );
+        dataset.scanTrainSetSifts( ( sift ) -> tree.insertEntry( sift ) );
 
-        tree.optimize();
-
-        dataset.testSet( ( img ) -> tree.index( img ) );
-
+//        tree.optimize();
         tree.finishBuild();
+
+        dataset.scanTrainSet( ( img ) -> tree.index( img ) );
+        
+        dataset.scanTestSet( (query)->{
+            List< Histogram > results = tree.findTopK( query, 4 );
+            for ( Histogram histogram : results ) {
+                System.out.println( histogram.getImage().getImage().getName() );
+            }
+        });
     }
 }

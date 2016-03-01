@@ -112,6 +112,7 @@ public class CFTree extends IndexedTree {
                                                  // exceeded every 100,000
                                                  // insertions
 
+    private int wordsAmount;
 
     /**
      * 
@@ -626,13 +627,16 @@ public class CFTree extends IndexedTree {
 
         CFNode l = leafListStart.getNextLeaf(); // the first leaf is dummy!
 
+        this.wordsAmount = 0;
+        
         int id = 0;
         while ( l != null ) {
+            wordsAmount += l.getEntries().size();
             if ( !l.isDummy() ) {
                 // System.out.println(l);
                 for ( CFEntry e : l.getEntries() ) {
-                    id++;
                     e.setSubclusterID( id );
+                    id++;
                 }
             }
             l = l.getNextLeaf();
@@ -795,7 +799,7 @@ public class CFTree extends IndexedTree {
     }
 
 
-    private CFEntry findClosestCluster( double[] sift ) {
+    public CFEntry findClosestCluster( double[] sift ) {
 
         return this.root.findClosestCluster( new CFEntry( sift ) );
     }
@@ -812,6 +816,11 @@ public class CFTree extends IndexedTree {
     public double getThreshold() {
 
         return this.root.getDistThreshold();
+    }
+
+
+    public int getWordsSize() {
+        return wordsAmount;
     }
 
 }

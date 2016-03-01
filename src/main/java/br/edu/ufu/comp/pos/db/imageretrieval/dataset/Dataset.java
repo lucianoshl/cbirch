@@ -8,46 +8,46 @@ import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 
 public abstract class Dataset {
 
-    private long testSetSize;
+    private long trainSetSize;
     
     private long current;
 
 
-    public abstract void trainSet( Consumer< OxfordImage > c );
+    protected abstract void trainSet( Consumer< OxfordImage > c );
 
 
-    public abstract void testSet( Consumer< OxfordImage > c );
+    protected abstract void testSet( Consumer< OxfordImage > c );
 
 
     public void scanTrainSet( Consumer< OxfordImage > c ) {
-
-        this.trainSet( c );
+        current = 0;
+        this.trainSet( (img) -> {
+            current = current + 1;
+            c.accept( img );
+            System.out.println( String.format( "%.2f%% %s",(current/Double.valueOf( getTrainSetSize() ))*100,img.getImage().getName()) );
+        });
+        
     }
 
 
     public void scanTestSet( Consumer< OxfordImage > c ) {
-        current = 0;
-        this.testSet( (img) -> {
-            current = current + 1;
-            c.accept( img );
-            System.out.println( String.format( "%.2f%% %s",(current/Double.valueOf( getTestSetSize() ))*100,img.getImage().getName()) );
-        });
+        this.testSet( c );
     }
 
 
-    public long getTestSetSize() {
+    public long getTrainSetSize() {
 
-        testSetSize = 0;
-        if ( testSetSize == 0 ) {
-            testSet( ( i ) -> this.testSetSize = testSetSize + 1 );
+        trainSetSize = 0;
+        if ( trainSetSize == 0 ) {
+            trainSet( ( i ) -> this.trainSetSize = trainSetSize + 1 );
         }
-        return this.testSetSize;
+        return this.trainSetSize;
     }
 
 
-    public void scanTestSetSifts( Consumer< double[] > c ) {
+    public void scanTrainSetSifts( Consumer< double[] > c ) {
 
-        this.scanTestSet( ( image ) -> image.scan( c ) );
+        this.scanTrainSet( ( image ) -> image.scan( c ) );
     }
 
 }

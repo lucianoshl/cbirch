@@ -15,8 +15,10 @@ public interface ClusterTree {
 
     void finishBuild();
 
-    void findTopK( OxfordImage query, int i );
+    List< Histogram > findTopK( OxfordImage query, int i );
 
     List< ImageHits > queryImage( OxfordImage queryImage );
+
+    Histogram getHistogram( OxfordImage img );
 
 }
