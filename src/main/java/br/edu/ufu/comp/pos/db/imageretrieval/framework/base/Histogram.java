@@ -11,6 +11,8 @@ public class Histogram {
     private double[] content;
 
     private OxfordImage image;
+    
+    private double maxOcurrence;
 
 
     public Histogram( OxfordImage img, int wordsSize ) {
@@ -20,8 +22,11 @@ public class Histogram {
 
 
     public void count( CFEntry closestCluster ) {
-
-        this.content[ closestCluster.getSubclusterID() ]++;
+    	int wordId = closestCluster.getSubclusterID();
+		this.content[ wordId ]++;
+    	if (maxOcurrence < this.content[ wordId ]){
+    		maxOcurrence = this.content[ wordId ];
+    	}
     }
 
 
@@ -35,5 +40,24 @@ public class Histogram {
 
         return image;
     }
+
+
+	public Histogram normalize(Histograms histograms) {
+		double[] result = new double[content.length];
+		for (int i = 0; i < content.length; i++) {
+			result[i] = content[i] * tf(i) * histograms.idf(i);
+		}
+		return null;
+	}
+
+
+	private double tf(int word) {
+		return content[word] / maxOcurrence;
+	}
+
+
+	public boolean hasOcurrence(int word) {
+		return content[word] > 0.0;
+	}
 
 }

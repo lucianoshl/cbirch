@@ -2,12 +2,12 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework.base;
 
 import java.util.List;
 
+import br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree.CFEntry;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
-import br.edu.ufu.comp.pos.db.imageretrieval.pojo.ImageHits;
 
 public interface ClusterTree {
 
-    void insertEntry( double[] sift );
+    boolean insertEntry( double[] sift );
 
     void optimize();
 
@@ -17,8 +17,8 @@ public interface ClusterTree {
 
     List< Histogram > findTopK( OxfordImage query, int i );
 
-    List< ImageHits > queryImage( OxfordImage queryImage );
+	int getWordsSize();
 
-    Histogram getHistogram( OxfordImage img );
+	CFEntry findClosestCluster(double[] sift);
 
 }

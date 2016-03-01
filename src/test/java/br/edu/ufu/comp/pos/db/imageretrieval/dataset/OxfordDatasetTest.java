@@ -9,12 +9,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
+import lombok.Getter;
 
 
 public class OxfordDatasetTest {
 
     OxfordImage test;
-
+    
     @Test
     public void validateBinaryReader( )
         throws IOException {
