@@ -48,7 +48,7 @@ public class Histograms {
 					n++;
 				}
 			}
-			value = Math.log(documents.size() / n);
+			value = Math.log(documents.size() / (n+1)); // TODO OLHAR N = ZERO
 			this.idfCache.put(word, value);
 		}
 
