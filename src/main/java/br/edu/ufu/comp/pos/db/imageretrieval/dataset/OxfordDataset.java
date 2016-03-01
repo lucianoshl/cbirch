@@ -40,14 +40,14 @@ public class OxfordDataset extends Dataset {
 
 
     @Override
-    public void scanTrainSet( Consumer< OxfordImage > c ) {
-
-        this.scan( c, false );
-    }
-
-    public void scanTestSet( Consumer< OxfordImage > c ) {
+    public void trainSet( Consumer< OxfordImage > c ) {
 
         this.scan( c, true );
+    }
+
+    public void testSet( Consumer< OxfordImage > c ) {
+
+        this.scan( c, false );
     }
 
 
@@ -98,7 +98,8 @@ public class OxfordDataset extends Dataset {
 
         Scanner scanner = Utils.createScanner( orderInBinaryFile );
         while ( scanner.hasNextLine() ) {
-            c.accept( scanner.nextLine().replace( "oxc1_", "" ) + ".jpg" );
+            String fileName = scanner.nextLine().replace( "oxc1_", "" ) + ".jpg";
+            c.accept( fileName );
         }
         scanner.close();
     }

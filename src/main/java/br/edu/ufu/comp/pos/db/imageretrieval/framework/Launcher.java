@@ -33,7 +33,7 @@ public class Launcher {
 
         tree.optimize();
 
-        dataset.scanTestSet( ( img ) -> tree.index( img ) );
+        dataset.testSet( ( img ) -> tree.index( img ) );
 
         tree.finishBuild();
     }
