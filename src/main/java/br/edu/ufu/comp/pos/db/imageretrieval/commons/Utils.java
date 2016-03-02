@@ -3,6 +3,7 @@ package br.edu.ufu.comp.pos.db.imageretrieval.commons;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 import org.apache.commons.io.FileUtils;
@@ -35,5 +36,14 @@ public class Utils {
         } catch ( IOException e ) {
             throw new IllegalStateException(e);
         }
+    }
+
+    public static List<String> readLines(String path) {
+	try {
+	    return FileUtils.readLines(new File(path));
+	} catch (IOException e) {
+	    throw new IllegalStateException(e);
+	}
+	
     }
 }

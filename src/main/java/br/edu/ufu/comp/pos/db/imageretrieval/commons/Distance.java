@@ -18,7 +18,7 @@ import java.util.TreeMap;
  * @author Barkin Aygun
  *
  */
-public class Similarity {
+public class Distance {
         public static final int COSINE = 0;
         public static final int L2 = 1;
         public static final int L1 = 2;
@@ -82,7 +82,7 @@ public class Similarity {
          * @param vec2 Array of doubles for second vector
          * @return the distance between the two vectors
          */
-        public static double calculateSimilarity(double[] vec1, double[] vec2) {
+        public static double cosine(double[] vec1, double[] vec2) {
                 return calculateSimilarity(vec1, vec2, COSINE);
         }
         

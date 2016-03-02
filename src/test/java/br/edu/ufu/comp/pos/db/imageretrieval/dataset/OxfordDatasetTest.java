@@ -9,7 +9,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
-import lombok.Getter;
 
 
 public class OxfordDatasetTest {
@@ -35,7 +34,7 @@ public class OxfordDatasetTest {
             randomAccessFile.read();
 
         }
-        Assert.assertEquals( randomAccessFile.read(), -1 );
+        Assert.assertEquals( -1 , randomAccessFile.read());
         randomAccessFile.close();
     }
 }

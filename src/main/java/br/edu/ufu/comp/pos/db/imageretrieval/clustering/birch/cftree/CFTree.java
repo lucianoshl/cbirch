@@ -631,16 +631,18 @@ public class CFTree extends IndexedTree {
         
         int id = 0;
         while ( l != null ) {
-            wordsAmount += l.getEntries().size();
             if ( !l.isDummy() ) {
-                // System.out.println(l);
                 for ( CFEntry e : l.getEntries() ) {
                     e.setSubclusterID( id );
+                    if (e.getN() == 0){
+                        System.out.println( e );
+                    }
                     id++;
                 }
             }
             l = l.getNextLeaf();
         }
+        wordsAmount = id;
     }
 
 

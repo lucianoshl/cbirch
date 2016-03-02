@@ -16,7 +16,7 @@ public class Launcher {
 
     public static void main( String[] args )
         throws IOException {
-        
+
         if ( args.length == 0 ) {
             throw new IllegalArgumentException( "tree name is required" );
         }
@@ -31,18 +31,31 @@ public class Launcher {
     public void run( Dataset dataset, ClusterTree tree )
         throws IOException {
 
+	
+	
         dataset.scanTrainSetSifts( ( sift ) -> tree.insertEntry( sift ) );
 
-//        tree.optimize();
+        // tree.optimize();
         tree.finishBuild();
 
         dataset.scanTrainSet( ( img ) -> tree.index( img ) );
+
+        String[] testClasses = dataset.getTestClasses();
+        for (String clazz : testClasses) {
+            System.out.println("=============== START QUERY FOR CLASS " + clazz);
+            dataset.scanTestSet(clazz, ( query ) -> {
+                System.out.println();
+                System.out.println( "\tQuery: " + query.getImage().getName() );
+                List< Histogram > results = tree.findTopK( query, 4 );
+                for ( int i = 0; i < results.size(); i++ ) {
+                    String imgName = results.get( i ).getImage().getImage().getName();
+                    String classification = dataset.quality( query, imgName );
+                    System.out.println( String.format( "\t\tRank %s: %s %s", i, imgName, classification ) );
+                }
+            } );
+            System.out.println();
+	}
         
-        dataset.scanTestSet( (query)->{
-            List< Histogram > results = tree.findTopK( query, 4 );
-            for ( Histogram histogram : results ) {
-                System.out.println( histogram.getImage().getImage().getName() );
-            }
-        });
+
     }
 }
