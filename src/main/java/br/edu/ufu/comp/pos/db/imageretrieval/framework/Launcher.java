@@ -50,13 +50,18 @@ public class Launcher {
 		for (int j = 0; j < results.size(); j++) {
 		    String imgName = results.get(j).getImage().getImage().getName();
 		    String classification = dataset.quality(query, imgName);
+		    System.out.println(String.format("\t\tRank %s: %s %s", j, imgName, classification));
 		    if (Arrays.asList("good","ok","junk").contains(classification)){
+			System.out.println("Classification is valid"+averagePrecision[i]);
 			averagePrecision[i] += 1;
+			System.out.println("now is "+averagePrecision[i] );
 		    }
 		    
-		    System.out.println(String.format("\t\tRank %s: %s %s", j, imgName, classification));
+		   
 		}
-		averagePrecision[i] = averagePrecision[i]/4;
+		System.out.println("Sum precision is " +  averagePrecision[i]);
+		averagePrecision[i] = averagePrecision[i]/4.0;
+		System.out.println("Sum precision/4 is " +  averagePrecision[i]);
 		System.out.println("Average precision: " + averagePrecision[i]);
 		System.out.println();
 	    });
@@ -67,7 +72,7 @@ public class Launcher {
 	for (int i = 0; i < averagePrecision.length; i++) {
 	    mAP += averagePrecision[i];
 	}
-	System.out.println("mAP: " + mAP/averagePrecision.length);
+	System.out.println("mAP: " + mAP/Double.valueOf(averagePrecision.length));
 
     }
 }

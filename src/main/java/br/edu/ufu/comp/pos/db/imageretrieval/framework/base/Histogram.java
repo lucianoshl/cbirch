@@ -3,6 +3,8 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework.base;
 
 import java.util.Arrays;
 
+import org.apache.commons.math3.ml.distance.CosineDistance;
+import org.apache.commons.math3.ml.distance.DistanceMeasure;
 import org.apache.commons.math3.ml.distance.EuclideanDistance;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree.CFEntry;
@@ -11,7 +13,7 @@ import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 
 public class Histogram {
 
-    private static EuclideanDistance distanceMeasure = new EuclideanDistance();
+    private static DistanceMeasure distanceMeasure = new CosineDistance();
 
     private double[] content;
 

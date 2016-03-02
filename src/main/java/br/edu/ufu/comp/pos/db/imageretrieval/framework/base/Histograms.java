@@ -25,7 +25,7 @@ public class Histograms {
 
 	Histogram normalizedQuery = query.normalize(this);
 
-	result.sort((a, b) -> {
+	result.sort((b, a) -> {
 	    double distA = normalizedQuery.distance(a.normalize(this));
 	    double distB = normalizedQuery.distance(b.normalize(this));
 	    return Double.compare(distA, distB);
