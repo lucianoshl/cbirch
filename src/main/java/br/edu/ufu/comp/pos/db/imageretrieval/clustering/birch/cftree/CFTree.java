@@ -236,7 +236,7 @@ public class CFTree extends IndexedTree {
      */
     public boolean insertEntry( double[] x ) {
 
-        instanceIndex++;
+	instanceIndex++;
 
         if ( automaticRebuild && ( instanceIndex % periodicMemLimitCheck ) == 0 ) {
             // rebuilds the tree if we reached or exceeded memory limits
@@ -496,7 +496,7 @@ public class CFTree extends IndexedTree {
      *            a CFTree
      * @return memory usage in bytes
      */
-    private long computeMemorySize( CFTree t ) {
+    protected long computeMemorySize( CFTree t ) {
 
         long memSize = 0;
         try {

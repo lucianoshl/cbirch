@@ -14,8 +14,8 @@ public abstract class Dataset {
 
     protected abstract void trainSet(Consumer<OxfordImage> c);
 
-    protected abstract void testSet(String clazz,Consumer<OxfordImage> c);
-    
+    protected abstract void testSet(String clazz, Consumer<OxfordImage> c);
+
     public abstract String[] getTestClasses();
 
     public void scanTrainSet(Consumer<OxfordImage> c) {
@@ -24,16 +24,13 @@ public abstract class Dataset {
 	    current = current + 1;
 	    c.accept(img);
 	    percent = (current / Double.valueOf(getTrainSetSize())) * 100;
-	    if (percent > lastPrint + 9) {
-		lastPrint = (lastPrint + 10);
-		System.out.println(String.format("%.2f%%", percent));
-	    }
+	    System.out.println(String.format("%.2f%%", percent));
 	});
 
     }
 
-    public void scanTestSet(String clazz,Consumer<OxfordImage> c) {
-	this.testSet(clazz,c);
+    public void scanTestSet(String clazz, Consumer<OxfordImage> c) {
+	this.testSet(clazz, c);
     }
 
     public long getTrainSetSize() {

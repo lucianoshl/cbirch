@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
+
 
 /**
  * The original code for this class can be found at
@@ -159,7 +161,7 @@ public class SizeOf {
 
         Field[] result = fieldsCache.get( clazz );
         if ( result == null ) {
-            result = clazz.getDeclaredFields();
+            result = FieldUtils.getAllFields(clazz);
             fieldsCache.put( clazz, result );
         }
         return result;

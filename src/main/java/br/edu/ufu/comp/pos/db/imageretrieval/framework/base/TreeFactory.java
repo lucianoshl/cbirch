@@ -14,6 +14,7 @@ public class TreeFactory {
             
             System.out.println( "Tree: Birch" );
             System.out.println( "Branching factor: "+branchingFactor );
+            System.out.println( "Threshold: "+threshold );
             System.out.println( "Memory: "+memory );
             
             return new BirchTree( branchingFactor , threshold, memory);

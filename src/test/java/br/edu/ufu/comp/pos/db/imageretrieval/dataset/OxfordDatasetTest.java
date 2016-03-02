@@ -8,6 +8,7 @@ import java.io.RandomAccessFile;
 import org.junit.Assert;
 import org.junit.Test;
 
+import br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree.CFTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 
 
@@ -37,4 +38,6 @@ public class OxfordDatasetTest {
         Assert.assertEquals( -1 , randomAccessFile.read());
         randomAccessFile.close();
     }
+    
+
 }

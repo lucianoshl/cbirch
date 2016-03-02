@@ -372,27 +372,27 @@ public class CFEntry {
 
 
     public String toString() {
-        return String.valueOf( this.subclusterID );
-//        StringBuffer buff = new StringBuffer();
-//        buff.append( " " );
-//        for ( int i = 0; i < sumX.length; i++ )
-//            buff.append( sumX[ i ] / n + " " );
-//
-//        if ( this.indexList != null ) {
-//            buff.append( "( " );
-//            for ( int i : indexList ) {
-//                buff.append( i + " " );
-//            }
-//            buff.append( ")" );
-//        }
-//        if ( this.hasChild() ) {
-//            buff.append( LINE_SEP );
-//            buff.append( "||" + LINE_SEP );
-//            buff.append( "||" + LINE_SEP );
-//            buff.append( this.getChild() );
-//        }
-//
-//        return buff.toString();
+//        return String.valueOf( this.subclusterID );
+        StringBuffer buff = new StringBuffer();
+        buff.append( " " );
+        for ( int i = 0; i < sumX.length; i++ )
+            buff.append( sumX[ i ] / n + " " );
+
+        if ( this.indexList != null ) {
+            buff.append( "( " );
+            for ( int i : indexList ) {
+                buff.append( i + " " );
+            }
+            buff.append( ")" );
+        }
+        if ( this.hasChild() ) {
+            buff.append( LINE_SEP );
+            buff.append( "||" + LINE_SEP );
+            buff.append( "||" + LINE_SEP );
+            buff.append( this.getChild() );
+        }
+
+        return buff.toString();
     }
 
 
