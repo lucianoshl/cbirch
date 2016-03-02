@@ -44,6 +44,7 @@ public class Launcher {
 	    String clazz = testClasses[i];
 	    System.out.println("=============== START QUERY FOR CLASS " + clazz);
 	    dataset.scanTestSet(clazz, (query) -> {
+		double queryAssert = 0.0;
 		System.out.println();
 		System.out.println("\tQuery: " + query.getImage().getName());
 		List<Histogram> results = tree.findTopK(query, 4);
@@ -53,18 +54,16 @@ public class Launcher {
 		    System.out.println(String.format("\t\tRank %s: %s %s", j, imgName, classification));
 		    if (Arrays.asList("good","ok","junk").contains(classification)){
 			System.out.println("Classification is valid"+averagePrecision[i]);
-			averagePrecision[i] += 1;
+			queryAssert += 1;
 			System.out.println("now is "+averagePrecision[i] );
 		    }
-		    
-		   
 		}
-		System.out.println("Sum precision is " +  averagePrecision[i]);
-		averagePrecision[i] = averagePrecision[i]/4.0;
-		System.out.println("Sum precision/4 is " +  averagePrecision[i]);
+
+		averagePrecision[i] += queryAssert/4.0;
 		System.out.println("Average precision: " + averagePrecision[i]);
 		System.out.println();
 	    });
+	    averagePrecision[i] = averagePrecision[i]/5;
 	    System.out.println();
 	}
 	
