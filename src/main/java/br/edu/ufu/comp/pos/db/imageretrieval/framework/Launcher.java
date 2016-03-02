@@ -1,7 +1,7 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework;
 
-
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
@@ -11,51 +11,63 @@ import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Histogram;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.TreeFactory;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.tree.BirchTree;
 
-
 public class Launcher {
 
-    public static void main( String[] args )
-        throws IOException {
+    double[] averagePrecision;
+    int i;
 
-        if ( args.length == 0 ) {
-            throw new IllegalArgumentException( "tree name is required" );
-        }
+    public static void main(String[] args) throws IOException {
 
-        Dataset dataset = new DatasetFactory().create( args );
-        BirchTree tree = new TreeFactory().create( args );
-        new Launcher().run( dataset, tree );
+	if (args.length == 0) {
+	    throw new IllegalArgumentException("tree name is required");
+	}
+
+	Dataset dataset = new DatasetFactory().create(args);
+	BirchTree tree = new TreeFactory().create(args);
+	new Launcher().run(dataset, tree);
 
     }
 
+    public void run(Dataset dataset, ClusterTree tree) throws IOException {
 
-    public void run( Dataset dataset, ClusterTree tree )
-        throws IOException {
+	dataset.scanTrainSetSifts((sift) -> tree.insertEntry(sift));
 
-	
-	
-        dataset.scanTrainSetSifts( ( sift ) -> tree.insertEntry( sift ) );
+	// tree.optimize();
+	tree.finishBuild();
 
-        // tree.optimize();
-        tree.finishBuild();
+	dataset.scanTrainSet((img) -> tree.index(img));
 
-        dataset.scanTrainSet( ( img ) -> tree.index( img ) );
+	String[] testClasses = dataset.getTestClasses();
+	averagePrecision = new double[testClasses.length];
 
-        String[] testClasses = dataset.getTestClasses();
-        for (String clazz : testClasses) {
-            System.out.println("=============== START QUERY FOR CLASS " + clazz);
-            dataset.scanTestSet(clazz, ( query ) -> {
-                System.out.println();
-                System.out.println( "\tQuery: " + query.getImage().getName() );
-                List< Histogram > results = tree.findTopK( query, 4 );
-                for ( int i = 0; i < results.size(); i++ ) {
-                    String imgName = results.get( i ).getImage().getImage().getName();
-                    String classification = dataset.quality( query, imgName );
-                    System.out.println( String.format( "\t\tRank %s: %s %s", i, imgName, classification ) );
-                }
-            } );
-            System.out.println();
+	for (i = 0; i < testClasses.length; i++) {
+	    String clazz = testClasses[i];
+	    System.out.println("=============== START QUERY FOR CLASS " + clazz);
+	    dataset.scanTestSet(clazz, (query) -> {
+		System.out.println();
+		System.out.println("\tQuery: " + query.getImage().getName());
+		List<Histogram> results = tree.findTopK(query, 4);
+		for (int j = 0; j < results.size(); j++) {
+		    String imgName = results.get(j).getImage().getImage().getName();
+		    String classification = dataset.quality(query, imgName);
+		    if (Arrays.asList("good","ok","junk").contains(classification)){
+			averagePrecision[i] += 1;
+		    }
+		    
+		    System.out.println(String.format("\t\tRank %s: %s %s", j, imgName, classification));
+		}
+		averagePrecision[i] = averagePrecision[i]/4;
+		System.out.println("Average precision: " + averagePrecision[i]);
+		System.out.println();
+	    });
+	    System.out.println();
 	}
-        
+	
+	double mAP = 0.0;
+	for (int i = 0; i < averagePrecision.length; i++) {
+	    mAP += averagePrecision[i];
+	}
+	System.out.println("mAP: " + mAP/averagePrecision.length);
 
     }
 }
