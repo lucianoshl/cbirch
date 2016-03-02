@@ -10,7 +10,6 @@ public abstract class Dataset {
 
     private long current;
     private double percent;
-    private double lastPrint;
 
     protected abstract void trainSet(Consumer<OxfordImage> c);
 

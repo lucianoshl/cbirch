@@ -23,10 +23,8 @@
 
 package br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
-
 
 /**
  * 
@@ -35,7 +33,7 @@ import java.util.Arrays;
  */
 public class CFEntry {
 
-    private static final String LINE_SEP = System.getProperty( "line.separator" );
+    private static final String LINE_SEP = System.getProperty("line.separator");
 
     private int n = 0; // number of patterns summarized by this entry
 
@@ -45,36 +43,32 @@ public class CFEntry {
 
     private CFNode child = null;
 
-    private ArrayList< Integer > indexList = null;
+    private ArrayList<Integer> indexList = null;
 
     private int subclusterID = -1; // the unique id the describes a subcluster
-                                   // (valid only for leaf entries)
-
+				   // (valid only for leaf entries)
 
     public CFEntry() {
     }
 
-
-    public CFEntry( double[] x ) {
-        this( x, 0 );
+    public CFEntry(double[] x) {
+	this(x, 0);
     }
 
+    public CFEntry(double[] x, int index) {
+	this.n = 1;
 
-    public CFEntry( double[] x, int index ) {
-        this.n = 1;
+	this.sumX = new double[x.length];
+	for (int i = 0; i < sumX.length; i++)
+	    sumX[i] = x[i];
 
-        this.sumX = new double[ x.length ];
-        for ( int i = 0; i < sumX.length; i++ )
-            sumX[ i ] = x[ i ];
+	this.sumX2 = new double[x.length];
+	for (int i = 0; i < sumX2.length; i++)
+	    sumX2[i] = x[i] * x[i];
 
-        this.sumX2 = new double[ x.length ];
-        for ( int i = 0; i < sumX2.length; i++ )
-            sumX2[ i ] = x[ i ] * x[ i ];
-
-        indexList = new ArrayList< Integer >();
-        indexList.add( index );
+	indexList = new ArrayList<Integer>();
+	indexList.add(index);
     }
-
 
     /**
      * This makes a deep copy of the CFEntry e. WARNING: we do not make a deep
@@ -83,343 +77,319 @@ public class CFEntry {
      * @param e
      *            the entry to be cloned
      */
-    public CFEntry( CFEntry e ) {
-        this.n = e.n;
-        this.sumX = e.sumX.clone();
-        this.sumX2 = e.sumX2.clone();
-        this.child = e.child; // WARNING: we do not make a deep copy of the
-                              // child!!!
-        this.indexList = new ArrayList< Integer >();
-        for ( int i : e.getIndexList() ) // this makes sure we get a deep copy
-                                         // of the indexList
-            this.indexList.add( i );
+    public CFEntry(CFEntry e) {
+	this.n = e.n;
+	this.sumX = e.sumX.clone();
+	this.sumX2 = e.sumX2.clone();
+	this.child = e.child; // WARNING: we do not make a deep copy of the
+			      // child!!!
+	this.indexList = new ArrayList<Integer>();
+	for (int i : e.getIndexList()) // this makes sure we get a deep copy
+				       // of the indexList
+	    this.indexList.add(i);
     }
 
+    protected ArrayList<Integer> getIndexList() {
 
-    protected ArrayList< Integer > getIndexList() {
-
-        return indexList;
+	return indexList;
     }
-
 
     protected boolean hasChild() {
 
-        return ( child != null );
+	return (child != null);
     }
-
 
     protected CFNode getChild() {
 
-        return child;
+	return child;
     }
-
 
     protected int getChildSize() {
 
-        return child.getEntries().size();
+	return child.getEntries().size();
     }
 
+    protected void setChild(CFNode n) {
 
-    protected void setChild( CFNode n ) {
-
-        child = n;
-        indexList = null; // we don't keep this if this becomes a non-leaf entry
+	child = n;
+	indexList = null; // we don't keep this if this becomes a non-leaf entry
     }
 
+    protected void setSubclusterID(int id) {
 
-    protected void setSubclusterID( int id ) {
-
-        subclusterID = id;
+	subclusterID = id;
     }
-
 
     public int getSubclusterID() {
 
-        return subclusterID;
+	return subclusterID;
     }
 
+    @SuppressWarnings("unchecked")
+    protected void update(CFEntry e) {
 
-    @SuppressWarnings( "unchecked" )
-    protected void update( CFEntry e ) {
+	this.n += e.n;
 
-        this.n += e.n;
+	if (this.sumX == null)
+	    this.sumX = e.sumX.clone();
+	else {
+	    for (int i = 0; i < sumX.length; i++)
+		this.sumX[i] += e.sumX[i];
+	}
 
-        if ( this.sumX == null )
-            this.sumX = e.sumX.clone();
-        else {
-            for ( int i = 0; i < sumX.length; i++ )
-                this.sumX[ i ] += e.sumX[ i ];
-        }
+	if (this.sumX2 == null)
+	    this.sumX2 = e.sumX2.clone();
+	else {
+	    for (int i = 0; i < sumX2.length; i++)
+		this.sumX2[i] += e.sumX2[i];
+	}
 
-        if ( this.sumX2 == null )
-            this.sumX2 = e.sumX2.clone();
-        else {
-            for ( int i = 0; i < sumX2.length; i++ )
-                this.sumX2[ i ] += e.sumX2[ i ];
-        }
-
-        if ( !this.hasChild() ) { // we keep indexList only if we are at a leaf
-            if ( this.indexList != null && e.indexList != null )
-                this.indexList.addAll( e.indexList );
-            else if ( this.indexList == null && e.indexList != null )
-                this.indexList = (ArrayList< Integer >) e.indexList.clone();
-        }
+	if (!this.hasChild()) { // we keep indexList only if we are at a leaf
+	    if (this.indexList != null && e.indexList != null)
+		this.indexList.addAll(e.indexList);
+	    else if (this.indexList == null && e.indexList != null)
+		this.indexList = (ArrayList<Integer>) e.indexList.clone();
+	}
     }
 
+    protected void addToChild(CFEntry e) {
 
-    protected void addToChild( CFEntry e ) {
-
-        // adds directly to the child node
-        child.getEntries().add( e );
+	// adds directly to the child node
+	child.getEntries().add(e);
     }
 
+    protected boolean isWithinThreshold(CFEntry e, double threshold, int distFunction) {
 
-    protected boolean isWithinThreshold( CFEntry e, double threshold, int distFunction ) {
+	double dist = distance(e, distFunction);
+	// System.out.println("Distance = " + dist);
 
-        double dist = distance( e, distFunction );
-        // System.out.println("Distance = " + dist);
+	if (dist == 0 || dist <= threshold) // read the comments in function
+					    // d0() about differences with
+					    // implementation in R
+	    return true;
 
-        if ( dist == 0 || dist <= threshold ) // read the comments in function
-                                              // d0() about differences with
-                                              // implementation in R
-            return true;
-
-        return false;
+	return false;
     }
-
 
     /**
      * 
      * @param e
      * @return the distance between this entry and e
      */
-    protected double distance( CFEntry e, int distFunction ) {
+    protected double distance(CFEntry e, int distFunction) {
 
-        double dist = Double.MAX_VALUE;
+	double dist = Double.MAX_VALUE;
 
-        switch ( distFunction ) {
-            case CFTree.D0_DIST:
-                dist = d0( this, e );
-                break;
-            case CFTree.D1_DIST:
-                dist = d1( this, e );
-                break;
-            case CFTree.D2_DIST:
-                dist = d2( this, e );
-                break;
-            case CFTree.D3_DIST:
-                dist = d3( this, e );
-                break;
-            case CFTree.D4_DIST:
-                dist = d4( this, e );
-                break;
-        }
+	switch (distFunction) {
+	case CFTree.D0_DIST:
+	    dist = d0(this, e);
+	    break;
+	case CFTree.D1_DIST:
+	    dist = d1(this, e);
+	    break;
+	case CFTree.D2_DIST:
+	    dist = d2(this, e);
+	    break;
+	case CFTree.D3_DIST:
+	    dist = d3(this, e);
+	    break;
+	case CFTree.D4_DIST:
+	    dist = d4(this, e);
+	    break;
+	}
 
-        return dist;
+	return dist;
     }
 
+    private double d0(CFEntry e1, CFEntry e2) {
 
-    private double d0( CFEntry e1, CFEntry e2 ) {
+	double dist = 0;
+	for (int i = 0; i < e1.sumX.length; i++) {
+	    double diff = e1.sumX[i] / e1.n - e2.sumX[i] / e2.n;
+	    dist += diff * diff;
+	}
 
-        double dist = 0;
-        for ( int i = 0; i < e1.sumX.length; i++ ) {
-            double diff = e1.sumX[ i ] / e1.n - e2.sumX[ i ] / e2.n;
-            dist += diff * diff;
-        }
+	if (dist < 0)
+	    System.err.println("d0 < 0 !!!");
 
-        if ( dist < 0 )
-            System.err.println( "d0 < 0 !!!" );
-
-        // notice here that in the R implementation of BIRCH (package birch)
-        //
-        // the radius parameter is based on the squared distance /dist/
-        // this causes a difference in results.
-        // if we change the line below into
-        // return dist;
-        // the results produced by the R implementation and this Java
-        // implementation
-        // will match perfectly (notice that in the R implementation maxEntries
-        // = 100
-        // and merging refinement is not implemented)
-        // System.out.println(dist);
-        return Math.sqrt( dist );
-        // return dist;
+	// notice here that in the R implementation of BIRCH (package birch)
+	//
+	// the radius parameter is based on the squared distance /dist/
+	// this causes a difference in results.
+	// if we change the line below into
+	// return dist;
+	// the results produced by the R implementation and this Java
+	// implementation
+	// will match perfectly (notice that in the R implementation maxEntries
+	// = 100
+	// and merging refinement is not implemented)
+	// System.out.println(dist);
+	return Math.sqrt(dist);
+	// return dist;
     }
 
+    private double d1(CFEntry e1, CFEntry e2) {
 
-    private double d1( CFEntry e1, CFEntry e2 ) {
+	double dist = 0;
+	for (int i = 0; i < e1.sumX.length; i++) {
+	    double diff = Math.abs(e1.sumX[i] / e1.n - e2.sumX[i] / e2.n);
+	    dist += diff;
+	}
 
-        double dist = 0;
-        for ( int i = 0; i < e1.sumX.length; i++ ) {
-            double diff = Math.abs( e1.sumX[ i ] / e1.n - e2.sumX[ i ] / e2.n );
-            dist += diff;
-        }
+	if (dist < 0)
+	    System.err.println("d1 < 0 !!!");
 
-        if ( dist < 0 )
-            System.err.println( "d1 < 0 !!!" );
-
-        return dist;
+	return dist;
     }
 
+    private double d2(CFEntry e1, CFEntry e2) {
 
-    private double d2( CFEntry e1, CFEntry e2 ) {
+	double dist = 0;
 
-        double dist = 0;
+	int n1 = e1.n;
+	int n2 = e2.n;
+	for (int i = 0; i < e1.sumX.length; i++) {
+	    double diff = (n2 * e1.sumX2[i] - 2 * e1.sumX[i] * e2.sumX[i] + n1 * e2.sumX2[i]) / (n1 * n2);
+	    dist += diff;
+	}
 
-        int n1 = e1.n;
-        int n2 = e2.n;
-        for ( int i = 0; i < e1.sumX.length; i++ ) {
-            double diff = ( n2 * e1.sumX2[ i ] - 2 * e1.sumX[ i ] * e2.sumX[ i ] + n1 * e2.sumX2[ i ] ) / ( n1 * n2 );
-            dist += diff;
-        }
+	if (dist < 0)
+	    System.err.println("d2 < 0 !!!");
 
-        if ( dist < 0 )
-            System.err.println( "d2 < 0 !!!" );
-
-        return Math.sqrt( dist );
+	return Math.sqrt(dist);
     }
 
+    private double d3(CFEntry e1, CFEntry e2) {
 
-    private double d3( CFEntry e1, CFEntry e2 ) {
+	double dist = 0;
 
-        double dist = 0;
+	int n1 = e1.n;
+	int n2 = e2.n;
+	double[] totSumX = e1.sumX.clone();
+	double[] totSumX2 = e1.sumX2.clone();
+	for (int i = 0; i < e2.sumX.length; i++) {
+	    totSumX[i] += e2.sumX[i];
+	    totSumX2[i] += e2.sumX2[i];
+	}
 
-        int n1 = e1.n;
-        int n2 = e2.n;
-        double[] totSumX = e1.sumX.clone();
-        double[] totSumX2 = e1.sumX2.clone();
-        for ( int i = 0; i < e2.sumX.length; i++ ) {
-            totSumX[ i ] += e2.sumX[ i ];
-            totSumX2[ i ] += e2.sumX2[ i ];
-        }
+	for (int i = 0; i < totSumX.length; i++) {
+	    double diff = ((n1 + n2) * totSumX2[i] - 2 * totSumX[i] * totSumX[i] + (n1 + n2) * totSumX2[i])
+		    / ((n1 + n2) * (n1 + n2 - 1));
+	    dist += diff;
+	}
 
-        for ( int i = 0; i < totSumX.length; i++ ) {
-            double diff = ( ( n1 + n2 ) * totSumX2[ i ] - 2 * totSumX[ i ] * totSumX[ i ]
-                + ( n1 + n2 ) * totSumX2[ i ] ) / ( ( n1 + n2 ) * ( n1 + n2 - 1 ) );
-            dist += diff;
-        }
+	if (dist < 0)
+	    System.err.println("d3 < 0 !!!");
 
-        if ( dist < 0 )
-            System.err.println( "d3 < 0 !!!" );
-
-        return Math.sqrt( dist );
+	return Math.sqrt(dist);
     }
 
+    private double d4(CFEntry e1, CFEntry e2) {
 
-    private double d4( CFEntry e1, CFEntry e2 ) {
+	double dist = 0;
 
-        double dist = 0;
+	int n1 = e1.n;
+	int n2 = e2.n;
+	double[] totSumX = e1.sumX.clone();
+	double[] totSumX2 = e1.sumX2.clone();
+	for (int i = 0; i < e2.sumX.length; i++) {
+	    totSumX[i] += e2.sumX[i];
+	    totSumX2[i] += e2.sumX2[i];
+	}
 
-        int n1 = e1.n;
-        int n2 = e2.n;
-        double[] totSumX = e1.sumX.clone();
-        double[] totSumX2 = e1.sumX2.clone();
-        for ( int i = 0; i < e2.sumX.length; i++ ) {
-            totSumX[ i ] += e2.sumX[ i ];
-            totSumX2[ i ] += e2.sumX2[ i ];
-        }
+	for (int i = 0; i < totSumX.length; i++) {
+	    double diff1 = totSumX2[i] - 2 * totSumX[i] * totSumX[i] / (n1 + n2)
+		    + (n1 + n2) * (totSumX[i] / (n1 + n2)) * (totSumX[i] / (n1 + n2));
+	    double diff2 = e1.sumX2[i] - 2 * e1.sumX[i] * e1.sumX[i] / n1 + n1 * (e1.sumX[i] / n1) * (e1.sumX[i] / n1);
+	    double diff3 = e2.sumX2[i] - 2 * e2.sumX[i] * e2.sumX[i] / n2 + n2 * (e2.sumX[i] / n2) * (e2.sumX[i] / n2);
+	    dist += diff1 - diff2 - diff3;
+	}
 
-        for ( int i = 0; i < totSumX.length; i++ ) {
-            double diff1 = totSumX2[ i ] - 2 * totSumX[ i ] * totSumX[ i ] / ( n1 + n2 )
-                + ( n1 + n2 ) * ( totSumX[ i ] / ( n1 + n2 ) ) * ( totSumX[ i ] / ( n1 + n2 ) );
-            double diff2 = e1.sumX2[ i ] - 2 * e1.sumX[ i ] * e1.sumX[ i ] / n1
-                + n1 * ( e1.sumX[ i ] / n1 ) * ( e1.sumX[ i ] / n1 );
-            double diff3 = e2.sumX2[ i ] - 2 * e2.sumX[ i ] * e2.sumX[ i ] / n2
-                + n2 * ( e2.sumX[ i ] / n2 ) * ( e2.sumX[ i ] / n2 );
-            dist += diff1 - diff2 - diff3;
-        }
+	if (dist < 0)
+	    System.err.println("d4 < 0 !!!");
 
-        if ( dist < 0 )
-            System.err.println( "d4 < 0 !!!" );
-
-        return Math.sqrt( dist );
+	return Math.sqrt(dist);
     }
 
+    public boolean equals(Object o) {
 
-    public boolean equals( Object o ) {
+	CFEntry e = (CFEntry) o;
 
-        CFEntry e = (CFEntry) o;
+	if (this.n != e.n)
+	    return false;
 
-        if ( this.n != e.n )
-            return false;
+	if (this.child != null && e.child == null)
+	    return false;
 
-        if ( this.child != null && e.child == null )
-            return false;
+	if (this.child == null && e.child != null)
+	    return false;
 
-        if ( this.child == null && e.child != null )
-            return false;
+	if (this.child != null && !this.child.equals(e.child))
+	    return false;
 
-        if ( this.child != null && !this.child.equals( e.child ) )
-            return false;
+	if (this.indexList == null && e.indexList != null)
+	    return false;
 
-        if ( this.indexList == null && e.indexList != null )
-            return false;
+	if (this.indexList != null && e.indexList == null)
+	    return false;
 
-        if ( this.indexList != null && e.indexList == null )
-            return false;
+	if (!Arrays.equals(this.sumX, e.sumX))
+	    return false;
 
-        if ( !Arrays.equals( this.sumX, e.sumX ) )
-            return false;
+	if (!Arrays.equals(this.sumX2, e.sumX2))
+	    return false;
 
-        if ( !Arrays.equals( this.sumX2, e.sumX2 ) )
-            return false;
+	if (this.indexList != null && !this.indexList.equals(e.indexList))
+	    return false;
 
-        if ( this.indexList != null && !this.indexList.equals( e.indexList ) )
-            return false;
-
-        return true;
+	return true;
     }
-
 
     public String toString() {
-//        return String.valueOf( this.subclusterID );
-        StringBuffer buff = new StringBuffer();
-        buff.append( " " );
-        for ( int i = 0; i < sumX.length; i++ )
-            buff.append( sumX[ i ] / n + " " );
+	// return String.valueOf( this.subclusterID );
+	StringBuffer buff = new StringBuffer();
+	buff.append(" ");
+	for (int i = 0; i < sumX.length; i++)
+	    buff.append(sumX[i] / n + " ");
 
-        if ( this.indexList != null ) {
-            buff.append( "( " );
-            for ( int i : indexList ) {
-                buff.append( i + " " );
-            }
-            buff.append( ")" );
-        }
-        if ( this.hasChild() ) {
-            buff.append( LINE_SEP );
-            buff.append( "||" + LINE_SEP );
-            buff.append( "||" + LINE_SEP );
-            buff.append( this.getChild() );
-        }
+	if (this.indexList != null) {
+	    buff.append("( ");
+	    for (int i : indexList) {
+		buff.append(i + " ");
+	    }
+	    buff.append(")");
+	}
+	if (this.hasChild()) {
+	    buff.append(LINE_SEP);
+	    buff.append("||" + LINE_SEP);
+	    buff.append("||" + LINE_SEP);
+	    buff.append(this.getChild());
+	}
 
-        return buff.toString();
+	return buff.toString();
     }
-
 
     public double[] getSumX() {
 
-        return sumX;
+	return sumX;
     }
-
 
     public int getN() {
 
-        return n;
+	return n;
     }
-
 
     public double[] getSumX2() {
 
-        return sumX2;
+	return sumX2;
     }
-
 
     public double[] getCenter() {
 
-        double[] res = new double[ sumX.length ];
-        for ( int i = 0; i < sumX.length; i++ )
-            res[ i ] = sumX[ i ] / n;
-        return res;
+	double[] res = new double[sumX.length];
+	for (int i = 0; i < sumX.length; i++)
+	    res[i] = sumX[i] / n;
+	return res;
     }
 
 }

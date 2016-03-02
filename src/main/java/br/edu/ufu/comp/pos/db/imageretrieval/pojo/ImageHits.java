@@ -8,22 +8,19 @@ public class ImageHits {
 
     private final String image;
 
-
-    public ImageHits( OxfordImage image, Integer hits ) {
-        this.image = image.getImage().getName();
-        this.hits = hits;
+    public ImageHits(OxfordImage image, Integer hits) {
+	this.image = image.getImage().getName();
+	this.hits = hits;
     }
-
 
     public Integer getHits() {
 
-        return hits;
+	return hits;
     }
-
 
     public String getImage() {
 
-        return image;
+	return image;
     }
 
 }

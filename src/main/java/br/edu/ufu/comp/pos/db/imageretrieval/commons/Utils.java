@@ -9,33 +9,33 @@ import java.util.Scanner;
 import org.apache.commons.io.FileUtils;
 
 public class Utils {
-    public static double[] convertToDouble( byte[] buffer ) {
+    public static double[] convertToDouble(byte[] buffer) {
 
-        double[] result = new double[ buffer.length ];
-        for ( int i = 0; i < buffer.length; i++ ) {
-            result[ i ] = buffer[ i ];
-        }
-        return result;
+	double[] result = new double[buffer.length];
+	for (int i = 0; i < buffer.length; i++) {
+	    result[i] = buffer[i];
+	}
+	return result;
     }
 
-    public static File getDatesetPath( String workspace, String datasetName ) {
-        return new File(workspace,"datasets" + File.separatorChar + datasetName);
-    }
-    
-    public static Scanner createScanner(File file){
-        try {
-            return new Scanner(file);
-        } catch ( FileNotFoundException e ) {
-            throw new IllegalStateException(e);
-        }
+    public static File getDatesetPath(String workspace, String datasetName) {
+	return new File(workspace, "datasets" + File.separatorChar + datasetName);
     }
 
-    public static String readFileToString( File file ) {
-        try {
-            return FileUtils.readFileToString( file );
-        } catch ( IOException e ) {
-            throw new IllegalStateException(e);
-        }
+    public static Scanner createScanner(File file) {
+	try {
+	    return new Scanner(file);
+	} catch (FileNotFoundException e) {
+	    throw new IllegalStateException(e);
+	}
+    }
+
+    public static String readFileToString(File file) {
+	try {
+	    return FileUtils.readFileToString(file);
+	} catch (IOException e) {
+	    throw new IllegalStateException(e);
+	}
     }
 
     public static List<String> readLines(String path) {
@@ -44,6 +44,6 @@ public class Utils {
 	} catch (IOException e) {
 	    throw new IllegalStateException(e);
 	}
-	
+
     }
 }

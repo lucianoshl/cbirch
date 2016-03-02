@@ -52,26 +52,26 @@ public class Launcher {
 		    String imgName = results.get(j).getImage().getImage().getName();
 		    String classification = dataset.quality(query, imgName);
 		    System.out.println(String.format("\t\tRank %s: %s %s", j, imgName, classification));
-		    if (Arrays.asList("good","ok","junk").contains(classification)){
-			System.out.println("Classification is valid"+averagePrecision[i]);
+		    if (Arrays.asList("good", "ok", "junk").contains(classification)) {
+			System.out.println("Classification is valid" + averagePrecision[i]);
 			queryAssert += 1;
-			System.out.println("now is "+averagePrecision[i] );
+			System.out.println("now is " + averagePrecision[i]);
 		    }
 		}
 
-		averagePrecision[i] += queryAssert/4.0;
+		averagePrecision[i] += queryAssert / 4.0;
 		System.out.println("Average precision: " + averagePrecision[i]);
 		System.out.println();
 	    });
-	    averagePrecision[i] = averagePrecision[i]/5;
+	    averagePrecision[i] = averagePrecision[i] / 5;
 	    System.out.println();
 	}
-	
+
 	double mAP = 0.0;
 	for (int i = 0; i < averagePrecision.length; i++) {
 	    mAP += averagePrecision[i];
 	}
-	System.out.println("mAP: " + mAP/Double.valueOf(averagePrecision.length));
+	System.out.println("mAP: " + mAP / Double.valueOf(averagePrecision.length));
 
     }
 }

@@ -50,11 +50,11 @@ public class Histograms {
 		    n++;
 		}
 	    }
-	    if (n == 0){
+	    if (n == 0) {
 		System.out.println("N = ZERO");
 		System.exit(1);
 	    }
-	    value = Math.log(documents.size() /n);
+	    value = Math.log(documents.size() / n);
 	    this.idfCache.put(word, value);
 	}
 

@@ -7,18 +7,18 @@ import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 
 public interface ClusterTree {
 
-    boolean insertEntry( double[] sift );
+    boolean insertEntry(double[] sift);
 
     void optimize();
 
-    void index( OxfordImage img );
+    void index(OxfordImage img);
 
     void finishBuild();
 
-    List< Histogram > findTopK( OxfordImage query, int i );
+    List<Histogram> findTopK(OxfordImage query, int i);
 
-	int getWordsSize();
+    int getWordsSize();
 
-	CFEntry findClosestCluster(double[] sift);
+    CFEntry findClosestCluster(double[] sift);
 
 }

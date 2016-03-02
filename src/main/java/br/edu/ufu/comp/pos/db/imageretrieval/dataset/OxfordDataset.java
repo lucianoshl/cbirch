@@ -103,7 +103,7 @@ public class OxfordDataset extends Dataset {
 	    String fileName = scanner.nextLine().replace("oxc1_", "") + ".jpg";
 	    c.accept(fileName);
 	    i++;
-	    if (i == 100){
+	    if (i == 100) {
 		break;
 	    }
 	}
