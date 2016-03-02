@@ -22,7 +22,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
  * @see java#lang#instrument#Instrument
  * @version 0.5
  */
-// @SuppressWarnings({"rawtypes","unused"})
+ @SuppressWarnings({"rawtypes","unused"})
 public class SizeOf {
 
     private static OutputStream out = System.out;
