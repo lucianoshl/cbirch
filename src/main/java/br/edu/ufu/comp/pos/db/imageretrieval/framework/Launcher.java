@@ -1,10 +1,12 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.DatasetFactory;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Histogram;
@@ -12,9 +14,6 @@ import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.TreeFactory;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.tree.BirchTree;
 
 public class Launcher {
-
-    double[] averagePrecision;
-    int i;
 
     public static void main(String[] args) throws IOException {
 
@@ -24,11 +23,11 @@ public class Launcher {
 
 	Dataset dataset = new DatasetFactory().create(args);
 	BirchTree tree = new TreeFactory().create(args);
-	new Launcher().run(dataset, tree);
+	new Launcher().run(dataset, tree, 4);
 
     }
 
-    public void run(Dataset dataset, ClusterTree tree) throws IOException {
+    public void run(Dataset dataset, ClusterTree tree, int K) throws IOException {
 
 	dataset.scanTrainSetSifts((sift) -> tree.insertEntry(sift));
 
@@ -37,41 +36,33 @@ public class Launcher {
 
 	dataset.scanTrainSet((img) -> tree.index(img));
 
-	String[] testClasses = dataset.getTestClasses();
-	averagePrecision = new double[testClasses.length];
+	List<Double> averagePrecision = new ArrayList<Double>();
 
-	for (i = 0; i < testClasses.length; i++) {
-	    String clazz = testClasses[i];
-	    System.out.println("=============== START QUERY FOR CLASS " + clazz);
+	for (String clazz : dataset.getTestClasses()) {
+	    List<Double> precisionList = new ArrayList<Double>();
 	    dataset.scanTestSet(clazz, (query) -> {
-		double queryAssert = 0.0;
-		System.out.println();
-		System.out.println("\tQuery: " + query.getImage().getName());
-		List<Histogram> results = tree.findTopK(query, 4);
-		for (int j = 0; j < results.size(); j++) {
-		    String imgName = results.get(j).getImage().getImage().getName();
-		    String classification = dataset.quality(query, imgName);
-		    System.out.println(String.format("\t\tRank %s: %s %s", j, imgName, classification));
-		    if (Arrays.asList("good", "ok", "junk").contains(classification)) {
-			System.out.println("Classification is valid" + averagePrecision[i]);
-			queryAssert += 1;
-			System.out.println("now is " + averagePrecision[i]);
-		    }
-		}
-
-		averagePrecision[i] += queryAssert / 4.0;
-		System.out.println("Average precision: " + averagePrecision[i]);
-		System.out.println();
-	    });
-	    averagePrecision[i] = averagePrecision[i] / 5;
-	    System.out.println();
+		precisionList.add(precision(dataset, tree, query, K));
+	    });	    
+	    
+	    if (!precisionList.isEmpty()){ // for developer testing
+		averagePrecision.add(precisionList.stream().mapToDouble(a -> a).average().getAsDouble());
+	    }  
 	}
 
-	double mAP = 0.0;
-	for (int i = 0; i < averagePrecision.length; i++) {
-	    mAP += averagePrecision[i];
-	}
-	System.out.println("mAP: " + mAP / Double.valueOf(averagePrecision.length));
+	System.out.println("mAP: " + averagePrecision.stream().mapToDouble(a -> a).average().getAsDouble());
 
+    }
+
+    private double precision(Dataset dataset, ClusterTree tree, OxfordImage query, int K) {
+	int queryAssert = 0;
+	List<Histogram> results = tree.findTopK(query, K);
+	for (int j = 0; j < results.size(); j++) {
+	    String imgName = results.get(j).getImage().getImage().getName();
+	    String classification = dataset.quality(query, imgName);
+	    if (Arrays.asList("good", "ok", "junk").contains(classification)) {
+		queryAssert += 1;
+	    }
+	}
+	return queryAssert/Double.valueOf(K);
     }
 }
