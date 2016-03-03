@@ -440,7 +440,10 @@ public class CFTree extends IndexedTree {
 						// increases
 						// compared to
 						// currentThreshold
+	    logger.info("newThreshold <= currentThreshold");
+	    logger.info("increase currentThreshold in 10% ");
 	    newThreshold = 2 * currentThreshold;
+	    newThreshold = 1.1 * currentThreshold;
 	}
 
 	return newThreshold;
