@@ -18,6 +18,8 @@ public interface ClusterTree {
     List<Histogram> findTopK(OxfordImage query, int i);
 
     int getWordsSize();
+    
+    int calcWordsSize();
 
     CFEntry findClosestCluster(double[] sift);
 

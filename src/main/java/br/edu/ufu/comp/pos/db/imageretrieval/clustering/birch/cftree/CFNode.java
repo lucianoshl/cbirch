@@ -168,7 +168,6 @@ public class CFNode {
 	}
 
 	CFEntry closest = findClosestEntry(e);
-	// System.out.println("Closest Entry = " + closest);
 
 	boolean dontSplit = false;
 	if (closest.hasChild()) { // if closest has a child we go down with a

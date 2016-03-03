@@ -33,13 +33,18 @@ public class Launcher {
 
     public void run(Dataset dataset, ClusterTree tree, int K) throws IOException {
 
+	logger.info("Building tree with test set...");
 	dataset.scanTrainSetSifts((sift) -> tree.insertEntry(sift));
 
-	tree.optimize();
+	logger.info("Vocabulary size: " + tree.calcWordsSize() );
+//	logger.info("Start optimize" );
+//	tree.optimize();
+//	logger.info("Vocabulary size after optmize: " + tree.calcWordsSize() );
 	tree.finishBuild();
 
 	dataset.scanTrainSet((img) -> tree.index(img));
 
+	logger.info("Calc mAP...");
 	List<Double> averagePrecision = new ArrayList<Double>();
 
 	for (String clazz : dataset.getTestClasses()) {
@@ -53,7 +58,6 @@ public class Launcher {
 	    }  
 	}
 
-	System.out.println("Vocabulary size: "+ tree.getWordsSize());
 	System.out.println("mAP: " + averagePrecision.stream().mapToDouble(a -> a).average().getAsDouble());
 
     }

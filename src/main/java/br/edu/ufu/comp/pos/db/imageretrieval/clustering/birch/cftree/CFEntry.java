@@ -161,7 +161,6 @@ public class CFEntry {
     protected boolean isWithinThreshold(CFEntry e, double threshold, int distFunction) {
 
 	double dist = distance(e, distFunction);
-	// System.out.println("Distance = " + dist);
 
 	if (dist == 0 || dist <= threshold) // read the comments in function
 					    // d0() about differences with
@@ -223,7 +222,6 @@ public class CFEntry {
 	// will match perfectly (notice that in the R implementation maxEntries
 	// = 100
 	// and merging refinement is not implemented)
-	// System.out.println(dist);
 	return Math.sqrt(dist);
 	// return dist;
     }

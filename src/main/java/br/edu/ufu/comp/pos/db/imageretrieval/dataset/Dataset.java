@@ -2,9 +2,13 @@ package br.edu.ufu.comp.pos.db.imageretrieval.dataset;
 
 import java.util.function.Consumer;
 
+import org.apache.log4j.Logger;
+
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 
 public abstract class Dataset {
+
+    final static Logger logger = Logger.getLogger(Dataset.class);
 
     private long trainSetSize;
 
@@ -23,7 +27,7 @@ public abstract class Dataset {
 	    current = current + 1;
 	    c.accept(img);
 	    percent = (current / Double.valueOf(getTrainSetSize())) * 100;
-	    System.out.println(String.format("%.2f%%", percent));
+	    logger.debug(String.format("%.2f%%", percent));
 	});
 
     }

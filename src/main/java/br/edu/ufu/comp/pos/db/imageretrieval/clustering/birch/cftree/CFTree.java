@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.IndexedTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 import br.edu.ufu.comp.pos.db.imageretrieval.pojo.ImageCounter;
@@ -45,6 +47,8 @@ import net.sourceforge.sizeof.SizeOf;
  */
 public class CFTree extends IndexedTree {
 
+    final static Logger logger = Logger.getLogger(CFTree.class);
+    
     /**
      * Used when computing if the tree is reaching memory limit
      */
@@ -249,8 +253,6 @@ public class CFTree extends IndexedTree {
 
 	CFEntry e = new CFEntry(x, index);
 
-	// System.out.println("Inserting " + e);
-
 	return insertEntry(e);
     }
 
@@ -315,17 +317,19 @@ public class CFTree extends IndexedTree {
 
     public void rebuildTree() {
 
-	System.out.println("############## Size of Tree is reaching or has exceeded the memory limit");
-	System.out.println("############## Rebuilding the Tree...");
-
-	System.out.println("############## Current Threshold = " + root.getDistThreshold());
+	logger.info("Preparing to rebuild tree");
+	logger.info("Actual threshold " + root.getDistThreshold());
+	logger.info("Computing new threshould...");
 	double newThreshold = computeNewThreshold(leafListStart, root.getDistFunction(), root.getDistThreshold());
-	System.out.println("############## New Threshold = " + newThreshold);
+	logger.info("New threshold: "+ newThreshold);
+	logger.info("Tree size: "+ SizeOf.humanReadable(computeMemorySize(this) ));
+	logger.info("Rebuilding... ");
 
 	CFTree newTree = this.rebuildTree(root.getMaxNodeEntries(), newThreshold, root.getDistFunction(),
 		root.applyMergingRefinement(), true);
 
-	System.out.println("#################### new Tree Size = " + SizeOf.humanReadable(computeMemorySize(newTree)));
+	logger.info("New tree size: "+ SizeOf.humanReadable(computeMemorySize(newTree) ));
+	
 	copyTree(newTree);
     }
 
@@ -776,6 +780,18 @@ public class CFTree extends IndexedTree {
 	return this.root.getDistThreshold();
     }
 
+    public int calcWordsSize() {
+	CFNode l = leafListStart.getNextLeaf(); // the first leaf is dummy!
+
+	int result = 0;
+	
+	while (l != null) {
+	    result += l.getEntries().size();
+	    l = l.getNextLeaf();
+	}
+	return result;
+    }
+    
     public int getWordsSize() {
 	return wordsAmount;
     }
