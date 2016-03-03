@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
@@ -15,8 +17,10 @@ import br.edu.ufu.comp.pos.db.imageretrieval.framework.tree.BirchTree;
 
 public class Launcher {
 
+    final static Logger logger = Logger.getLogger(Launcher.class);
+    
     public static void main(String[] args) throws IOException {
-
+	
 	if (args.length == 0) {
 	    throw new IllegalArgumentException("tree name is required");
 	}
@@ -31,7 +35,7 @@ public class Launcher {
 
 	dataset.scanTrainSetSifts((sift) -> tree.insertEntry(sift));
 
-	// tree.optimize();
+	tree.optimize();
 	tree.finishBuild();
 
 	dataset.scanTrainSet((img) -> tree.index(img));
@@ -49,11 +53,15 @@ public class Launcher {
 	    }  
 	}
 
+	System.out.println("Vocabulary size: "+ tree.getWordsSize());
 	System.out.println("mAP: " + averagePrecision.stream().mapToDouble(a -> a).average().getAsDouble());
 
     }
 
     private double precision(Dataset dataset, ClusterTree tree, OxfordImage query, int K) {
+	
+	
+	
 	int queryAssert = 0;
 	List<Histogram> results = tree.findTopK(query, K);
 	for (int j = 0; j < results.size(); j++) {

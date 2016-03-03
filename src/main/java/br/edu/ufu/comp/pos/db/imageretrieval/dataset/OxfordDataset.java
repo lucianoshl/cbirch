@@ -10,10 +10,15 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
+import org.apache.log4j.Logger;
+
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.DatasetFactory;
 
 public class OxfordDataset extends Dataset {
+
+    final static Logger logger = Logger.getLogger(DatasetFactory.class);
 
     private File binaryFile;
 
@@ -103,15 +108,17 @@ public class OxfordDataset extends Dataset {
 	    String fileName = scanner.nextLine().replace("oxc1_", "") + ".jpg";
 	    c.accept(fileName);
 	    i++;
-//	    if (i == 100) {
-//		break;
-//	    }
+	    // if (i == 100) {
+	    // break;
+	    // }
 	}
 	scanner.close();
     }
 
     public static OxfordDataset createFromBase(String workspace, String datasetName) {
 
+	logger.debug("Creating class for dataset oxford");
+	
 	return new OxfordDataset(workspace, datasetName, "feat_oxc1_hesaff_sift.bin", "word_oxc1_hesaff_sift_16M_1M",
 		"images", "gt_files", "README2.txt");
     }
