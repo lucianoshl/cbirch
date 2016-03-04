@@ -13,6 +13,9 @@ import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 
 public class Histogram {
 
+    private static int GENERATOR = 0;
+    private int uuid = ++GENERATOR;
+
     static public Cache<Integer, double[]> histogramCache;
 
     static {
@@ -45,7 +48,7 @@ public class Histogram {
     }
 
     public double distance(Histogram histogram) {
-	return Histogram.distanceMeasure.compute(histogram.content, this.content);
+	return Histogram.distanceMeasure.compute(histogram.getContent(), this.getContent());
     }
 
     public OxfordImage getImage() {
@@ -106,12 +109,12 @@ public class Histogram {
 	return new Histogram(img, content);
     }
 
-    public double[] getContent() {
-        return content;
+    private double[] getContent() {
+	return histogramCache.get(uuid);
     }
 
-    public void setContent(double[] content) {
-        this.content = content;
+    private void setContent(double[] content) {
+	histogramCache.put(uuid, content);
     }
 
 }
