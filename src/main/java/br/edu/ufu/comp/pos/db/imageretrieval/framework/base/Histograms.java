@@ -35,9 +35,8 @@ public class Histograms {
     }
 
     public static Histogram getHistogram(OxfordImage img, ClusterTree tree) {
-	Histogram histogram = new Histogram(img, tree.getWordsSize());
-	img.scan((sift) -> histogram.count(tree.findClosestCluster(sift)));
-	return histogram;
+
+	return Histogram.create(img,tree);
     }
 
     public double idf(int word) {

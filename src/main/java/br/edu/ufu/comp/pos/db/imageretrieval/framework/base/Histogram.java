@@ -34,12 +34,7 @@ public class Histogram {
 
     private double maxOcurrence;
 
-    public Histogram(OxfordImage img, int wordsSize) {
-	this.image = img;
-	this.content = new double[wordsSize];
-    }
-
-    public Histogram(OxfordImage img, double[] content) {
+    private Histogram(OxfordImage img, double[] content) {
 	this.image = img;
 	this.content = content;
 	this.maxOcurrence = 0;
@@ -109,6 +104,15 @@ public class Histogram {
 	if (!Arrays.equals(content, other.content))
 	    return false;
 	return true;
+    }
+
+    public static Histogram create(OxfordImage img, ClusterTree tree) {
+
+	double[] content = new double[tree.getWordsSize()];
+	img.scan((sift) -> {
+	    content[tree.findClosestCluster(sift).getSubclusterID()]++;
+	});
+	return new Histogram(img, content);
     }
 
 }
