@@ -1,5 +1,6 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework.base;
 
+import java.io.File;
 import java.util.Arrays;
 
 import org.apache.commons.math3.ml.distance.CosineDistance;
@@ -8,20 +9,34 @@ import org.ehcache.Cache;
 import org.ehcache.CacheManager;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
+import org.ehcache.config.builders.ResourcePoolsBuilder;
+import org.ehcache.config.units.EntryUnit;
+import org.ehcache.config.units.MemoryUnit;
+import org.ehcache.impl.config.persistence.CacheManagerPersistenceConfiguration;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 
 public class Histogram {
 
     private static int GENERATOR = 0;
+    private static int CACHE_HITS = 0;
     private int uuid = ++GENERATOR;
 
     static public Cache<Integer, double[]> histogramCache;
+    static public CacheManager cacheManager;
+
+    private Histogram normalized;
 
     static {
-	CacheManager cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
-		.withCache("histogramCache",
-			CacheConfigurationBuilder.newCacheConfigurationBuilder(Integer.class, double[].class).build())
+
+	cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
+		.with(new CacheManagerPersistenceConfiguration(new File("/tmp/cache" + Math.random())))
+		.withCache("histogramCache", CacheConfigurationBuilder
+			.newCacheConfigurationBuilder(Integer.class, double[].class)
+			.withResourcePools(ResourcePoolsBuilder.newResourcePoolsBuilder()//
+				.heap(1000, EntryUnit.ENTRIES).offheap(1, MemoryUnit.GB)//
+				.disk(5, MemoryUnit.GB, false))
+			.build())
 		.build(true);
 
 	histogramCache = cacheManager.getCache("histogramCache", Integer.class, double[].class);
@@ -29,8 +44,6 @@ public class Histogram {
     }
 
     private static DistanceMeasure distanceMeasure = new CosineDistance();
-
-    private double[] content;
 
     private OxfordImage image;
 
@@ -57,25 +70,23 @@ public class Histogram {
     }
 
     public Histogram normalize(Histograms histograms) {
-
-	double[] content = getContent();
-	double[] result = new double[content.length];
-	for (int i = 0; i < content.length; i++) {
-	    if (content[i] != 0) {
-		result[i] = content[i] * tf(i) * histograms.idf(i);
+	if (normalized == null) {
+	    double[] content = getContent();
+	    double[] result = new double[content.length];
+	    for (int i = 0; i < content.length; i++) {
+		if (content[i] != 0) {
+		    result[i] = content[i] * tf(i, content) * histograms.idf(i);
+		}
 	    }
+	    normalized = new Histogram(this.getImage(), result);
 	}
-	return new Histogram(this.getImage(), result);
+
+	return normalized;
     }
 
-    private double tf(int word) {
+    private double tf(int word, double[] content) {
 
-	return getContent()[word] / maxOcurrence;
-    }
-
-    public boolean hasOcurrence(int word) {
-
-	return getContent()[word] > 0.0;
+	return content[word] / maxOcurrence;
     }
 
     @Override
@@ -109,11 +120,13 @@ public class Histogram {
 	return new Histogram(img, content);
     }
 
-    private double[] getContent() {
+    public double[] getContent() {
+//	System.out.println("cache get " + ++CACHE_HITS);
 	return histogramCache.get(uuid);
     }
 
     private void setContent(double[] content) {
+//	System.out.println("cache set " + ++CACHE_HITS);
 	histogramCache.put(uuid, content);
     }
 

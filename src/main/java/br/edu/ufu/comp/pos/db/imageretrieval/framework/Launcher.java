@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.log4j.Logger;
+import org.ehcache.CacheManager;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
@@ -26,13 +27,16 @@ public class Launcher {
 	    throw new IllegalArgumentException("tree name is required");
 	}
 
+	System.out.println(Histogram.cacheManager);
+	
 	Dataset dataset = new DatasetFactory().create(args);
 	BirchTree tree = new TreeFactory().create(args);
 
 	StopWatch stopWatch = new StopWatch();
 	stopWatch.start();
-	
+
 	new Launcher().run(dataset, tree, 4);
+	
 	logger.info("elapsed time " + stopWatch.getTime());
     }
 

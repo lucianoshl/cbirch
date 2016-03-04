@@ -45,7 +45,8 @@ public class Histograms {
 	    double n = 0;
 	    Collection<Histogram> documents = content.values();
 	    for (Histogram document : documents) {
-		if (document.hasOcurrence(word)) {
+		
+		if (document.getContent()[word] > 0.0) {
 		    n++;
 		}
 	    }
