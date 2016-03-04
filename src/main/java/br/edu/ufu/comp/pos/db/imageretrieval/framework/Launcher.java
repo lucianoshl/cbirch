@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.apache.log4j.Logger;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
@@ -27,8 +28,12 @@ public class Launcher {
 
 	Dataset dataset = new DatasetFactory().create(args);
 	BirchTree tree = new TreeFactory().create(args);
-	new Launcher().run(dataset, tree, 4);
 
+	StopWatch stopWatch = new StopWatch();
+	stopWatch.start();
+	
+	new Launcher().run(dataset, tree, 4);
+	logger.info("elapsed time " + stopWatch.getTime());
     }
 
     public void run(Dataset dataset, ClusterTree tree, int K) throws IOException {
@@ -52,7 +57,7 @@ public class Launcher {
 
 	    if (!precisionList.isEmpty()) { // for developer testing
 		double currentAveragePrecision = precisionList.stream().mapToDouble(a -> a).average().getAsDouble();
-		logger.info("Average precision for "+ clazz + " is " + currentAveragePrecision);
+		logger.info("Average precision for " + clazz + " is " + currentAveragePrecision);
 		averagePrecision.add(currentAveragePrecision);
 	    }
 	}

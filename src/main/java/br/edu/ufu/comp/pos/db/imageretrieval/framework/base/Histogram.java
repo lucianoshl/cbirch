@@ -4,11 +4,27 @@ import java.util.Arrays;
 
 import org.apache.commons.math3.ml.distance.CosineDistance;
 import org.apache.commons.math3.ml.distance.DistanceMeasure;
+import org.ehcache.Cache;
+import org.ehcache.CacheManager;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.CacheManagerBuilder;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree.CFEntry;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 
 public class Histogram {
+
+    static public Cache<Integer, double[]> histogramCache;
+
+    static {
+	CacheManager cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
+		.withCache("preConfigured",
+			CacheConfigurationBuilder.newCacheConfigurationBuilder(Integer.class, double[].class).build())
+		.build(true);
+
+	histogramCache = cacheManager.getCache("preConfigured", Integer.class, double[].class);
+
+    }
 
     private static DistanceMeasure distanceMeasure = new CosineDistance();
 
