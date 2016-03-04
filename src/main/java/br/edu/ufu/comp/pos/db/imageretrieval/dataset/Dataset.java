@@ -13,7 +13,10 @@ public abstract class Dataset {
     private long trainSetSize;
 
     private long current;
+
     private double percent;
+    
+    private double lastShow;
 
     protected abstract void trainSet(Consumer<OxfordImage> c);
 
@@ -23,11 +26,16 @@ public abstract class Dataset {
 
     public void scanTrainSet(Consumer<OxfordImage> c) {
 	current = 0;
+	lastShow = 0;
 	this.trainSet((img) -> {
 	    current = current + 1;
 	    c.accept(img);
 	    percent = (current / Double.valueOf(getTrainSetSize())) * 100;
-	    logger.debug(String.format("%.2f%%", percent));
+	    if (percent > lastShow){
+		logger.debug(String.format("%.2f%%", percent));
+		lastShow +=10;
+	    }
+	    
 	});
 
     }

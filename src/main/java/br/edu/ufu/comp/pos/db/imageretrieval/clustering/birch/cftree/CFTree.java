@@ -463,7 +463,8 @@ public class CFTree extends IndexedTree {
 
 	long memory = computeMemorySize(tree);
 
-	System.out.println("#################### Tree Size = " + SizeOf.humanReadable(memory));
+	String humanReadableTreeSize = SizeOf.humanReadable(memory);
+	logger.info("Tree size " + (Math.ceil(memory/Double.valueOf(limit)*100)) + "%" + " "+ humanReadableTreeSize + " ");
 	if (memory >= (limit - limit / (double) MEM_LIM_FRAC)) {
 	    return true;
 	}
