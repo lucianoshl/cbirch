@@ -52,6 +52,7 @@ public class Framework {
 	logger.info("mAP: " + map);
 
 	result.setMap(map);
+	result.setVocabularySize(tree.getWordsSize());
 	return result;
     }
 

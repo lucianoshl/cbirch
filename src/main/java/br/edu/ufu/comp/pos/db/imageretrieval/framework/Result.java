@@ -7,5 +7,6 @@ import lombok.Setter;
 @Setter
 public class Result {
     private double map;
+    private int vocabularySize;
     
 }
