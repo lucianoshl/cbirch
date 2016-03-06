@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import org.apache.log4j.Logger;
 
-import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 
 public abstract class Dataset {
 
@@ -18,13 +18,13 @@ public abstract class Dataset {
     
     private double lastShow;
 
-    protected abstract void trainSet(Consumer<OxfordImage> c);
+    protected abstract void trainSet(Consumer<Image> c);
 
-    protected abstract void testSet(String clazz, Consumer<OxfordImage> c);
+    protected abstract void testSet(String clazz, Consumer<Image> c);
 
     public abstract String[] getTestClasses();
 
-    public void scanTrainSet(Consumer<OxfordImage> c) {
+    public void scanTrainSet(Consumer<Image> c) {
 	current = 0;
 	lastShow = 0;
 	this.trainSet((img) -> {
@@ -40,7 +40,7 @@ public abstract class Dataset {
 
     }
 
-    public void scanTestSet(String clazz, Consumer<OxfordImage> c) {
+    public void scanTestSet(String clazz, Consumer<Image> c) {
 	this.testSet(clazz, c);
     }
 
@@ -58,6 +58,6 @@ public abstract class Dataset {
 	this.scanTrainSet((image) -> image.scan(c));
     }
 
-    public abstract String quality(OxfordImage query, String imgName);
+    public abstract String quality(Image query, String imgName);
 
 }

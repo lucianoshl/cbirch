@@ -14,7 +14,7 @@ import org.ehcache.config.units.EntryUnit;
 import org.ehcache.config.units.MemoryUnit;
 import org.ehcache.impl.config.persistence.CacheManagerPersistenceConfiguration;
 
-import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 
 public class Histogram {
 
@@ -45,11 +45,11 @@ public class Histogram {
 
     private static DistanceMeasure distanceMeasure = new CosineDistance();
 
-    private OxfordImage image;
+    private Image image;
 
     private double maxOcurrence;
 
-    private Histogram(OxfordImage img, double[] content) {
+    private Histogram(Image img, double[] content) {
 	this.image = img;
 	setContent(content);
 	this.maxOcurrence = 0;
@@ -64,7 +64,7 @@ public class Histogram {
 	return Histogram.distanceMeasure.compute(histogram.getContent(), this.getContent());
     }
 
-    public OxfordImage getImage() {
+    public Image getImage() {
 
 	return image;
     }
@@ -111,7 +111,7 @@ public class Histogram {
 	return true;
     }
 
-    public static Histogram create(OxfordImage img, ClusterTree tree) {
+    public static Histogram create(Image img, ClusterTree tree) {
 
 	double[] content = new double[tree.getWordsSize()];
 	img.scan((sift) -> {

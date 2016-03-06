@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 import org.ehcache.CacheManager;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
-import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.DatasetFactory;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Histogram;
@@ -71,7 +71,7 @@ public class Launcher {
 
     }
 
-    private double precision(Dataset dataset, ClusterTree tree, OxfordImage query, int K) {
+    private double precision(Dataset dataset, ClusterTree tree, Image query, int K) {
 
 	StringBuilder log = new StringBuilder();
 

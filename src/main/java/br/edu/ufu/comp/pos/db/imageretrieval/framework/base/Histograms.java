@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 
 public class Histograms {
 
-    Map<OxfordImage, Histogram> content = new HashMap<OxfordImage, Histogram>();
+    Map<Image, Histogram> content = new HashMap<Image, Histogram>();
 
     Map<Integer, Double> idfCache = new HashMap<Integer, Double>();
 
@@ -34,7 +34,7 @@ public class Histograms {
 	return result.subList(0, k);
     }
 
-    public static Histogram getHistogram(OxfordImage img, ClusterTree tree) {
+    public static Histogram getHistogram(Image img, ClusterTree tree) {
 
 	return Histogram.create(img,tree);
     }

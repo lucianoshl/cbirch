@@ -6,11 +6,13 @@ import java.io.RandomAccessFile;
 import java.util.function.Consumer;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
+import lombok.Getter;
 
-public class OxfordImage {
+public class OxfordImage extends Image {
 
     public final File binaryFile;
 
+    @Getter
     public final File image;
 
     public final long offset;
@@ -25,11 +27,7 @@ public class OxfordImage {
 	this.size = size;
     }
 
-    public File getImage() {
-
-	return image;
-    }
-
+    @Override
     public void scan(Consumer<double[]> c) {
 
 	try {
@@ -45,31 +43,6 @@ public class OxfordImage {
 	} catch (IOException e) {
 	    throw new IllegalStateException(e);
 	}
-    }
-
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((image == null) ? 0 : image.hashCode());
-	return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	OxfordImage other = (OxfordImage) obj;
-	if (image == null) {
-	    if (other.image != null)
-		return false;
-	} else if (!image.equals(other.image))
-	    return false;
-	return true;
     }
 
 }

@@ -3,7 +3,7 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework.tree;
 import java.util.List;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree.CFTree;
-import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Histogram;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Histograms;
@@ -26,7 +26,7 @@ public class BirchTree extends CFTree implements ClusterTree {
     }
 
     @Override
-    public void index(OxfordImage img) {
+    public void index(Image img) {
 	histograms.add(Histograms.getHistogram(img, this));
     }
 
@@ -37,7 +37,7 @@ public class BirchTree extends CFTree implements ClusterTree {
     }
 
     @Override
-    public List<Histogram> findTopK(OxfordImage queryImage, int k) {
+    public List<Histogram> findTopK(Image queryImage, int k) {
 
 	Histogram query = Histograms.getHistogram(queryImage, this);
 

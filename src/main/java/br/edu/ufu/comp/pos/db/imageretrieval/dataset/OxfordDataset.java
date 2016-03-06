@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 import org.apache.log4j.Logger;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.DatasetFactory;
 
@@ -37,12 +38,12 @@ public class OxfordDataset extends Dataset {
     private Map<String, List<String>> queryClass;
 
     @Override
-    public void trainSet(Consumer<OxfordImage> c) {
+    public void trainSet(Consumer<Image> c) {
 
 	this.scanAllImages(c);
     }
 
-    public void testSet(String clazz, Consumer<OxfordImage> c) {
+    public void testSet(String clazz, Consumer<Image> c) {
 
 	this.scanAllImages((image) -> {
 	    if (isQueryFile(clazz, image)) {
@@ -51,7 +52,7 @@ public class OxfordDataset extends Dataset {
 	});
     }
 
-    private boolean isQueryFile(String clazz, OxfordImage image) {
+    private boolean isQueryFile(String clazz, Image image) {
 
 	boolean isQuery = this.queryFiles.keySet().contains(image.getImage().getName());
 	boolean isFromClazz = this.queryClass.get(clazz).contains(image.getImage().getName());
@@ -78,7 +79,7 @@ public class OxfordDataset extends Dataset {
 	}
     }
 
-    protected void scanAllImages(Consumer<OxfordImage> c) {
+    protected void scanAllImages(Consumer<Image> c) {
 
 	Map<String, Long> aux = new HashMap<String, Long>();
 	aux.put("aux", 0l);
@@ -108,9 +109,9 @@ public class OxfordDataset extends Dataset {
 	    String fileName = scanner.nextLine().replace("oxc1_", "") + ".jpg";
 	    c.accept(fileName);
 	    i++;
-//	     if (i == 200) {
-//		 break;
-//	     }
+	     if (i == 200) {
+		 break;
+	     }
 	}
 	scanner.close();
     }
@@ -138,7 +139,7 @@ public class OxfordDataset extends Dataset {
     }
 
     @Override
-    public String quality(OxfordImage query, String imgName) {
+    public String quality(Image query, String imgName) {
 	File queryFile = this.queryFiles.get(query.getImage().getName());
 
 	String result = "null";

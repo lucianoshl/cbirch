@@ -7,11 +7,11 @@ import java.io.RandomAccessFile;
 import org.junit.Assert;
 import org.junit.Test;
 
-import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 
 public class OxfordDatasetTest {
 
-    OxfordImage test;
+    Image test;
 
     @Test
     public void validateBinaryReader() throws IOException {

@@ -29,10 +29,6 @@ public class SizeOf {
 
     private static Map<Class, Field[]> fieldsCache = new HashMap<Class, Field[]>();
 
-    // private static int modifier =
-    // System.getProperty("os.arch").contains("amd64") ? 2 : 1;
-    private static int modifier = 1;
-
     /**
      * Instance of java.lang.instrument.Instrument injected by the Java VM
      * 
@@ -68,7 +64,7 @@ public class SizeOf {
 	if (inst == null)
 	    throw new IllegalStateException("Instrumentation is null");
 
-	return inst.getObjectSize(object) * modifier;
+	return inst.getObjectSize(object);
     }
 
     private static String[] unit = { "b", "Kb", "Mb", "Gb" };

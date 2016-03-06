@@ -30,7 +30,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.IndexedTree;
-import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.pojo.ImageCounter;
 import br.edu.ufu.comp.pos.db.imageretrieval.pojo.ImageHits;
 import net.sourceforge.sizeof.SizeOf;
@@ -762,7 +762,7 @@ public class CFTree extends IndexedTree {
 	}
     }
 
-    public void index(OxfordImage img) {
+    public void index(Image img) {
 
 	img.scan((sift) -> putInIndex(findClosestCluster(sift), img));
     }
@@ -772,7 +772,7 @@ public class CFTree extends IndexedTree {
 	return this.root.findClosestCluster(new CFEntry(sift));
     }
 
-    public List<ImageHits> queryImage(OxfordImage query) {
+    public List<ImageHits> queryImage(Image query) {
 
 	ImageCounter counter = new ImageCounter();
 	query.scan((sift) -> counter.count(getImagesInLeaf(findClosestCluster(sift))));

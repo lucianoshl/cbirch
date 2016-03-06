@@ -6,23 +6,23 @@ import java.util.Map;
 import java.util.Set;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree.CFEntry;
-import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 
 public class IndexedTree {
 
-    private Map<CFEntry, Set<OxfordImage>> index = new HashMap<CFEntry, Set<OxfordImage>>();
+    private Map<CFEntry, Set<Image>> index = new HashMap<CFEntry, Set<Image>>();
 
-    protected void putInIndex(CFEntry leaf, OxfordImage img) {
+    protected void putInIndex(CFEntry leaf, Image img) {
 
-	Set<OxfordImage> set = index.get(leaf);
+	Set<Image> set = index.get(leaf);
 	if (set == null) {
-	    set = new HashSet<OxfordImage>();
+	    set = new HashSet<Image>();
 	    index.put(leaf, set);
 	}
 	set.add(img);
     }
 
-    protected Set<OxfordImage> getImagesInLeaf(CFEntry leaf) {
+    protected Set<Image> getImagesInLeaf(CFEntry leaf) {
 
 	return this.index.get(leaf);
     }

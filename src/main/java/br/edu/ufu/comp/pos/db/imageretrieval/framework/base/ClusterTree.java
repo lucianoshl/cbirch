@@ -3,7 +3,7 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework.base;
 import java.util.List;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree.CFEntry;
-import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 
 public interface ClusterTree {
 
@@ -11,11 +11,11 @@ public interface ClusterTree {
 
     void optimize();
 
-    void index(OxfordImage img);
+    void index(Image img);
 
     void finishBuild();
 
-    List<Histogram> findTopK(OxfordImage query, int i);
+    List<Histogram> findTopK(Image query, int i);
 
     int getWordsSize();
     
