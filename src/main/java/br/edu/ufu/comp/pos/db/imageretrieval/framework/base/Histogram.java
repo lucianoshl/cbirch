@@ -19,7 +19,7 @@ import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 public class Histogram {
 
     private static int GENERATOR = 0;
-    private static int CACHE_HITS = 0;
+//    private static int CACHE_HITS = 0;
     private int uuid = ++GENERATOR;
 
     static public Cache<Integer, double[]> histogramCache;
@@ -31,12 +31,12 @@ public class Histogram {
 
 	cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
 		.with(new CacheManagerPersistenceConfiguration(new File("/tmp/cache" + Math.random())))
-		.withCache("histogramCache", CacheConfigurationBuilder
-			.newCacheConfigurationBuilder(Integer.class, double[].class)
-			.withResourcePools(ResourcePoolsBuilder.newResourcePoolsBuilder()//
-				.heap(1000, EntryUnit.ENTRIES).offheap(1, MemoryUnit.GB)//
-				.disk(5, MemoryUnit.GB, false))
-			.build())
+		.withCache("histogramCache",
+			CacheConfigurationBuilder.newCacheConfigurationBuilder(Integer.class, double[].class)
+				.withResourcePools(ResourcePoolsBuilder.newResourcePoolsBuilder()//
+					.heap(1000, EntryUnit.ENTRIES).offheap(1, MemoryUnit.GB)//
+					.disk(5, MemoryUnit.GB, false))
+				.build())
 		.build(true);
 
 	histogramCache = cacheManager.getCache("histogramCache", Integer.class, double[].class);
@@ -121,12 +121,12 @@ public class Histogram {
     }
 
     public double[] getContent() {
-//	System.out.println("cache get " + ++CACHE_HITS);
+	// System.out.println("cache get " + ++CACHE_HITS);
 	return histogramCache.get(uuid);
     }
 
     private void setContent(double[] content) {
-//	System.out.println("cache set " + ++CACHE_HITS);
+	// System.out.println("cache set " + ++CACHE_HITS);
 	histogramCache.put(uuid, content);
     }
 

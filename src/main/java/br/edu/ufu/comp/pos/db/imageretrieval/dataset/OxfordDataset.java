@@ -37,6 +37,8 @@ public class OxfordDataset extends Dataset {
 
     private Map<String, List<String>> queryClass;
 
+    private int scanLimit = -1;
+
     @Override
     public void trainSet(Consumer<Image> c) {
 
@@ -109,9 +111,9 @@ public class OxfordDataset extends Dataset {
 	    String fileName = scanner.nextLine().replace("oxc1_", "") + ".jpg";
 	    c.accept(fileName);
 	    i++;
-	     if (i == 200) {
-		 break;
-	     }
+	    if (scanLimit == i) {
+		break;
+	    }
 	}
 	scanner.close();
     }
@@ -119,7 +121,7 @@ public class OxfordDataset extends Dataset {
     public static OxfordDataset createFromBase(String workspace, String datasetName) {
 
 	logger.debug("Creating class for dataset oxford");
-	
+
 	return new OxfordDataset(workspace, datasetName, "feat_oxc1_hesaff_sift.bin", "word_oxc1_hesaff_sift_16M_1M",
 		"images", "gt_files", "README2.txt");
     }
@@ -170,6 +172,10 @@ public class OxfordDataset extends Dataset {
 	String[] result = uniq.toArray(new String[uniq.size()]);
 	Arrays.sort(result);
 	return result;
+    }
+
+    public void setScanLimit(int scanLimit) {
+	this.scanLimit = scanLimit;
     }
 
 }

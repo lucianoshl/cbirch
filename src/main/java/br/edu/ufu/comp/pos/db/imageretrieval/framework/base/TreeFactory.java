@@ -2,15 +2,14 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework.base;
 
 import org.apache.log4j.Logger;
 
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.tree.BirchTree;
+import br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree.CFTree;
 
 public class TreeFactory {
 
     final static Logger logger = Logger.getLogger(TreeFactory.class);
-    
-    public BirchTree create(String[] args) {
+
+    public ClusterTree create(String[] args) {
 	String treeName = args[0];
-	
 
 	if (treeName.equals("birch")) {
 	    Integer branchingFactor = Integer.valueOf(args[2]);
@@ -22,10 +21,17 @@ public class TreeFactory {
 	    logger.info("Threshold: " + threshold);
 	    logger.info("Memory: " + memory);
 
-	    return new BirchTree(branchingFactor, threshold, memory);
+	    return createCFTree(branchingFactor, threshold, memory);
 	} else {
 	    throw new UnsupportedOperationException();
 	}
+    }
+
+    public ClusterTree createCFTree(Integer branchingFactor, Double threshold, Integer memory) {
+	CFTree tree = new CFTree(branchingFactor, threshold, 1, true);
+	tree.setAutomaticRebuild(true);
+	tree.setMemoryLimitMB(memory);
+	return tree;
     }
 
 }

@@ -25,14 +25,10 @@ package br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import br.edu.ufu.comp.pos.db.imageretrieval.commons.IndexedTree;
-import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
-import br.edu.ufu.comp.pos.db.imageretrieval.pojo.ImageCounter;
-import br.edu.ufu.comp.pos.db.imageretrieval.pojo.ImageHits;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 import net.sourceforge.sizeof.SizeOf;
 
 /**
@@ -45,10 +41,10 @@ import net.sourceforge.sizeof.SizeOf;
  * @version 0.1
  *
  */
-public class CFTree extends IndexedTree {
+public class CFTree implements ClusterTree {
 
     final static Logger logger = Logger.getLogger(CFTree.class);
-    
+
     /**
      * Used when computing if the tree is reaching memory limit
      */
@@ -321,15 +317,15 @@ public class CFTree extends IndexedTree {
 	logger.info("Actual threshold " + root.getDistThreshold());
 	logger.info("Computing new threshould...");
 	double newThreshold = computeNewThreshold(leafListStart, root.getDistFunction(), root.getDistThreshold());
-	logger.info("New threshold: "+ newThreshold);
-	logger.info("Tree size: "+ SizeOf.humanReadable(computeMemorySize(this) ));
+	logger.info("New threshold: " + newThreshold);
+	logger.info("Tree size: " + SizeOf.humanReadable(computeMemorySize(this)));
 	logger.info("Rebuilding... ");
 
 	CFTree newTree = this.rebuildTree(root.getMaxNodeEntries(), newThreshold, root.getDistFunction(),
 		root.applyMergingRefinement(), true);
 
-	logger.info("New tree size: "+ SizeOf.humanReadable(computeMemorySize(newTree) ));
-	
+	logger.info("New tree size: " + SizeOf.humanReadable(computeMemorySize(newTree)));
+
 	copyTree(newTree);
     }
 
@@ -443,7 +439,6 @@ public class CFTree extends IndexedTree {
 	    logger.info("newThreshold <= currentThreshold");
 	    logger.info("increase currentThreshold in 10% ");
 	    newThreshold = 2 * currentThreshold;
-	    newThreshold = 1.1 * currentThreshold;
 	}
 
 	return newThreshold;
@@ -464,7 +459,8 @@ public class CFTree extends IndexedTree {
 	long memory = computeMemorySize(tree);
 
 	String humanReadableTreeSize = SizeOf.humanReadable(memory);
-	logger.info("Tree size " + (Math.ceil(memory/Double.valueOf(limit)*100)) + "%" + " "+ humanReadableTreeSize + " ");
+	logger.info("Tree size " + (Math.ceil(memory / Double.valueOf(limit) * 100)) + "%" + " " + humanReadableTreeSize
+		+ " ");
 	if (memory >= (limit - limit / (double) MEM_LIM_FRAC)) {
 	    return true;
 	}
@@ -599,7 +595,7 @@ public class CFTree extends IndexedTree {
      * Signals the fact that we finished inserting data. The obtained
      * subclusters will be assigned a positive, unique ID number
      */
-    public void finishedInsertingData() {
+    public void finishBuild() {
 
 	CFNode l = leafListStart.getNextLeaf(); // the first leaf is dummy!
 
@@ -762,21 +758,9 @@ public class CFTree extends IndexedTree {
 	}
     }
 
-    public void index(Image img) {
-
-	img.scan((sift) -> putInIndex(findClosestCluster(sift), img));
-    }
-
     public CFEntry findClosestCluster(double[] sift) {
 
 	return this.root.findClosestCluster(new CFEntry(sift));
-    }
-
-    public List<ImageHits> queryImage(Image query) {
-
-	ImageCounter counter = new ImageCounter();
-	query.scan((sift) -> counter.count(getImagesInLeaf(findClosestCluster(sift))));
-	return counter.rank();
     }
 
     public double getThreshold() {
@@ -788,16 +772,17 @@ public class CFTree extends IndexedTree {
 	CFNode l = leafListStart.getNextLeaf(); // the first leaf is dummy!
 
 	int result = 0;
-	
+
 	while (l != null) {
 	    result += l.getEntries().size();
 	    l = l.getNextLeaf();
 	}
 	return result;
     }
-    
+
     public int getWordsSize() {
 	return wordsAmount;
     }
+
 
 }
