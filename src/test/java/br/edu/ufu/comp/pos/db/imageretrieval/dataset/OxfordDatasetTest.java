@@ -47,7 +47,8 @@ public class OxfordDatasetTest {
     
     @Test
     public void simple() throws IOException{
-	dataset.setScanLimit(200);
+	int limit = 200;
+	dataset.setScanLimit(limit);
 	Result result = new Framework().run(dataset, new TreeFactory().createCFTree(100, 3000.0, 1024),4);
 	TestCase.assertEquals(4987, result.getVocabularySize());
 	TestCase.assertEquals(0.875, result.getMap());

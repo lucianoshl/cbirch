@@ -57,7 +57,7 @@ public class Framework {
     }
 
     private double precision(Dataset dataset, Index index, Image query, int K) {
-
+	
 	StringBuilder log = new StringBuilder();
 
 	log.append("Quering ").append(query.getImage().getName()).append(": ");

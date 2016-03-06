@@ -6,10 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.time.StopWatch;
+import org.apache.log4j.Logger;
+
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 
 public class Histograms {
-
+    
+    final static Logger logger = Logger.getLogger(Histograms.class);
+    
     Map<Image, Histogram> content = new HashMap<Image, Histogram>();
 
     Map<Integer, Double> idfCache = new HashMap<Integer, Double>();
@@ -21,16 +26,39 @@ public class Histograms {
 
     public List<Histogram> getSimilar(Histogram query, int k) {
 
-	List<Histogram> result = new ArrayList<Histogram>(content.values());
-
+	logger.debug("Normalizing query");
 	Histogram normalizedQuery = query.normalize(this);
+	
+	List<Histogram> result = new ArrayList<Histogram>();
+	
+	List<HistogramDistance> sortList = new ArrayList<HistogramDistance>();
 
-	result.sort((b, a) -> {
-	    double distA = normalizedQuery.distance(a.normalize(this));
-	    double distB = normalizedQuery.distance(b.normalize(this));
-	    return Double.compare(distA, distB);
+	StopWatch stopWatch = new StopWatch();
+	stopWatch.start();
+	logger.debug("start sort by distance");
+	for (Histogram histogram : content.values()) {
+	    double distance = histogram.normalize(this).distance(normalizedQuery);
+	    sortList.add(new HistogramDistance(histogram,distance));
+	}
+	
+	sortList.sort((b,a) -> {
+	    return Double.compare(a.getDistance(), b.getDistance());
 	});
 
+	logger.debug("end sort by distance " + stopWatch.getTime());
+
+
+//	stopWatch.start();
+//	result.sort((b, a) -> {
+//	    double distA = normalizedQuery.distance(a.normalize(this));
+//	    double distB = normalizedQuery.distance(b.normalize(this));
+//	    return Double.compare(distA, distB);
+//	});
+
+	sortList.subList(0, k).forEach((a) -> {
+	    result.add(a.getHistogram());
+	});
+	
 	return result.subList(0, k);
     }
 
