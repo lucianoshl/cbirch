@@ -46,13 +46,28 @@ public class OxfordDatasetTest {
     }
     
     @Test
-    public void simple() throws IOException{
-	int limit = 200;
+    public void simple15() throws IOException{
+	validateSource(15, 1283, 1.0);
+    }
+    
+    @Test
+    public void simple200() throws IOException{
+	validateSource(200, 4987, 0.875);
+    }
+    
+    @Test
+    public void simple500() throws IOException{
+	validateSource(500, 7973, 0.725);
+    }
+
+    private void validateSource(int limit, int vocabularySize, double map) throws IOException {
 	dataset.setScanLimit(limit);
 	Result result = new Framework().run(dataset, new TreeFactory().createCFTree(100, 3000.0, 1024),4);
-	TestCase.assertEquals(4987, result.getVocabularySize());
-	TestCase.assertEquals(0.875, result.getMap());
+	TestCase.assertEquals(vocabularySize, result.getVocabularySize());
+	TestCase.assertEquals(map, result.getMap());
 	dataset.setScanLimit(-1);
     }
+    
+    
 
 }

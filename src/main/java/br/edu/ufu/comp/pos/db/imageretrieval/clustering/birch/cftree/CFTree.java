@@ -110,6 +110,7 @@ public class CFTree implements ClusterTree {
 						 // insertions
 
     private int wordsAmount;
+    private boolean finishBuild;
 
     /**
      * 
@@ -615,6 +616,7 @@ public class CFTree implements ClusterTree {
 	    l = l.getNextLeaf();
 	}
 	wordsAmount = id;
+	finishBuild = true;
     }
 
     /**
@@ -769,20 +771,23 @@ public class CFTree implements ClusterTree {
     }
 
     public int calcWordsSize() {
-	CFNode l = leafListStart.getNextLeaf(); // the first leaf is dummy!
+	if (wordsAmount == 0 && !finishBuild) {
+	    CFNode l = leafListStart.getNextLeaf(); // the first leaf is dummy!
 
-	int result = 0;
+	    int result = 0;
 
-	while (l != null) {
-	    result += l.getEntries().size();
-	    l = l.getNextLeaf();
+	    while (l != null) {
+		result += l.getEntries().size();
+		l = l.getNextLeaf();
+	    }
+	    wordsAmount = result;
 	}
-	return result;
+	return wordsAmount;
+
     }
 
     public int getWordsSize() {
 	return wordsAmount;
     }
-
 
 }

@@ -47,14 +47,6 @@ public class Histograms {
 
 	logger.debug("end sort by distance " + stopWatch.getTime());
 
-
-//	stopWatch.start();
-//	result.sort((b, a) -> {
-//	    double distA = normalizedQuery.distance(a.normalize(this));
-//	    double distB = normalizedQuery.distance(b.normalize(this));
-//	    return Double.compare(distA, distB);
-//	});
-
 	sortList.subList(0, k).forEach((a) -> {
 	    result.add(a.getHistogram());
 	});

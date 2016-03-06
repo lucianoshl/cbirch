@@ -25,6 +25,7 @@ public class Framework {
 	dataset.scanTrainSetSifts((sift) -> tree.insertEntry(sift));
 
 	tree.finishBuild();
+	logger.info("Finish tree build: " + tree.getWordsSize());
 
 	Index index = new Index(tree);
 
