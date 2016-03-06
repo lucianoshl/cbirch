@@ -50,7 +50,7 @@ public class Histogram {
 
     private double maxOcurrence;
 
-    private Histogram(Image img, double[] content) {
+    Histogram(Image img, double[] content) {
 	this.image = img;
 	setContent(content);
 	this.maxOcurrence = 0;
