@@ -226,14 +226,14 @@ public class CFTree implements ClusterTree {
      */
     public boolean insertEntry(double[] x) {
 
-	instanceIndex++;
-
 	if (automaticRebuild && (instanceIndex % periodicMemLimitCheck) == 0) {
 	    // rebuilds the tree if we reached or exceeded memory limits
 	    rebuildIfAboveMemLimit();
 	}
 
-	return insertEntry(x, instanceIndex);
+	boolean insertEntry = insertEntry(x, instanceIndex);
+	instanceIndex++;
+	return insertEntry;
     }
 
     /**

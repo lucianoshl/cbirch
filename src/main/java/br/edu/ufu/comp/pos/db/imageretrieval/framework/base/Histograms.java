@@ -17,7 +17,13 @@ public class Histograms {
     
     Map<Image, Histogram> content = new HashMap<Image, Histogram>();
 
-    Map<Integer, Double> idfCache = new HashMap<Integer, Double>();
+    private double[] idf;
+
+    private int wordsSize;
+
+    public Histograms(int wordsSize) {
+	this.wordsSize = wordsSize;
+    }
 
     public void add(Histogram histogram) {
 	content.put(histogram.getImage(), histogram);
@@ -60,25 +66,35 @@ public class Histograms {
     }
 
     public double idf(int word) {
-	Double value = this.idfCache.get(word);
-	if (value == null) {
-	    double n = 0;
-	    Collection<Histogram> documents = content.values();
-	    for (Histogram document : documents) {
-		
-		if (document.getContent()[word] > 0.0) {
-		    n++;
+	if (idf == null) {
+	    calcAllIdfs();
+	}
+	return idf[word];
+
+    }
+
+    private void calcAllIdfs() {
+	idf = new double[this.wordsSize];
+	
+	Collection<Histogram> documents = content.values();
+	int documentsSize = documents.size();
+	for (Histogram document : documents) {
+	    double[] histogram = document.getContent();
+	    for (int i = 0; i < histogram.length; i++) {
+		if (histogram[i] > 0){
+			idf[i] += 1;
 		}
 	    }
-	    if (n == 0) {
-		System.out.println("N = ZERO");
-		System.exit(1);
-	    }
-	    value = Math.log(documents.size() / n);
-	    this.idfCache.put(word, value);
 	}
 
-	return value;
+	for (int i = 0; i < idf.length; i++) {
+	    // inverse document frequency
+	    if (idf[i] != 0) { // CHECK THIS!! TODO FIXME
+		idf[i] = Math.log(Double.valueOf(documentsSize) / idf[i]);
+	    }
+
+	}
+
     }
 
     public double idf(List<List<String>> docs, String term) {

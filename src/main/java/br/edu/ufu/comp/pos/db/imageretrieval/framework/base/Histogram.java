@@ -1,6 +1,7 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework.base;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.commons.math3.ml.distance.CosineDistance;

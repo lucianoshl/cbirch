@@ -25,7 +25,6 @@ public class OxfordDatasetTest {
     public void before(){
 	this.workspace = System.getenv().get("DATASET_WORKSPACE");
 	this.dsName = "oxford";
-
 	this.dataset = OxfordDataset.createFromBase(workspace, dsName);
     }
     

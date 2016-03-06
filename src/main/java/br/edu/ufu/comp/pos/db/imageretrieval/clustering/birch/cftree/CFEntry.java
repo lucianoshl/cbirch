@@ -389,5 +389,7 @@ public class CFEntry {
 	    res[i] = sumX[i] / n;
 	return res;
     }
+    
+    
 
 }
