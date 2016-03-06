@@ -7,13 +7,13 @@ import java.util.List;
 
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.log4j.Logger;
-import org.ehcache.CacheManager;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.DatasetFactory;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Histogram;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Index;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.TreeFactory;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.tree.BirchTree;
 
@@ -47,7 +47,9 @@ public class Launcher {
 
 	tree.finishBuild();
 
-	dataset.scanTrainSet((img) -> tree.index(img));
+	Index index = new Index(tree);
+	
+	dataset.scanTrainSet((img) -> index.put(img));
 
 	logger.info("Calc mAP...");
 	List<Double> averagePrecision = new ArrayList<Double>();
@@ -56,7 +58,7 @@ public class Launcher {
 	    logger.debug("Queries for class " + clazz);
 	    List<Double> precisionList = new ArrayList<Double>();
 	    dataset.scanTestSet(clazz, (query) -> {
-		precisionList.add(precision(dataset, tree, query, K));
+		precisionList.add(precision(dataset, index, query, K));
 	    });
 
 	    if (!precisionList.isEmpty()) { // for developer testing
@@ -71,14 +73,14 @@ public class Launcher {
 
     }
 
-    private double precision(Dataset dataset, ClusterTree tree, Image query, int K) {
+    private double precision(Dataset dataset, Index index, Image query, int K) {
 
 	StringBuilder log = new StringBuilder();
 
 	log.append("Quering ").append(query.getImage().getName()).append(": ");
 
 	int queryAssert = 0;
-	List<Histogram> results = tree.findTopK(query, K);
+	List<Histogram> results = index.findTop(query, K);
 	for (int j = 0; j < results.size(); j++) {
 	    String imgName = results.get(j).getImage().getImage().getName();
 	    String classification = dataset.quality(query, imgName);
