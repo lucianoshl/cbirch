@@ -8,7 +8,7 @@ public interface ClusterTree {
 
     void finishBuild();
 
-    int getWordsSize();
+    int getEntriesAmount();
 
     CFEntry findClosestCluster(double[] sift);
 

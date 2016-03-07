@@ -25,7 +25,7 @@ public class Framework {
 	dataset.scanTrainSetSifts((sift) -> tree.insertEntry(sift));
 
 	tree.finishBuild();
-	logger.info("Finish tree build: " + tree.getWordsSize());
+	logger.info("Finish tree build: " + tree.getEntriesAmount());
 
 	Index index = new Index(tree);
 
@@ -48,12 +48,12 @@ public class Framework {
 	    }
 	}
 
-	logger.info("Vocabulary size: " + tree.getWordsSize());
+	logger.info("Vocabulary size: " + tree.getEntriesAmount());
 	double map = averagePrecision.stream().mapToDouble(a -> a).average().getAsDouble();
 	logger.info("mAP: " + map);
 
 	result.setMap(map);
-	result.setVocabularySize(tree.getWordsSize());
+	result.setVocabularySize(tree.getEntriesAmount());
 	return result;
     }
 

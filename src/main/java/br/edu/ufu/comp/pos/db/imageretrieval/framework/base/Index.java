@@ -15,7 +15,7 @@ public class Index {
 
     public Index(ClusterTree tree) {
 	this.tree = tree;
-	this.histograms = new Histograms(tree.getWordsSize());
+	this.histograms = new Histograms(tree.getEntriesAmount());
     }
 
     public void put(Image img) {

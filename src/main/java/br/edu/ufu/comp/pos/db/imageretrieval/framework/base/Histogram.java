@@ -1,7 +1,6 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework.base;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.commons.math3.ml.distance.CosineDistance;
@@ -20,11 +19,11 @@ import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 public class Histogram {
 
     private static int GENERATOR = 0;
-//    private static int CACHE_HITS = 0;
+    public static int CACHE_HITS = 0;
     private int uuid = ++GENERATOR;
 
-    static public Cache<Integer, double[]> histogramCache;
-    static public CacheManager cacheManager;
+    static protected Cache<Integer, double[]> histogramCache;
+    static protected CacheManager cacheManager;
 
     private Histogram normalized;
 
@@ -114,7 +113,7 @@ public class Histogram {
 
     public static Histogram create(Image img, ClusterTree tree) {
 
-	double[] content = new double[tree.getWordsSize()];
+	double[] content = new double[tree.getEntriesAmount()];
 	img.scan((sift) -> {
 	    content[tree.findClosestCluster(sift).getSubclusterID()]++;
 	});
@@ -122,12 +121,12 @@ public class Histogram {
     }
 
     public double[] getContent() {
-	// System.out.println("cache get " + ++CACHE_HITS);
+	++CACHE_HITS;
 	return histogramCache.get(uuid);
     }
 
     private void setContent(double[] content) {
-	// System.out.println("cache set " + ++CACHE_HITS);
+	++CACHE_HITS;
 	histogramCache.put(uuid, content);
     }
 

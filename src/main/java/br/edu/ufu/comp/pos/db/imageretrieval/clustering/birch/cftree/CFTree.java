@@ -109,7 +109,7 @@ public class CFTree implements ClusterTree {
 						 // exceeded every 100,000
 						 // insertions
 
-    private int wordsAmount;
+    private int entriesAmount;
     private boolean finishBuild;
 
     /**
@@ -303,9 +303,8 @@ public class CFTree implements ClusterTree {
     private boolean rebuildIfAboveMemLimit() {
 
 	boolean rebuild = false;
-	if (hasReachedMemoryLimit(this, memLimit)) {
+	while (hasReachedMemoryLimit(this, memLimit)) {
 	    rebuildTree();
-	    // System.gc();
 	    rebuild = true;
 	}
 
@@ -316,6 +315,7 @@ public class CFTree implements ClusterTree {
 
 	logger.info("Preparing to rebuild tree");
 	logger.info("Actual threshold " + root.getDistThreshold());
+	logger.info("Actual leafs: " + this.getEntriesAmount());
 	logger.info("Computing new threshould...");
 	double newThreshold = computeNewThreshold(leafListStart, root.getDistFunction(), root.getDistThreshold());
 	logger.info("New threshold: " + newThreshold);
@@ -326,6 +326,7 @@ public class CFTree implements ClusterTree {
 		root.applyMergingRefinement(), true);
 
 	logger.info("New tree size: " + SizeOf.humanReadable(computeMemorySize(newTree)));
+	logger.info("New leafs: " + newTree.getEntriesAmount());
 
 	copyTree(newTree);
     }
@@ -439,7 +440,8 @@ public class CFTree implements ClusterTree {
 						// currentThreshold
 	    logger.info("newThreshold <= currentThreshold");
 	    logger.info("increase currentThreshold in 10% ");
-	    newThreshold = 2 * currentThreshold;
+//	    newThreshold = 2 * currentThreshold;
+	    newThreshold = 1.1 * currentThreshold;
 	}
 
 	return newThreshold;
@@ -600,7 +602,7 @@ public class CFTree implements ClusterTree {
 
 	CFNode l = leafListStart.getNextLeaf(); // the first leaf is dummy!
 
-	this.wordsAmount = 0;
+	this.entriesAmount = 0;
 
 	int id = 0;
 	while (l != null) {
@@ -615,7 +617,7 @@ public class CFTree implements ClusterTree {
 	    }
 	    l = l.getNextLeaf();
 	}
-	wordsAmount = id;
+	entriesAmount = id;
 	finishBuild = true;
     }
 
@@ -770,8 +772,8 @@ public class CFTree implements ClusterTree {
 	return this.root.getDistThreshold();
     }
 
-    public int calcWordsSize() {
-	if (wordsAmount == 0 && !finishBuild) {
+    public int getEntriesAmount() {
+	if (!finishBuild || entriesAmount == 0) {
 	    CFNode l = leafListStart.getNextLeaf(); // the first leaf is dummy!
 
 	    int result = 0;
@@ -780,14 +782,9 @@ public class CFTree implements ClusterTree {
 		result += l.getEntries().size();
 		l = l.getNextLeaf();
 	    }
-	    wordsAmount = result;
+	    entriesAmount = result;
 	}
-	return wordsAmount;
-
-    }
-
-    public int getWordsSize() {
-	return wordsAmount;
+	return entriesAmount;
     }
 
 }
