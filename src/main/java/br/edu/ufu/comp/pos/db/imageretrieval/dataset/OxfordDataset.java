@@ -37,7 +37,7 @@ public class OxfordDataset extends Dataset {
 
     private Map<String, List<String>> queryClass;
 
-    private int scanLimit = -1;
+    private int scanLimit =15;
 
     @Override
     public void trainSet(Consumer<Image> c) {
