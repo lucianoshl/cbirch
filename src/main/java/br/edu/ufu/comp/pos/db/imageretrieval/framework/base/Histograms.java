@@ -89,7 +89,7 @@ public class Histograms {
 
 	for (int i = 0; i < idf.length; i++) {
 	    // inverse document frequency
-	    if (idf[i] != 0) { // CHECK THIS!! TODO FIXME
+	    if (idf[i] != 0) {
 		idf[i] = Math.log(Double.valueOf(documentsSize) / idf[i]);
 	    }
 

@@ -34,7 +34,8 @@ public class Histogram {
 		.withCache("histogramCache",
 			CacheConfigurationBuilder.newCacheConfigurationBuilder(Integer.class, double[].class)
 				.withResourcePools(ResourcePoolsBuilder.newResourcePoolsBuilder()//
-					.heap(1000, EntryUnit.ENTRIES).offheap(512, MemoryUnit.MB)//
+					.heap(1000, EntryUnit.ENTRIES)//
+//					.offheap(512, MemoryUnit.MB)//
 					.disk(5, MemoryUnit.GB, false))
 				.build())
 		.build(true);
