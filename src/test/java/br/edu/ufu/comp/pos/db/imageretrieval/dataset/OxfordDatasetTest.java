@@ -6,7 +6,9 @@ import java.io.RandomAccessFile;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Framework;
@@ -14,6 +16,7 @@ import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.TreeFactory;
 import junit.framework.TestCase;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OxfordDatasetTest {
 
     OxfordImage test;
@@ -29,7 +32,7 @@ public class OxfordDatasetTest {
     }
     
     @Test
-    public void validateBinaryReader() throws IOException {
+    public void a_validateBinaryReader() throws IOException {
 	File binFile = new File(workspace + "/datasets/" + dsName + "/feat_oxc1_hesaff_sift.bin");
 
 	dataset.scanAllImages((img) -> test = (OxfordImage) img);
