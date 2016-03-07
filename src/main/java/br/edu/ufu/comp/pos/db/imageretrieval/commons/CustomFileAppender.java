@@ -15,7 +15,7 @@ public class CustomFileAppender extends FileAppender {
 	if (fileName.indexOf("%timestamp") >= 0) {
 	    Date d = new Date();
 	    datePart = format.format(d);
-	    datePart = fileName = fileName.replaceAll("%timestamp", datePart);
+	    fileName = fileName.replaceAll("%timestamp", datePart);
 	}
 	super.setFile(fileName);
     }

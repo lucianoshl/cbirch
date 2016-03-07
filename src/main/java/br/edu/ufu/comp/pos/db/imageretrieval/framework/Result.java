@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.time.StopWatch;
+import org.apache.log4j.Logger;
 
 import com.google.gson.GsonBuilder;
 
@@ -19,6 +20,9 @@ import lombok.SneakyThrows;
 @Getter
 @Setter
 public class Result {
+
+    final static Logger logger = Logger.getLogger(Result.class);
+    
     public static Result instance = new Result();
 
     private double map;
@@ -64,6 +68,7 @@ public class Result {
 	FileWriter writer = new FileWriter(resultFile);
 	new GsonBuilder().setPrettyPrinting().create().toJson(this, writer);
 	writer.close();
+	logger.info("result file saved in "+resultFile.getAbsolutePath());
     }
 
 }
