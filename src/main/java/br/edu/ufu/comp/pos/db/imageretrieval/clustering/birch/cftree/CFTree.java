@@ -28,6 +28,7 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 import net.sourceforge.sizeof.SizeOf;
 
@@ -316,6 +317,7 @@ public class CFTree implements ClusterTree {
 	logger.info("Preparing to rebuild tree");
 	logger.info("Actual threshold " + root.getDistThreshold());
 	logger.info("Actual leafs: " + this.getEntriesAmount());
+	Result.statistic("words", entriesAmount);
 	logger.info("Computing new threshould...");
 	double newThreshold = computeNewThreshold(leafListStart, root.getDistFunction(), root.getDistThreshold());
 	logger.info("New threshold: " + newThreshold);
@@ -464,6 +466,9 @@ public class CFTree implements ClusterTree {
 	String humanReadableTreeSize = SizeOf.humanReadable(memory);
 	logger.info("Tree size " + (Math.ceil(memory / Double.valueOf(limit) * 100)) + "%" + " " + humanReadableTreeSize
 		+ " ");
+	
+	Result.statistic("treeMemory", memory);
+	
 	if (memory >= (limit - limit / (double) MEM_LIM_FRAC)) {
 	    return true;
 	}

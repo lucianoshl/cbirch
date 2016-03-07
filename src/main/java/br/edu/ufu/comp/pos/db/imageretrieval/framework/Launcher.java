@@ -26,9 +26,13 @@ public class Launcher {
 	StopWatch stopWatch = new StopWatch();
 	stopWatch.start();
 
-	new Framework().run(dataset, tree, 4);
+	Result result = new Framework().run(dataset, tree, 4);
 	
 	logger.info("elapsed time " + stopWatch.getTime());
+	
+	logger.info(result.toString());
+	
+	result.save();
     }
 
 

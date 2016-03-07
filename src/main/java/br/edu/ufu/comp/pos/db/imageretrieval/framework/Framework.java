@@ -19,46 +19,49 @@ public class Framework {
 
     public Result run(Dataset dataset, ClusterTree tree, int K) throws IOException {
 
-	Result result = new Result();
-	
-	logger.info("Building tree with test set...");
-	dataset.scanTrainSetSifts((sift) -> tree.insertEntry(sift));
+	Result result = Result.instance;
 
-	tree.finishBuild();
-	logger.info("Finish tree build: " + tree.getEntriesAmount());
+	result.elapsedTime("build tree", () -> {
+	    logger.info("Building tree with test set...");
+	    dataset.scanTrainSetSifts((sift) -> tree.insertEntry(sift));
+
+	    tree.finishBuild();
+	});
 
 	Index index = new Index(tree);
-
-	dataset.scanTrainSet((img) -> index.put(img));
+	result.elapsedTime("build index", () -> {
+	    dataset.scanTrainSet((img) -> index.put(img));
+	});
 
 	logger.info("Calc mAP...");
 	List<Double> averagePrecision = new ArrayList<Double>();
+	result.elapsedTime("testing model ", () -> {
 
-	for (String clazz : dataset.getTestClasses()) {
-	    logger.debug("Queries for class " + clazz);
-	    List<Double> precisionList = new ArrayList<Double>();
-	    dataset.scanTestSet(clazz, (query) -> {
-		precisionList.add(precision(dataset, index, query, K));
-	    });
+	    for (String clazz : dataset.getTestClasses()) {
+		logger.debug("Queries for class " + clazz);
+		List<Double> precisionList = new ArrayList<Double>();
+		dataset.scanTestSet(clazz, (query) -> {
+		    precisionList.add(precision(dataset, index, query, K));
+		});
 
-	    if (!precisionList.isEmpty()) { // for developer testing
-		double currentAveragePrecision = precisionList.stream().mapToDouble(a -> a).average().getAsDouble();
-		logger.info("Average precision for " + clazz + " is " + currentAveragePrecision);
-		averagePrecision.add(currentAveragePrecision);
+		if (!precisionList.isEmpty()) { // for developer testing
+		    double currentAveragePrecision = precisionList.stream().mapToDouble(a -> a).average().getAsDouble();
+		    logger.info("Average precision for " + clazz + " is " + currentAveragePrecision);
+		    averagePrecision.add(currentAveragePrecision);
+		}
 	    }
-	}
+	});
 
-	logger.info("Vocabulary size: " + tree.getEntriesAmount());
 	double map = averagePrecision.stream().mapToDouble(a -> a).average().getAsDouble();
-	logger.info("mAP: " + map);
 
 	result.setMap(map);
 	result.setVocabularySize(tree.getEntriesAmount());
+	result.setCacheHits(Histogram.CACHE_HITS);
 	return result;
     }
 
     private double precision(Dataset dataset, Index index, Image query, int K) {
-	
+
 	StringBuilder log = new StringBuilder();
 
 	log.append("Quering ").append(query.getImage().getName()).append(": ");
