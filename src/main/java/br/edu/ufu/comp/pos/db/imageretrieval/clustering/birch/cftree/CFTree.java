@@ -128,6 +128,8 @@ public class CFTree implements ClusterTree {
     public CFTree(int maxNodeEntries, double distThreshold, int distFunction, boolean applyMergingRefinement) {
 	if (distFunction < D0_DIST || distFunction > D4_DIST)
 	    distFunction = D0_DIST;
+	
+	Result.statistic("threshold", distThreshold);
 
 	root = new CFNode(maxNodeEntries, distThreshold, distFunction, applyMergingRefinement, true);
 	leafListStart = new CFNode(0, 0, distFunction, applyMergingRefinement, true); // this
@@ -321,6 +323,7 @@ public class CFTree implements ClusterTree {
 	logger.info("Computing new threshould...");
 	double newThreshold = computeNewThreshold(leafListStart, root.getDistFunction(), root.getDistThreshold());
 	logger.info("New threshold: " + newThreshold);
+	Result.statistic("threshold", newThreshold);
 	logger.info("Tree size: " + SizeOf.humanReadable(computeMemorySize(this)));
 	logger.info("Rebuilding... ");
 
@@ -624,6 +627,7 @@ public class CFTree implements ClusterTree {
 	}
 	entriesAmount = id;
 	finishBuild = true;
+	Result.statistic("words", entriesAmount);
     }
 
     /**
