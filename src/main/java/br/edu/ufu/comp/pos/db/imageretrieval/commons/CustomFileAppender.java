@@ -8,13 +8,14 @@ import org.apache.log4j.FileAppender;
 public class CustomFileAppender extends FileAppender {
 
     public static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SS");
-    public static String nameFile;
+    public static String datePart;
     
     @Override
     public void setFile(String fileName) {
 	if (fileName.indexOf("%timestamp") >= 0) {
 	    Date d = new Date();
-	    nameFile = fileName = fileName.replaceAll("%timestamp", format.format(d));
+	    datePart = format.format(d);
+	    datePart = fileName = fileName.replaceAll("%timestamp", datePart);
 	}
 	super.setFile(fileName);
     }

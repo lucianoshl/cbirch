@@ -60,7 +60,7 @@ public class Result {
 	if (!resultsDir.exists()) {
 	    resultsDir.mkdirs();
 	}
-	File resultFile = new File(resultsDir, CustomFileAppender.nameFile + ".json");
+	File resultFile = new File(resultsDir, CustomFileAppender.datePart + ".json");
 	FileWriter writer = new FileWriter(resultFile);
 	new GsonBuilder().setPrettyPrinting().create().toJson(this, writer);
 	writer.close();
