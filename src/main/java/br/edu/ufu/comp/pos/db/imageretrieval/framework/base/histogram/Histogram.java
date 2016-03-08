@@ -25,7 +25,7 @@ public class Histogram {
 
     private double maxOcurrence;
 
-    Histogram(Image img, double[] content) {
+    public Histogram(Image img, double[] content) {
 	this.image = img;
 	setContent(content);
 	this.maxOcurrence = 0;
