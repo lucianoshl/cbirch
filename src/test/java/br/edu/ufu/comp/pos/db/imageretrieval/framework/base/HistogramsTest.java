@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import org.junit.Test;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.Histograms;
 import junit.framework.TestCase;
 
 public class HistogramsTest {

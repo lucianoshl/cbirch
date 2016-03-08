@@ -10,8 +10,8 @@ import org.apache.log4j.Logger;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Histogram;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Index;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.Histogram;
 
 public class Framework {
 
@@ -56,7 +56,6 @@ public class Framework {
 
 	result.setMap(map);
 	result.setVocabularySize(tree.getEntriesAmount());
-	result.setCacheHits(Histogram.CACHE_HITS);
 	return result;
     }
 

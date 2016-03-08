@@ -1,4 +1,4 @@
-package br.edu.ufu.comp.pos.db.imageretrieval.framework.base;
+package br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,6 +10,7 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.apache.log4j.Logger;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 
 public class Histograms {
     

@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.Histogram;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.Histograms;
 
 public class Index {
 

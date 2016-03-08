@@ -1,50 +1,25 @@
-package br.edu.ufu.comp.pos.db.imageretrieval.framework.base;
+package br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram;
 
-import java.io.File;
 import java.util.Arrays;
 
 import org.apache.commons.math3.ml.distance.CosineDistance;
 import org.apache.commons.math3.ml.distance.DistanceMeasure;
-import org.ehcache.Cache;
-import org.ehcache.CacheManager;
-import org.ehcache.config.builders.CacheConfigurationBuilder;
-import org.ehcache.config.builders.CacheManagerBuilder;
-import org.ehcache.config.builders.ResourcePoolsBuilder;
-import org.ehcache.config.units.EntryUnit;
-import org.ehcache.config.units.MemoryUnit;
-import org.ehcache.impl.config.persistence.CacheManagerPersistenceConfiguration;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.cache.HistogramCache;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.cache.HistogramMemoryCache;
 
 public class Histogram {
 
+    private static DistanceMeasure distanceMeasure = new CosineDistance();
+
     private static int GENERATOR = 0;
-    public static int CACHE_HITS = 0;
     private int uuid = ++GENERATOR;
 
-    static protected Cache<Integer, double[]> histogramCache;
-    static protected CacheManager cacheManager;
+    HistogramCache cache = new HistogramMemoryCache();
 
     private Histogram normalized;
-
-    static {
-
-	cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
-		.with(new CacheManagerPersistenceConfiguration(new File("/tmp/cache" + Math.random())))
-		.withCache("histogramCache",
-			CacheConfigurationBuilder.newCacheConfigurationBuilder(Integer.class, double[].class)
-				.withResourcePools(ResourcePoolsBuilder.newResourcePoolsBuilder()//
-					.heap(1000, EntryUnit.ENTRIES)//
-//					.offheap(512, MemoryUnit.MB)//
-					.disk(5, MemoryUnit.GB, false))
-				.build())
-		.build(true);
-
-	histogramCache = cacheManager.getCache("histogramCache", Integer.class, double[].class);
-
-    }
-
-    private static DistanceMeasure distanceMeasure = new CosineDistance();
 
     private Image image;
 
@@ -122,13 +97,11 @@ public class Histogram {
     }
 
     public double[] getContent() {
-	++CACHE_HITS;
-	return histogramCache.get(uuid);
+	return cache.get(uuid);
     }
 
     private void setContent(double[] content) {
-	++CACHE_HITS;
-	histogramCache.put(uuid, content);
+	cache.put(uuid, content);
     }
 
 }
