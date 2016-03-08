@@ -19,21 +19,24 @@ public class Launcher {
 	if (args.length == 0) {
 	    throw new IllegalArgumentException("tree name is required");
 	}
-	
+
 	Dataset dataset = new DatasetFactory().create(args);
 	ClusterTree tree = new TreeFactory().create(args);
 
 	StopWatch stopWatch = new StopWatch();
 	stopWatch.start();
 
-	Result result = new Framework().run(dataset, tree, 4);
-	
-	logger.info("elapsed time " + stopWatch.getTime());
-	
-	logger.info(result.toString());
-	
-	result.save();
-    }
+	try {
 
+	    new Framework().run(dataset, tree, 4);
+	} catch (Exception e) {
+	    logger.error(e);
+	} finally {
+	    logger.info("elapsed time " + stopWatch.getTime());
+	    logger.info(Result.instance.toString());
+	    Result.instance.save();
+	}
+
+    }
 
 }
