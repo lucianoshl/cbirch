@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.function.Consumer;
 
-import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Sift;
 import lombok.Getter;
 
 public class OxfordImage extends Image {
@@ -37,7 +37,7 @@ public class OxfordImage extends Image {
             byte[] buffer = new byte[128];
             for (int i = 0; i < size; i++) {
                 randomAccessFile.read(buffer);
-                c.accept(Utils.convertToDouble(buffer));
+                c.accept(Sift.scale(buffer));
             }
             randomAccessFile.close();
         } catch (IOException e) {
