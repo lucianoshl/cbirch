@@ -31,10 +31,10 @@ public abstract class Dataset {
 	    current = current + 1;
 	    c.accept(img);
 	    percent = (current / Double.valueOf(getTrainSetSize())) * 100;
-	    if (percent > lastShow){
+//	    if (percent > lastShow){
 		logger.debug(String.format("%.2f%%", percent));
-		lastShow +=10;
-	    }
+//		lastShow +=10;
+//	    }
 	    
 	});
 
