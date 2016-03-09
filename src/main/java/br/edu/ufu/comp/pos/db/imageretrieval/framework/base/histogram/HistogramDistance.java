@@ -10,8 +10,8 @@ public class HistogramDistance {
     private Histogram histogram;
 
     public HistogramDistance(Histogram histogram, double distance) {
-	this.histogram = histogram;
-	this.distance = distance;
+        this.histogram = histogram;
+        this.distance = distance;
     }
 
 }

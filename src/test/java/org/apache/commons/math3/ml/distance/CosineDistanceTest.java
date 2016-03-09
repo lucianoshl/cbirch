@@ -10,13 +10,13 @@ public class CosineDistanceTest {
 
     @Test
     public void test1() {
-	double dist = cosineDistance.compute(new double[] { 1, 1 }, new double[] { 1, 1 });
-	TestCase.assertEquals(1, Math.round(dist));
+        double dist = cosineDistance.compute(new double[] { 1, 1 }, new double[] { 1, 1 });
+        TestCase.assertEquals(1, Math.round(dist));
     }
 
     @Test
     public void test2() {
-	double dist = cosineDistance.compute(new double[] { 1, 1 }, new double[] { -1, -1 });
-	TestCase.assertEquals(-1, Math.round(dist));
+        double dist = cosineDistance.compute(new double[] { 1, 1 }, new double[] { -1, -1 });
+        TestCase.assertEquals(-1, Math.round(dist));
     }
 }

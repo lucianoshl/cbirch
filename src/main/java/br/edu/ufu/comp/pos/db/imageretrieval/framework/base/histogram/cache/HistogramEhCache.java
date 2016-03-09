@@ -16,33 +16,33 @@ public class HistogramEhCache implements HistogramCache {
     private CacheManager cacheManager;
 
     public HistogramEhCache() {
-	cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
-		.with(new CacheManagerPersistenceConfiguration(this.createCacheLocation()))
-		.withCache("histogramCache",
-			CacheConfigurationBuilder.newCacheConfigurationBuilder(Integer.class, double[].class)
-				.withResourcePools(ResourcePoolsBuilder.newResourcePoolsBuilder()//
-					.heap(1, EntryUnit.ENTRIES)//
-					.disk(5, MemoryUnit.GB, false))
-				.withExpiry(Expirations.noExpiration()).build())
-		.build(true);
+        cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
+                .with(new CacheManagerPersistenceConfiguration(this.createCacheLocation()))
+                .withCache("histogramCache",
+                        CacheConfigurationBuilder.newCacheConfigurationBuilder(Integer.class, double[].class)
+                                .withResourcePools(ResourcePoolsBuilder.newResourcePoolsBuilder()//
+                                        .heap(1, EntryUnit.ENTRIES)//
+                                        .disk(5, MemoryUnit.GB, false))
+                                .withExpiry(Expirations.noExpiration()).build())
+                .build(true);
 
-	histogramCache = cacheManager.getCache("histogramCache", Integer.class, double[].class);
+        histogramCache = cacheManager.getCache("histogramCache", Integer.class, double[].class);
     }
 
     @Override
     public double[] get(int uuid) {
-	return histogramCache.get(uuid);
+        return histogramCache.get(uuid);
     }
 
     @Override
     public void put(int uuid, double[] content) {
-	histogramCache.put(uuid, content);
+        histogramCache.put(uuid, content);
 
     }
 
     @Override
     public boolean inCache(int uuid) {
-	return histogramCache.containsKey(uuid);
+        return histogramCache.containsKey(uuid);
     }
 
 }

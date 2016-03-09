@@ -12,14 +12,14 @@ public class CustomFileAppender extends FileAppender {
 
     @Override
     public void setFile(String fileName) {
-	if (fileName.indexOf("%timestamp") >= 0) {
-	    Date d = new Date();
-	    datePart = format.format(d);
-	    fileName = fileName.replaceAll("%timestamp", datePart);
-	    String workspace = System.getenv().get("DATASET_WORKSPACE");
-	    fileName = fileName.replaceAll("%workspace", workspace);
+        if (fileName.indexOf("%timestamp") >= 0) {
+            Date d = new Date();
+            datePart = format.format(d);
+            fileName = fileName.replaceAll("%timestamp", datePart);
+            String workspace = System.getenv().get("DATASET_WORKSPACE");
+            fileName = fileName.replaceAll("%workspace", workspace);
 
-	}
-	super.setFile(fileName);
+        }
+        super.setFile(fileName);
     }
 }

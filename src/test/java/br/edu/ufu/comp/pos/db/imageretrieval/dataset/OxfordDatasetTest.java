@@ -25,51 +25,49 @@ public class OxfordDatasetTest {
     private OxfordDataset dataset;
 
     @Before
-    public void before(){
-	this.workspace = System.getenv().get("DATASET_WORKSPACE");
-	this.dsName = "oxford";
-	this.dataset = OxfordDataset.createFromBase(workspace, dsName);
+    public void before() {
+        this.workspace = System.getenv().get("DATASET_WORKSPACE");
+        this.dsName = "oxford";
+        this.dataset = OxfordDataset.createFromBase(workspace, dsName);
     }
-    
+
     @Test
     public void a_validateBinaryReader() throws IOException {
-	File binFile = new File(workspace + "/datasets/" + dsName + "/feat_oxc1_hesaff_sift.bin");
+        File binFile = new File(workspace + "/datasets/" + dsName + "/feat_oxc1_hesaff_sift.bin");
 
-	dataset.scanAllImages((img) -> test = (OxfordImage) img);
+        dataset.scanAllImages((img) -> test = (OxfordImage) img);
 
-	RandomAccessFile randomAccessFile = new RandomAccessFile(binFile, "r");
-	randomAccessFile.seek(test.offset + test.size * 128);
-	for (int i = 0; i < 12; i++) {
-	    randomAccessFile.read();
+        RandomAccessFile randomAccessFile = new RandomAccessFile(binFile, "r");
+        randomAccessFile.seek(test.offset + test.size * 128);
+        for (int i = 0; i < 12; i++) {
+            randomAccessFile.read();
 
-	}
-	Assert.assertEquals(-1, randomAccessFile.read());
-	randomAccessFile.close();
+        }
+        Assert.assertEquals(-1, randomAccessFile.read());
+        randomAccessFile.close();
     }
-    
+
     @Test
-    public void simple15() throws IOException{
-	validateSource(15, 1283, 1.0);
+    public void simple15() throws IOException {
+        validateSource(15, 1283, 1.0);
     }
-    
+
     @Test
-    public void simple200() throws IOException{
-	validateSource(200, 4987, 0.875);
+    public void simple200() throws IOException {
+        validateSource(200, 4987, 0.875);
     }
-    
+
     @Test
-    public void simple500() throws IOException{
-	validateSource(500, 7973, 0.725);
+    public void simple500() throws IOException {
+        validateSource(500, 7973, 0.725);
     }
 
     private void validateSource(int limit, int vocabularySize, double map) throws IOException {
-	dataset.setScanLimit(limit);
-	Result result = new Framework().run(dataset, new TreeFactory().createCFTree(100, 3000.0, 1024),4);
-	TestCase.assertEquals(vocabularySize, result.getVocabularySize());
-	TestCase.assertEquals(map, result.getMap());
-	dataset.setScanLimit(-1);
+        dataset.setScanLimit(limit);
+        Result result = new Framework().run(dataset, new TreeFactory().createCFTree(100, 3000.0, 1024), 4);
+        TestCase.assertEquals(vocabularySize, result.getVocabularySize());
+        TestCase.assertEquals(map, result.getMap());
+        dataset.setScanLimit(-1);
     }
-    
-    
 
 }

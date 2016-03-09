@@ -14,20 +14,20 @@ public class DatasetFactory {
 
     public Dataset create(String[] args) {
 
-	String workspace = System.getenv().get("DATASET_WORKSPACE");
-	String datasetName = args[1];
+        String workspace = System.getenv().get("DATASET_WORKSPACE");
+        String datasetName = args[1];
 
-	File datasetPath = Utils.getDatesetPath(workspace, datasetName);
+        File datasetPath = Utils.getDatesetPath(workspace, datasetName);
 
-	logger.info("Dataset workspace: " + workspace);
-	logger.info("Dataset name: " + datasetName);
-	logger.info("Dataset path: " + datasetPath);
+        logger.info("Dataset workspace: " + workspace);
+        logger.info("Dataset name: " + datasetName);
+        logger.info("Dataset path: " + datasetPath);
 
-	if (new File(datasetPath, "README2.txt").exists()) {
-	    return OxfordDataset.createFromBase(workspace, datasetName);
-	} else {
-	    throw new UnsupportedOperationException("unsupported dataset in " + datasetPath.getAbsolutePath());
-	}
+        if (new File(datasetPath, "README2.txt").exists()) {
+            return OxfordDataset.createFromBase(workspace, datasetName);
+        } else {
+            throw new UnsupportedOperationException("unsupported dataset in " + datasetPath.getAbsolutePath());
+        }
 
     }
 

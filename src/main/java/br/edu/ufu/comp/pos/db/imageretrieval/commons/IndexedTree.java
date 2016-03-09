@@ -14,17 +14,17 @@ public class IndexedTree {
 
     protected void putInIndex(CFEntry leaf, Image img) {
 
-	Set<Image> set = index.get(leaf);
-	if (set == null) {
-	    set = new HashSet<Image>();
-	    index.put(leaf, set);
-	}
-	set.add(img);
+        Set<Image> set = index.get(leaf);
+        if (set == null) {
+            set = new HashSet<Image>();
+            index.put(leaf, set);
+        }
+        set.add(img);
     }
 
     protected Set<Image> getImagesInLeaf(CFEntry leaf) {
 
-	return this.index.get(leaf);
+        return this.index.get(leaf);
     }
 
 }

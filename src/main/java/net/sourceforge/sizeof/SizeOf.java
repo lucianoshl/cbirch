@@ -22,7 +22,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
  * @see java#lang#instrument#Instrument
  * @version 0.5
  */
- @SuppressWarnings({"rawtypes","unused"})
+@SuppressWarnings({ "rawtypes", "unused" })
 public class SizeOf {
 
     private static OutputStream out = System.out;
@@ -46,7 +46,7 @@ public class SizeOf {
      */
     public static void premain(String options, Instrumentation inst) {
 
-	SizeOf.inst = inst;
+        SizeOf.inst = inst;
     }
 
     /**
@@ -61,10 +61,10 @@ public class SizeOf {
      */
     public static long sizeOf(Object object) {
 
-	if (inst == null)
-	    throw new IllegalStateException("Instrumentation is null");
+        if (inst == null)
+            throw new IllegalStateException("Instrumentation is null");
 
-	return inst.getObjectSize(object);
+        return inst.getObjectSize(object);
     }
 
     private static String[] unit = { "b", "Kb", "Mb", "Gb" };
@@ -78,15 +78,15 @@ public class SizeOf {
      */
     public static String humanReadable(long size) {
 
-	int i;
-	double dSize = size;// new Double(size);
-	for (i = 0; i < 4; ++i) {
-	    if (dSize < 1024)
-		break;
-	    dSize /= 1024;
-	}
+        int i;
+        double dSize = size;// new Double(size);
+        for (i = 0; i < 4; ++i) {
+            if (dSize < 1024)
+                break;
+            dSize /= 1024;
+        }
 
-	return dSize + unit[i];
+        return dSize + unit[i];
     }
 
     /**
@@ -101,99 +101,99 @@ public class SizeOf {
      * @throws IOException
      */
     public static long iterativeSizeOf(Object objectToSize)
-	    throws IllegalArgumentException, IllegalAccessException, IOException {
+            throws IllegalArgumentException, IllegalAccessException, IOException {
 
-	Set<Integer> doneObj = new HashSet<Integer>();
-	return iterativeSizeOf(objectToSize, doneObj);
+        Set<Integer> doneObj = new HashSet<Integer>();
+        return iterativeSizeOf(objectToSize, doneObj);
     }
 
     private static long iterativeSizeOf(Object o, Set<Integer> doneObj)
-	    throws IllegalArgumentException, IllegalAccessException, IOException {
+            throws IllegalArgumentException, IllegalAccessException, IOException {
 
-	if (o == null)
-	    return 0;
+        if (o == null)
+            return 0;
 
-	long size = 0;
-	int hash = System.identityHashCode(o);
-	// String hash = o.getClass().toString();
+        long size = 0;
+        int hash = System.identityHashCode(o);
+        // String hash = o.getClass().toString();
 
-	if (doneObj.contains(hash))
-	    return 0;
+        if (doneObj.contains(hash))
+            return 0;
 
-	doneObj.add(hash);
-	size = sizeOf(o);
+        doneObj.add(hash);
+        size = sizeOf(o);
 
-	if (o instanceof Object[]) {
-	    for (Object obj : (Object[]) o)
-		size += iterativeSizeOf(obj, doneObj);
-	} else {
+        if (o instanceof Object[]) {
+            for (Object obj : (Object[]) o)
+                size += iterativeSizeOf(obj, doneObj);
+        } else {
 
-	    Class<? extends Object> clazz = o.getClass();
-	    Field[] fields = getFields(clazz);
-	    for (Field f : fields) {
-		f.setAccessible(true);
-		Object obj = f.get(o);
-		if (isComputable(f))
-		    size += iterativeSizeOf(obj, doneObj);
-	    }
-	}
+            Class<? extends Object> clazz = o.getClass();
+            Field[] fields = getFields(clazz);
+            for (Field f : fields) {
+                f.setAccessible(true);
+                Object obj = f.get(o);
+                if (isComputable(f))
+                    size += iterativeSizeOf(obj, doneObj);
+            }
+        }
 
-	return size;
+        return size;
     }
 
     protected static Field[] getFields(Class<? extends Object> clazz) {
 
-	Field[] result = fieldsCache.get(clazz);
-	if (result == null) {
-	    result = FieldUtils.getAllFields(clazz);
-	    fieldsCache.put(clazz, result);
-	}
-	return result;
+        Field[] result = fieldsCache.get(clazz);
+        if (result == null) {
+            result = FieldUtils.getAllFields(clazz);
+            fieldsCache.put(clazz, result);
+        }
+        return result;
     }
 
     private static boolean isAPrimitiveType(Class c) {
 
-	if (c == java.lang.Boolean.TYPE)
-	    return true;
+        if (c == java.lang.Boolean.TYPE)
+            return true;
 
-	if (c == java.lang.Character.TYPE)
-	    return true;
+        if (c == java.lang.Character.TYPE)
+            return true;
 
-	if (c == java.lang.Byte.TYPE)
-	    return true;
+        if (c == java.lang.Byte.TYPE)
+            return true;
 
-	if (c == java.lang.Short.TYPE)
-	    return true;
+        if (c == java.lang.Short.TYPE)
+            return true;
 
-	if (c == java.lang.Integer.TYPE)
-	    return true;
+        if (c == java.lang.Integer.TYPE)
+            return true;
 
-	if (c == java.lang.Long.TYPE)
-	    return true;
+        if (c == java.lang.Long.TYPE)
+            return true;
 
-	if (c == java.lang.Float.TYPE)
-	    return true;
+        if (c == java.lang.Float.TYPE)
+            return true;
 
-	if (c == java.lang.Double.TYPE)
-	    return true;
+        if (c == java.lang.Double.TYPE)
+            return true;
 
-	if (c == java.lang.Void.TYPE)
-	    return true;
+        if (c == java.lang.Void.TYPE)
+            return true;
 
-	return false;
+        return false;
     }
 
     private static boolean isComputable(Field f) {
 
-	int modificatori = f.getModifiers();
+        int modificatori = f.getModifiers();
 
-	if (isAPrimitiveType(f.getType()))
-	    return false;
-	else if (SKIP_STATIC_FIELD && Modifier.isStatic(modificatori))
-	    return false;
-	else if (SKIP_FINAL_FIELD && Modifier.isFinal(modificatori))
-	    return false;
-	else
-	    return true;
+        if (isAPrimitiveType(f.getType()))
+            return false;
+        else if (SKIP_STATIC_FIELD && Modifier.isStatic(modificatori))
+            return false;
+        else if (SKIP_FINAL_FIELD && Modifier.isFinal(modificatori))
+            return false;
+        else
+            return true;
     }
 }

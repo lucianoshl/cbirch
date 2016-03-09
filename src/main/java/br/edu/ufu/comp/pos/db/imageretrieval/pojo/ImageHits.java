@@ -9,18 +9,18 @@ public class ImageHits {
     private final String image;
 
     public ImageHits(Image image, Integer hits) {
-	this.image = image.getImage().getName();
-	this.hits = hits;
+        this.image = image.getImage().getName();
+        this.hits = hits;
     }
 
     public Integer getHits() {
 
-	return hits;
+        return hits;
     }
 
     public String getImage() {
 
-	return image;
+        return image;
     }
 
 }

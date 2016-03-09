@@ -10,12 +10,12 @@ public interface HistogramCache {
     double[] get(int uuid);
 
     void put(int uuid, double[] content);
-    
+
     boolean inCache(int uuid);
 
     @SneakyThrows
     default File createCacheLocation() {
-	return Files.createTempDirectory("histogram-cache").toFile();
+        return Files.createTempDirectory("histogram-cache").toFile();
     }
 
 }

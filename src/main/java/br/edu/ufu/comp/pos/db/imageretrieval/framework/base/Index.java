@@ -16,18 +16,18 @@ public class Index {
     private Histograms histograms;
 
     public Index(ClusterTree tree) {
-	this.tree = tree;
-	this.histograms = new Histograms(tree.getEntriesAmount());
+        this.tree = tree;
+        this.histograms = new Histograms(tree.getEntriesAmount());
     }
 
     public void put(Image img) {
-	histograms.add(Histogram.create(img, tree));
+        histograms.add(Histogram.create(img, tree));
     }
 
     public List<Histogram> findTop(Image query, int k) {
-	logger.debug("Find top"+k+" for " + query.getImage().getName());
-	
-	return this.histograms.getSimilar(Histogram.create(query, tree), k);
+        logger.debug("Find top" + k + " for " + query.getImage().getName());
+
+        return this.histograms.getSimilar(Histogram.create(query, tree), k);
     }
 
 }

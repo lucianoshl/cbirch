@@ -13,19 +13,19 @@ public class OxfordMapCalculator implements MapCalculator {
     List<String> negative;
 
     public double calc(List<String> qualities) {
-	qualities = new ArrayList<>(qualities);
-	qualities.removeAll(ignore);
+        qualities = new ArrayList<>(qualities);
+        qualities.removeAll(ignore);
 
-	int positives = 0;
-	int total = qualities.size();
+        int positives = 0;
+        int total = qualities.size();
 
-	for (String quality : qualities) {
-	    if (positive.contains(quality)) {
-		positives++;
-	    }
-	}
+        for (String quality : qualities) {
+            if (positive.contains(quality)) {
+                positives++;
+            }
+        }
 
-	return positives / Double.valueOf(total);
+        return positives / Double.valueOf(total);
 
     }
 

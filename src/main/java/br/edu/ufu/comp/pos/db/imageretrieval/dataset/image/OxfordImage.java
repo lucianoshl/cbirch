@@ -20,29 +20,29 @@ public class OxfordImage extends Image {
     public final long size;
 
     public OxfordImage(File binaryFile, File image, long offset, long size) {
-	super();
-	this.binaryFile = binaryFile;
-	this.image = image;
-	this.offset = offset;
-	this.size = size;
+        super();
+        this.binaryFile = binaryFile;
+        this.image = image;
+        this.offset = offset;
+        this.size = size;
     }
 
     @Override
     public void scan(Consumer<double[]> c) {
 
-	try {
-	    RandomAccessFile randomAccessFile = new RandomAccessFile(this.binaryFile, "r");
-	    randomAccessFile.seek(this.offset);
+        try {
+            RandomAccessFile randomAccessFile = new RandomAccessFile(this.binaryFile, "r");
+            randomAccessFile.seek(this.offset);
 
-	    byte[] buffer = new byte[128];
-	    for (int i = 0; i < size; i++) {
-		randomAccessFile.read(buffer);
-		c.accept(Utils.convertToDouble(buffer));
-	    }
-	    randomAccessFile.close();
-	} catch (IOException e) {
-	    throw new IllegalStateException(e);
-	}
+            byte[] buffer = new byte[128];
+            for (int i = 0; i < size; i++) {
+                randomAccessFile.read(buffer);
+                c.accept(Utils.convertToDouble(buffer));
+            }
+            randomAccessFile.close();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
 }

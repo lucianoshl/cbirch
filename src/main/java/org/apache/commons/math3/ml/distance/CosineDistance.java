@@ -8,32 +8,32 @@ public class CosineDistance implements DistanceMeasure {
 
     @Override
     public double compute(double[] a, double[] b) throws DimensionMismatchException {
-	return similarity(a, b);
+        return similarity(a, b);
     }
 
     private double similarity(double[] a, double[] b) {
-	double dotProduct = 0.0;
-	double magnitude1 = 0.0;
-	double magnitude2 = 0.0;
-	double cosineSimilarity = 0.0;
+        double dotProduct = 0.0;
+        double magnitude1 = 0.0;
+        double magnitude2 = 0.0;
+        double cosineSimilarity = 0.0;
 
-	for (int i = 0; i < a.length; i++) // docVector1 and docVector2 must be
-					   // of same length
-	{
-	    dotProduct += a[i] * b[i]; // a.b
-	    magnitude1 += Math.pow(a[i], 2); // (a^2)
-	    magnitude2 += Math.pow(b[i], 2); // (b^2)
-	}
+        for (int i = 0; i < a.length; i++) // docVector1 and docVector2 must be
+                                           // of same length
+        {
+            dotProduct += a[i] * b[i]; // a.b
+            magnitude1 += Math.pow(a[i], 2); // (a^2)
+            magnitude2 += Math.pow(b[i], 2); // (b^2)
+        }
 
-	magnitude1 = Math.sqrt(magnitude1);// sqrt(a^2)
-	magnitude2 = Math.sqrt(magnitude2);// sqrt(b^2)
+        magnitude1 = Math.sqrt(magnitude1);// sqrt(a^2)
+        magnitude2 = Math.sqrt(magnitude2);// sqrt(b^2)
 
-	if (magnitude1 != 0.0 | magnitude2 != 0.0) {
-	    cosineSimilarity = dotProduct / (magnitude1 * magnitude2);
-	} else {
-	    return 0.0;
-	}
-	return cosineSimilarity;
+        if (magnitude1 != 0.0 | magnitude2 != 0.0) {
+            cosineSimilarity = dotProduct / (magnitude1 * magnitude2);
+        } else {
+            return 0.0;
+        }
+        return cosineSimilarity;
     }
 
 }

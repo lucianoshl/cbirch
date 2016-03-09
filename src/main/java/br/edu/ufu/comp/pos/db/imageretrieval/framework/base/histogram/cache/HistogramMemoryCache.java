@@ -13,27 +13,27 @@ public class HistogramMemoryCache implements HistogramCache {
 
     @Override
     public double[] get(int uuid) {
-	return cache.get(uuid);
+        return cache.get(uuid);
     }
 
     @Override
     public void put(int uuid, double[] content) {
-	double[] old = cache.get(uuid);
-	if (old != null) {
-	    memory -= SizeOf.sizeOf(old);
-	}
-	memory += SizeOf.sizeOf(content);
-	cache.put(uuid, content);
+        double[] old = cache.get(uuid);
+        if (old != null) {
+            memory -= SizeOf.sizeOf(old);
+        }
+        memory += SizeOf.sizeOf(content);
+        cache.put(uuid, content);
 
     }
 
     @Override
     public boolean inCache(int uuid) {
-	return cache.containsKey(uuid);
+        return cache.containsKey(uuid);
     }
 
     public long memoryUsage() {
-	return memory;
+        return memory;
     }
 
 }
