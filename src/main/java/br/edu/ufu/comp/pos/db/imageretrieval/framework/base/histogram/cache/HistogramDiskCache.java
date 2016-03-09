@@ -6,13 +6,14 @@ import static org.apache.commons.lang3.SerializationUtils.deserialize;
 import static org.apache.commons.lang3.SerializationUtils.serialize;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 
 import lombok.SneakyThrows;
 
 public class HistogramDiskCache implements HistogramCache {
 
-    private Map<Integer, File> index;
+    private Map<Integer, File> index = new HashMap<Integer, File>();
     private File cacheLocation;
 
     public HistogramDiskCache() {
