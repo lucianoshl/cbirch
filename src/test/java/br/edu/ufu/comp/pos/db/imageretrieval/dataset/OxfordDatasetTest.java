@@ -13,7 +13,7 @@ import org.junit.runners.MethodSorters;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Framework;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.TreeFactory;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory.TreeFactory;
 import junit.framework.TestCase;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

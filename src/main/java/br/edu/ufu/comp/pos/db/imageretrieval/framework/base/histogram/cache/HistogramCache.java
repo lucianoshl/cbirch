@@ -7,11 +7,11 @@ import lombok.SneakyThrows;
 
 public interface HistogramCache {
 
-    
-    
     double[] get(int uuid);
 
     void put(int uuid, double[] content);
+    
+    boolean inCache(int uuid);
 
     @SneakyThrows
     default File createCacheLocation() {

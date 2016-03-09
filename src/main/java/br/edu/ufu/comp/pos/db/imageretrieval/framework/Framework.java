@@ -2,7 +2,6 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -65,19 +64,17 @@ public class Framework {
 
 	log.append("Quering ").append(query.getImage().getName()).append(": ");
 
-	int queryAssert = 0;
 	List<Histogram> results = index.findTop(query, K);
+	List<String> qualities = new ArrayList<String>();
 	for (int j = 0; j < results.size(); j++) {
 	    String imgName = results.get(j).getImage().getImage().getName();
 	    String classification = dataset.quality(query, imgName);
 	    log.append("\n\t").append(imgName).append("=").append(classification).append(" ");
-	    if (Arrays.asList("good", "ok", "junk").contains(classification)) {
-		queryAssert += 1;
-	    }
+	    qualities.add(classification);
 	}
 
-	Double result = queryAssert / Double.valueOf(K);
-	log.append("assert ").append(queryAssert).append("/").append(K).append("=").append(result);
+	Double result = dataset.getMapCalculator().calc(qualities);
+	log.append("average precision=").append(result);
 	logger.debug(log.toString());
 	return result;
     }

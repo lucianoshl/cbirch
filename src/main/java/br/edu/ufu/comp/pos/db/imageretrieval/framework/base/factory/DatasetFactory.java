@@ -1,4 +1,4 @@
-package br.edu.ufu.comp.pos.db.imageretrieval.framework.base;
+package br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory;
 
 import java.io.File;
 

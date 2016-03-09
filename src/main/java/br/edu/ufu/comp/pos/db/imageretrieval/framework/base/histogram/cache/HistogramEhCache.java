@@ -40,4 +40,9 @@ public class HistogramEhCache implements HistogramCache {
 
     }
 
+    @Override
+    public boolean inCache(int uuid) {
+	return histogramCache.containsKey(uuid);
+    }
+
 }

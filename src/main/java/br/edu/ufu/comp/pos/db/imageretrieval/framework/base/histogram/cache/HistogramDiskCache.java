@@ -44,4 +44,9 @@ public class HistogramDiskCache implements HistogramCache {
 
     }
 
+    @Override
+    public boolean inCache(int uuid) {
+	return index.containsKey(uuid);
+    }
+
 }

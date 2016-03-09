@@ -1,5 +1,7 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.dataset;
 
+import static java.util.Arrays.asList;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,11 +17,18 @@ import org.apache.log4j.Logger;
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.DatasetFactory;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.MapCalculator;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.OxfordMapCalculator;
 
 public class OxfordDataset extends Dataset {
 
-    final static Logger logger = Logger.getLogger(DatasetFactory.class);
+    private static final OxfordMapCalculator MAP_CALCULATOR = OxfordMapCalculator.builder()//
+	    .ignore(asList("junk"))//
+	    .positive(asList("ok", "good"))//
+	    .negative(asList("absent"))//
+	    .build();
+
+    final static Logger logger = Logger.getLogger(OxfordDataset.class);
 
     private File binaryFile;
 
@@ -144,7 +153,7 @@ public class OxfordDataset extends Dataset {
     public String quality(Image query, String imgName) {
 	File queryFile = this.queryFiles.get(query.getImage().getName());
 
-	String result = "null";
+	String result = "absent";
 
 	result = checkIs(imgName, queryFile, "good", result);
 	result = checkIs(imgName, queryFile, "junk", result);
@@ -176,6 +185,11 @@ public class OxfordDataset extends Dataset {
 
     public void setScanLimit(int scanLimit) {
 	this.scanLimit = scanLimit;
+    }
+
+    @Override
+    public MapCalculator getMapCalculator() {
+	return MAP_CALCULATOR;
     }
 
 }
