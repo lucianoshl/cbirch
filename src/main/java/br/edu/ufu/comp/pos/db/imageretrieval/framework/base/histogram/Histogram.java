@@ -8,7 +8,7 @@ import org.apache.commons.math3.ml.distance.DistanceMeasure;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.cache.HistogramCache;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.cache.HistogramEhCache;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.cache.HistogramDiskCache;
 
 public class Histogram {
 
