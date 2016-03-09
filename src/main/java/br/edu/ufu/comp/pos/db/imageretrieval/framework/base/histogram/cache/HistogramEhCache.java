@@ -17,7 +17,7 @@ public class HistogramEhCache implements HistogramCache {
 
     public HistogramEhCache() {
 	cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
-		.with(new CacheManagerPersistenceConfiguration(this.cacheLocation()))
+		.with(new CacheManagerPersistenceConfiguration(this.createCacheLocation()))
 		.withCache("histogramCache",
 			CacheConfigurationBuilder.newCacheConfigurationBuilder(Integer.class, double[].class)
 				.withResourcePools(ResourcePoolsBuilder.newResourcePoolsBuilder()//
