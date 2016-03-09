@@ -17,7 +17,7 @@ public class Histogram {
     private static int GENERATOR = 0;
     private int uuid = ++GENERATOR;
 
-    HistogramCache cache = new HistogramEhCache();
+    HistogramCache cache = new HistogramDiskCache();
 
     private Histogram normalized;
 
