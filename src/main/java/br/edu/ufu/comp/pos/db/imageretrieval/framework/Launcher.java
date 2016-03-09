@@ -30,6 +30,7 @@ public class Launcher {
 
 	    new Framework().run(dataset, tree, 4);
 	} catch (Exception e) {
+	    logger.info("Error:"+ e.getMessage());
 	    logger.error(e);
 	} finally {
 	    logger.info("elapsed time " + stopWatch.getTime());
