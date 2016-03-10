@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.log4j.Logger;
 
@@ -31,6 +32,8 @@ public class Result {
 
     private Map<String, Long> elapsedTime = new HashMap<String, Long>();
     private Map<String, List<Object>> statistics = new HashMap<String, List<Object>>();
+
+    private String error;
 
     public void elapsedTime(String key, Runnable object) {
         StopWatch stopWatch = new StopWatch();
@@ -69,6 +72,11 @@ public class Result {
         new GsonBuilder().setPrettyPrinting().create().toJson(this, writer);
         writer.close();
         logger.info("result file saved in " + resultFile.getAbsolutePath());
+    }
+
+    public void setError(Exception e) {
+	this.error = ExceptionUtils.getStackTrace(e);
+	
     }
 
 }

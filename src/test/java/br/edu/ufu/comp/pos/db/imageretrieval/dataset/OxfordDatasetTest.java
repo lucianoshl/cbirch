@@ -49,7 +49,7 @@ public class OxfordDatasetTest {
 
     @Test
     public void simple15() throws IOException {
-        validateSource(15, 1284, 1.0);
+        validateSource(15, 1283, 1.0);
     }
 
     @Test
@@ -61,13 +61,13 @@ public class OxfordDatasetTest {
     public void simple500() throws IOException {
         validateSource(500, 7973, 0.725);
     }
-//1166
+
     private void validateSource(int limit, int vocabularySize, double map) throws IOException {
         dataset.setScanLimit(limit);
         // 23.453 1284
-        Result result = new Framework().run(dataset, new TreeFactory().createCFTree(100, 23.45330125d, 1024), 4);
-        TestCase.assertEquals(vocabularySize, result.getVocabularySize());
+        Result result = new Framework().run(dataset, new TreeFactory().createCFTree(100, 3000d, 1024), 4);
         TestCase.assertEquals(map, result.getMap());
+        TestCase.assertEquals(vocabularySize, result.getVocabularySize());
         dataset.setScanLimit(-1);
     }
 

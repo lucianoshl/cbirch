@@ -17,7 +17,10 @@ public class Framework {
     final static Logger logger = Logger.getLogger(Framework.class);
 
     public Result run(Dataset dataset, ClusterTree tree, int K) throws IOException {
-
+//
+//	if (true)
+//	throw new RuntimeException();
+	
         Result result = Result.instance;
 
         result.elapsedTime("build tree", () -> {
