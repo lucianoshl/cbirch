@@ -33,6 +33,7 @@ public class Framework {
         Index index = new Index(tree);
         result.elapsedTime("build index", () -> {
             dataset.scanTrainSet((img) -> index.put(img));
+            System.gc();
         });
 
         logger.info("Calc mAP...");

@@ -381,7 +381,7 @@ public class CFTree implements ClusterTree {
 
         // frees some memory by deleting the nodes in the tree that had to be
         // split
-        System.gc();
+//        System.gc();
 
     }
 
