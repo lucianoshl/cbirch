@@ -129,8 +129,6 @@ public class CFTree implements ClusterTree {
         if (distFunction < D0_DIST || distFunction > D4_DIST)
             distFunction = D0_DIST;
 
-        Result.statistic("threshold", distThreshold);
-
         root = new CFNode(maxNodeEntries, distThreshold, distFunction, applyMergingRefinement, true);
         leafListStart = new CFNode(0, 0, distFunction, applyMergingRefinement, true); // this
                                                                                       // is
@@ -319,11 +317,10 @@ public class CFTree implements ClusterTree {
         logger.info("Preparing to rebuild tree");
         logger.info("Actual threshold " + root.getDistThreshold());
         logger.info("Actual leafs: " + this.getEntriesAmount());
-        Result.statistic("words", entriesAmount);
+        Result.registerBirch(root.getDistThreshold(), this.entriesAmount, computeMemorySize(this));
         logger.info("Computing new threshould...");
         double newThreshold = computeNewThreshold(leafListStart, root.getDistFunction(), root.getDistThreshold());
         logger.info("New threshold: " + newThreshold);
-        Result.statistic("threshold", newThreshold);
         logger.info("Tree size: " + SizeOf.humanReadable(computeMemorySize(this)));
         logger.info("Rebuilding... ");
 
@@ -381,7 +378,7 @@ public class CFTree implements ClusterTree {
 
         // frees some memory by deleting the nodes in the tree that had to be
         // split
-//        System.gc();
+        // System.gc();
 
     }
 
@@ -469,8 +466,6 @@ public class CFTree implements ClusterTree {
         String humanReadableTreeSize = SizeOf.humanReadable(memory);
         logger.info("Tree size " + (Math.ceil(memory / Double.valueOf(limit) * 100)) + "%" + " " + humanReadableTreeSize
                 + " ");
-
-        Result.statistic("treeMemory", memory);
 
         if (memory >= (limit - limit / (double) MEM_LIM_FRAC)) {
             return true;
@@ -627,7 +622,7 @@ public class CFTree implements ClusterTree {
         }
         entriesAmount = id;
         finishBuild = true;
-        Result.statistic("words", entriesAmount);
+        Result.registerBirch(root.getDistThreshold(), this.entriesAmount, this.computeMemorySize(this));
     }
 
     /**

@@ -3,6 +3,7 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory;
 import org.apache.log4j.Logger;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree.CFTree;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 
 public class TreeFactory {
@@ -11,16 +12,15 @@ public class TreeFactory {
 
     public ClusterTree create(String[] args) {
         String treeName = args[0];
-
+        Result.extraInfo("Tree", treeName);
         if (treeName.equals("birch")) {
             Integer branchingFactor = Integer.valueOf(args[2]);
             Double threshold = Double.valueOf(args[3]);
             Integer memory = Integer.valueOf(args[4]);
 
-            logger.info("Tree: Birch");
-            logger.info("Branching factor: " + branchingFactor);
-            logger.info("Threshold: " + threshold);
-            logger.info("Memory: " + memory);
+            Result.extraInfo("Branching factor", branchingFactor);
+            Result.extraInfo("Threshold", threshold);
+            Result.extraInfo("Memory", memory);
 
             return createCFTree(branchingFactor, threshold, memory);
         } else {

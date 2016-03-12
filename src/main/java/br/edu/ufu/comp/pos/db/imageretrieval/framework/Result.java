@@ -33,7 +33,11 @@ public class Result {
     private Map<String, Long> elapsedTime = new HashMap<String, Long>();
     private Map<String, List<Object>> statistics = new HashMap<String, List<Object>>();
 
+    private Map<String, String> extraInfo = new HashMap<String, String>();
+
     private String error;
+
+    private File datasetPath;
 
     public void elapsedTime(String key, Runnable object) {
         StopWatch stopWatch = new StopWatch();
@@ -43,6 +47,12 @@ public class Result {
         elapsedTime.put(key, stopWatch.getTime());
     }
 
+    public static void registerBirch(Double threshould, Integer words, long treeSize) {
+        Result.statistic("threshold", threshould);
+        Result.statistic("words", words);
+        Result.statistic("treeMemory", treeSize);
+    }
+
     public static void statistic(String name, Object value) {
         List<Object> list = instance.statistics.get(name);
         if (list == null) {
@@ -50,6 +60,11 @@ public class Result {
             instance.statistics.put(name, list);
         }
         list.add(value);
+    }
+
+    public static void extraInfo(String name, Object value) {
+        logger.info(name + ": " + value);
+        instance.extraInfo.put(name, String.valueOf(value));
     }
 
     @Override
@@ -75,8 +90,13 @@ public class Result {
     }
 
     public void setError(Exception e) {
-	this.error = ExceptionUtils.getStackTrace(e);
-	
+        this.error = ExceptionUtils.getStackTrace(e);
+
+    }
+
+    public void setDatasetPath(File datasetPath) {
+        this.datasetPath = datasetPath;
+
     }
 
 }

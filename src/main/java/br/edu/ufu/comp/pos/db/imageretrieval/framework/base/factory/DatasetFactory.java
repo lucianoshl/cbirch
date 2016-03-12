@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.OxfordDataset;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
 
 public class DatasetFactory {
 
@@ -19,11 +20,14 @@ public class DatasetFactory {
 
         File datasetPath = Utils.getDatesetPath(workspace, datasetName);
 
-        logger.info("Dataset workspace: " + workspace);
-        logger.info("Dataset name: " + datasetName);
-        logger.info("Dataset path: " + datasetPath);
+        Result.extraInfo("Dataset workspace", workspace);
+        Result.extraInfo("Dataset name", datasetName);
+        Result.extraInfo("Dataset path", datasetPath);
+
+        Result.instance.setDatasetPath(datasetPath);
 
         if (new File(datasetPath, "README2.txt").exists()) {
+            Result.extraInfo("Dataset class", OxfordDataset.class);
             return OxfordDataset.createFromBase(workspace, datasetName);
         } else {
             throw new UnsupportedOperationException("unsupported dataset in " + datasetPath.getAbsolutePath());

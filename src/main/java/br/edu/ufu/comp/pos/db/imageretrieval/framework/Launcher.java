@@ -2,7 +2,6 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework;
 
 import java.io.IOException;
 
-import org.apache.commons.lang3.time.StopWatch;
 import org.apache.log4j.Logger;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
@@ -23,21 +22,18 @@ public class Launcher {
         Dataset dataset = new DatasetFactory().create(args);
         ClusterTree tree = new TreeFactory().create(args);
 
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-
-        try {
-
-            new Framework().run(dataset, tree, 4);
-        } catch (Exception e) {
-            Result.instance.setError(e);
-            logger.info("Error:" + e.getMessage());
-            logger.error(e);
-        } finally {
-            logger.info("elapsed time " + stopWatch.getTime());
-            logger.info(Result.instance.toString());
-            Result.instance.save();
-        }
+        Result.instance.elapsedTime("all", () -> {
+            try {
+                new Framework().run(dataset, tree, 4);
+            } catch (Exception e) {
+                Result.instance.setError(e);
+                logger.info("Error:" + e.getMessage());
+                logger.error(e);
+            } finally {
+                logger.info(Result.instance.toString());
+                Result.instance.save();
+            }
+        });
 
     }
 

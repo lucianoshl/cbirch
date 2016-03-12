@@ -1,6 +1,5 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +15,7 @@ public class Framework {
 
     final static Logger logger = Logger.getLogger(Framework.class);
 
-    public Result run(Dataset dataset, ClusterTree tree, int K) throws IOException {
-//
-//	if (true)
-//	throw new RuntimeException();
+    public Result run(Dataset dataset, ClusterTree tree, int K) {
 	
         Result result = Result.instance;
 
