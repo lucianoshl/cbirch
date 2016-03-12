@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import com.google.gson.GsonBuilder;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.CustomFileAppender;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -33,7 +34,8 @@ public class Result {
     private Map<String, Long> elapsedTime = new HashMap<String, Long>();
     private Map<String, List<Object>> statistics = new HashMap<String, List<Object>>();
 
-    private Map<String, String> extraInfo = new HashMap<String, String>();
+    private Map<String, String> extraInfo = new HashMap<String, String>(); 
+    private List<Map<String, String>> results = new ArrayList<Map<String,String>>(); 
 
     private String error;
 
@@ -97,6 +99,15 @@ public class Result {
     public void setDatasetPath(File datasetPath) {
         this.datasetPath = datasetPath;
 
+    }
+
+    public void addResult(String clazz, Image query, Image image, String classification) {
+        HashMap<String, String> item = new HashMap<String,String>();
+        item.put("clazz", clazz);
+        item.put("query", query.getImage().getAbsolutePath());
+        item.put("result", image.getImage().getAbsolutePath());
+        item.put("classification", classification);
+        results.add(item);
     }
 
 }

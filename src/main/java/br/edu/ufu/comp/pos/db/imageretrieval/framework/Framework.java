@@ -40,7 +40,7 @@ public class Framework {
                 logger.debug("Queries for class " + clazz);
                 List<Double> precisionList = new ArrayList<Double>();
                 dataset.scanTestSet(clazz, (query) -> {
-                    precisionList.add(precision(dataset, index, query, K));
+                    precisionList.add(precision(clazz,dataset, index, query, K));
                 });
 
                 if (!precisionList.isEmpty()) { // for developer testing
@@ -58,7 +58,7 @@ public class Framework {
         return result;
     }
 
-    private double precision(Dataset dataset, Index index, Image query, int K) {
+    private double precision(String clazz, Dataset dataset, Index index, Image query, int K) {
 
         StringBuilder log = new StringBuilder();
 
@@ -71,6 +71,7 @@ public class Framework {
             String classification = dataset.quality(query, imgName);
             log.append("\n\t").append(imgName).append("=").append(classification).append(" ");
             qualities.add(classification);
+            Result.instance.addResult(clazz,query,results.get(j).getImage(),classification);
         }
 
         Double result = dataset.getMapCalculator().calc(qualities);
