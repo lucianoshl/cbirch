@@ -59,7 +59,7 @@ public class OxfordDatasetTest {
 
     @Test
     public void simple500() throws IOException {
-        validateSource(500, 7973, 0.725);
+        validateSource(500, 7396, 0.725); 
     }
 
     private void validateSource(int limit, int vocabularySize, double map) throws IOException {
