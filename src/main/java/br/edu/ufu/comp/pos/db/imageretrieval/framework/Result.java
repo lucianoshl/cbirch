@@ -23,91 +23,108 @@ import lombok.SneakyThrows;
 @Setter
 public class Result {
 
-    final static Logger logger = Logger.getLogger(Result.class);
+	final static Logger logger = Logger.getLogger(Result.class);
 
-    public static Result instance = new Result();
+	public static Result instance = new Result();
 
-    private double map;
-    private int vocabularySize;
-    private int cacheHits;
+	private double map;
+	private int vocabularySize;
+	private int cacheHits;
 
-    private Map<String, Long> elapsedTime = new HashMap<String, Long>();
-    private Map<String, List<Object>> statistics = new HashMap<String, List<Object>>();
+	private Map<String, Long> elapsedTime = new HashMap<String, Long>();
+	private Map<String, List<Object>> statistics = new HashMap<String, List<Object>>();
 
-    private Map<String, String> extraInfo = new HashMap<String, String>();
-    private List<Map<String, String>> results = new ArrayList<Map<String, String>>();
+	private Map<String, String> extraInfo = new HashMap<String, String>();
 
-    private String error;
+	private List<QueryResult> results = new ArrayList<QueryResult>();
 
-    private File datasetPath;
+	private String error;
 
-    public void elapsedTime(String key, Runnable object) {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        object.run();
-        stopWatch.stop();
-        elapsedTime.put(key, stopWatch.getTime());
-    }
+	private File datasetPath;
 
-    public static void registerBirch(Double threshould, Integer words, long treeSize) {
-        Result.statistic("threshold", threshould);
-        Result.statistic("words", words);
-        Result.statistic("treeMemory", treeSize);
-    }
+	private Double finalThreshold;
 
-    public static void statistic(String name, Object value) {
-        List<Object> list = instance.statistics.get(name);
-        if (list == null) {
-            list = new ArrayList<Object>();
-            instance.statistics.put(name, list);
-        }
-        list.add(value);
-    }
+	private long finalTreeSize;
 
-    public static void extraInfo(String name, Object value) {
-        logger.info(name + ": " + value);
-        instance.extraInfo.put(name, String.valueOf(value));
-    }
+	public void elapsedTime(String key, Runnable object) {
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
+		object.run();
+		stopWatch.stop();
+		elapsedTime.put(key, stopWatch.getTime());
+	}
 
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Vocabulary size: ").append(this.vocabularySize);
-        builder.append("mAP: ").append(this.map);
-        return builder.toString();
-    }
+	public static void registerBirch(Double threshould, Integer words, long treeSize) {
+		instance.finalThreshold = threshould;
+		instance.vocabularySize = words;
+		instance.finalTreeSize = treeSize;
+		Result.statistic("threshold", threshould);
+		Result.statistic("words", words);
+		Result.statistic("treeMemory", treeSize);
+	}
 
-    @SneakyThrows
-    public void save() {
-        String workspace = System.getenv().get("DATASET_WORKSPACE");
-        File resultsDir = new File(workspace, "results");
-        if (!resultsDir.exists()) {
-            resultsDir.mkdirs();
-        }
-        File resultFile = new File(resultsDir, CustomFileAppender.datePart + ".json");
-        FileWriter writer = new FileWriter(resultFile);
-        new GsonBuilder().setPrettyPrinting().create().toJson(this, writer);
-        writer.close();
-        logger.info("result file saved in " + resultFile.getAbsolutePath());
-    }
+	public static void statistic(String name, Object value) {
+		List<Object> list = instance.statistics.get(name);
+		if (list == null) {
+			list = new ArrayList<Object>();
+			instance.statistics.put(name, list);
+		}
+		list.add(value);
+	}
 
-    public void setError(Exception e) {
-        this.error = ExceptionUtils.getStackTrace(e);
+	public static void extraInfo(String name, Object value) {
+		logger.info(name + ": " + value);
+		instance.extraInfo.put(name, String.valueOf(value));
+	}
 
-    }
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Vocabulary size: ").append(this.vocabularySize);
+		builder.append("mAP: ").append(this.map);
+		return builder.toString();
+	}
 
-    public void setDatasetPath(File datasetPath) {
-        this.datasetPath = datasetPath;
+	@SneakyThrows
+	public void save() {
+		String workspace = System.getenv().get("DATASET_WORKSPACE");
+		File resultsDir = new File(workspace, "results");
+		if (!resultsDir.exists()) {
+			resultsDir.mkdirs();
+		}
+		File resultFile = new File(resultsDir, CustomFileAppender.datePart + ".json");
+		FileWriter writer = new FileWriter(resultFile);
+		new GsonBuilder().setPrettyPrinting().create().toJson(this, writer);
+		writer.close();
+		logger.info("result file saved in " + resultFile.getAbsolutePath());
+	}
 
-    }
+	public void setError(Exception e) {
+		this.error = ExceptionUtils.getStackTrace(e);
 
-    public void addResult(String clazz, Image query, Image image, String classification) {
-        HashMap<String, String> item = new HashMap<String, String>();
-        item.put("clazz", clazz);
-        item.put("query", query.getImage().getAbsolutePath());
-        item.put("result", image.getImage().getAbsolutePath());
-        item.put("classification", classification);
-        results.add(item);
-    }
+	}
+
+	public void setDatasetPath(File datasetPath) {
+		this.datasetPath = datasetPath;
+
+	}
+
+	public void addResult(String clazz, Image query, Image image, String classification) {
+		QueryResultItem item = new QueryResultItem(image, classification);
+		QueryResult result = this.findQueryResult(query);
+		result.add(item);
+	}
+
+	private QueryResult findQueryResult(Image query) {
+		for (QueryResult queryResult : results) {
+			if (queryResult.getQuery().equals(query.getImage().getAbsolutePath())) {
+				return queryResult;
+			}
+		}
+
+		QueryResult result = new QueryResult(query);
+		this.results.add(result);
+		return result;
+	}
 
 }

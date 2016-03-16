@@ -18,8 +18,8 @@ public class Framework {
     public Result run(Dataset dataset, ClusterTree tree, int K) {
 
         Result result = Result.instance;
-
-        result.elapsedTime("build tree", () -> {
+        
+        result.elapsedTime("buildTree", () -> {
             logger.info("Building tree with test set...");
             dataset.scanTrainSetSifts((sift) -> tree.insertEntry(sift));
 
@@ -27,14 +27,14 @@ public class Framework {
         });
 
         Index index = new Index(tree);
-        result.elapsedTime("build index", () -> {
+        result.elapsedTime("buildIndex", () -> {
             dataset.scanTrainSet((img) -> index.put(img));
             System.gc();
         });
 
         logger.info("Calc mAP...");
         List<Double> averagePrecision = new ArrayList<Double>();
-        result.elapsedTime("testing model ", () -> {
+        result.elapsedTime("testingModel", () -> {
 
             for (String clazz : dataset.getTestClasses()) {
                 logger.debug("Queries for class " + clazz);

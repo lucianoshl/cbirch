@@ -1,0 +1,60 @@
+---
+title: "experiment-results"
+author: "Luciano Lopes"
+date: "March 13, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE}
+library("jsonlite") 
+result <- fromJSON("/home/void/workspace/results/null.json")
+```
+
+## Results
+mAP: `r result$map`  
+Vocabulary size: `r result$vocabularySize`  
+Build tree: `r result$elapsedTime$buildTree/1000/60/60` hours  
+Build index: `r result$elapsedTime$buildIndex/1000/60/60` hours  
+Testing model: `r result$elapsedTime$testingModel/1000/60/60` hours  
+
+## Parameters
+
+```{r, echo=FALSE}
+result$extraInfo
+```
+
+## Query results
+
+```{r,results='asis', echo=FALSE}
+queryResults = result$results
+
+g <- function(line, output) {
+   writeLines(paste0("<div style='border 1px solid black ; display:inline; width:300px; height:200px' ><img src='",line[1],"' width='150px' height='150px' />",line[2],"</div>"))
+}
+
+f <- function(line, output) {
+  writeLines("Query: <br>")
+  writeLines(paste0("<img src='",line$query,"' width='150px' height='150px' /><br>"))
+  writeLines("Results: <br>")
+  apply(line$results, 1, g)
+  writeLines("<hr>")
+   
+}
+apply(queryResults, 1, f)
+
+```
+
+
+## Evolution
+
+```{r echo=FALSE}
+plot(result$statistics$treeMemory/1024/1024,,type='l',xlab = "Moment",ylab = "Tree Memory(MB)")
+```
+
+```{r echo=FALSE}
+plot(result$statistics$threshold,,type='l',xlab = "Moment",ylab = "Threshold")
+```

@@ -48,6 +48,11 @@ public class OxfordDatasetTest {
     }
 
     @Test
+    public void test() throws IOException {
+        validateSource(15, 1283, 1.0);
+    }
+    
+    @Test
     public void simple15() throws IOException {
         validateSource(15, 1283, 1.0);
     }

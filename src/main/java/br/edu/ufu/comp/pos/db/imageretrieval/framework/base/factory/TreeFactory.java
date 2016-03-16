@@ -29,6 +29,7 @@ public class TreeFactory {
     }
 
     public ClusterTree createCFTree(Integer branchingFactor, Double threshold, Integer memory) {
+    	Result.registerBirch(threshold, 0, 0);
         CFTree tree = new CFTree(branchingFactor, threshold, 1, true);
         tree.setAutomaticRebuild(true);
         tree.setMemoryLimitMB(memory);

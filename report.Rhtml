@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+  </head>
+<!--begin.rcode echo=FALSE
+        library("jsonlite") 
+        result <- fromJSON("/home/void/workspace/results/null.json")
+end.rcode-->
+  <body>
+    <div class="container">
+
+      <div class="page-header">
+        <h1>Experiment result</h1>
+        <p class="lead"><!--rinline Sys.time() --></p>
+      </div>
+
+      <h3>Results</h3>
+      <div class="row">
+        <div class="col-md-12"> mAP: <!--rinline result$map --> </div>
+        <div class="col-md-12"> Vocabulary size: <!--rinline result$vocabularySize --> </div>
+        <div class="col-md-12"> Build tree: <!--rinline result$elapsedTime$buildTree/1000/60/60 --> hours</div>
+        <div class="col-md-12"> Build index: <!--rinline result$elapsedTime$buildIndex/1000/60/60 --> hours</div>
+        <div class="col-md-12"> Testing model: <!--rinline result$elapsedTime$testingModel/1000/60/60 --> hours </div>
+      </div>
+
+      <h3>Parameters</h3>
+<!--begin.rcode echo=FALSE
+result$extraInfo
+end.rcode-->
+
+      <h3>Query results</h3>
+<!--begin.rcode echo=FALSE, results='asis'
+queryResults = result$results
+
+g <- function(line, output) {
+   writeLines(paste0("<div style='display:inline-block;width:200px'><img src='",line[1],"' class='img-responsive'/>",line[2],"</div>"))
+}
+
+f <- function(line, output) {
+  writeLines("Query: <br>")
+  writeLines(paste0("<div style='display:inline-block;width:300px'><img class='img-responsive' src='",line$query,"' /></div><br>"))
+  writeLines("Results: <br>")
+  apply(line$results, 1, g)
+  writeLines("<hr>")
+   
+}
+apply(queryResults, 1, f)
+end.rcode-->
+
+
+      <h3>Evolution</h3>
+      <div class="row">
+<!--begin.rcode echo=FALSE
+plot(result$statistics$treeMemory/1024/1024,,type='l',xlab = "Moment",ylab = "Tree Memory(MB)")
+plot(result$statistics$threshold,,type='l',xlab = "Moment",ylab = "Threshold")
+end.rcode-->
+      </div>
+
+    </div>
+  </body>
+</html>
