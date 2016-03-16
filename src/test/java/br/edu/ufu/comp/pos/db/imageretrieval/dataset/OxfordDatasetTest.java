@@ -50,6 +50,8 @@ public class OxfordDatasetTest {
     @Test
     public void test() throws IOException {
         Result result = this.callExperiment(15, 3000);
+        
+        
         System.out.println(result.getVocabularySize());
     }
     
