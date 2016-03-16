@@ -63,8 +63,8 @@ public class OxfordDatasetTest {
     }
 
     private void validateSource(int limit, int vocabularySize, double map) throws IOException {
-        double threshold = 3000d;
-//        double threshold = 11.683065953654183;
+//        double threshold = 3000d;
+        double threshold = 11.683065953654183;
         Result result = callExperiment(limit, threshold);
         TestCase.assertEquals(vocabularySize, result.getVocabularySize());
         TestCase.assertEquals(map, result.getMap());
