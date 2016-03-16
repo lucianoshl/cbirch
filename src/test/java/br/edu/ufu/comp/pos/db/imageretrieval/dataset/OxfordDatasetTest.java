@@ -49,7 +49,8 @@ public class OxfordDatasetTest {
 
     @Test
     public void test() throws IOException {
-        validateSource(15, 1283, 1.0);
+        Result result = this.callExperiment(15, 3000);
+        System.out.println(result.getVocabularySize());
     }
     
     @Test
@@ -68,12 +69,17 @@ public class OxfordDatasetTest {
     }
 
     private void validateSource(int limit, int vocabularySize, double map) throws IOException {
-        dataset.setScanLimit(limit);
-        // 23.453 1284
-        Result result = new Framework().run(dataset, new TreeFactory().createCFTree(100, 3000d, 1024), 4);
+        double threshold = 3000d;
+        Result result = callExperiment(limit, threshold);
         TestCase.assertEquals(map, result.getMap());
         TestCase.assertEquals(vocabularySize, result.getVocabularySize());
-        dataset.setScanLimit(-1);
     }
+
+	private Result callExperiment(int limit, double threshold) {
+		dataset.setScanLimit(limit);
+		Result result = new Framework().run(dataset, new TreeFactory().createCFTree(100, threshold, 1024), 4);
+        dataset.setScanLimit(-1);
+		return result;
+	}
 
 }
