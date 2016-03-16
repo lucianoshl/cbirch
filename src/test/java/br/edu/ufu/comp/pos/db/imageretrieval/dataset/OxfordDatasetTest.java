@@ -46,23 +46,15 @@ public class OxfordDatasetTest {
         Assert.assertEquals(-1, randomAccessFile.read());
         randomAccessFile.close();
     }
-
-    @Test
-    public void test() throws IOException {
-        Result result = this.callExperiment(15, 3000);
-        
-        
-        System.out.println(result.getVocabularySize());
-    }
     
     @Test
     public void simple15() throws IOException {
-        validateSource(15, 1283, 1.0);
+        validateSource(15, 1313, 1.0);
     }
 
     @Test
     public void simple200() throws IOException {
-        validateSource(200, 4987, 0.875);
+        validateSource(200, 4799, 0.875);
     }
 
     @Test
@@ -72,9 +64,10 @@ public class OxfordDatasetTest {
 
     private void validateSource(int limit, int vocabularySize, double map) throws IOException {
         double threshold = 3000d;
+//        double threshold = 11.683065953654183;
         Result result = callExperiment(limit, threshold);
-        TestCase.assertEquals(map, result.getMap());
         TestCase.assertEquals(vocabularySize, result.getVocabularySize());
+        TestCase.assertEquals(map, result.getMap());
     }
 
 	private Result callExperiment(int limit, double threshold) {
