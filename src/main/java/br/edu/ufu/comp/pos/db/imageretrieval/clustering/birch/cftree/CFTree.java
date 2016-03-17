@@ -443,7 +443,8 @@ public class CFTree implements ClusterTree {
             logger.info("newThreshold <= currentThreshold");
             logger.info("increase currentThreshold in 10% ");
             // newThreshold = 2 * currentThreshold;
-            newThreshold = 1.1 * currentThreshold;
+            newThreshold = currentThreshold + 0.1;
+//            newThreshold = 1.1 * currentThreshold;
         }
 
         return newThreshold;

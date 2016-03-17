@@ -40,7 +40,7 @@ end.rcode-->
 queryResults = result$results
 
 g <- function(line, output) {
-   writeLines(paste0("<div style='display:inline-block;width:100px'><img src='",line[1],"' class='img-responsive'/>",line[2],"</div>"))
+   writeLines(paste0("<div style='display:inline-block;width:100px'><img src='",line[1],".thumb' class='img-responsive'/>",line[2],"</div>"))
 }
 
 f <- function(line, output) {
