@@ -25,13 +25,18 @@ public class DatasetFactory {
         Result.extraInfo("Dataset path", datasetPath);
 
         Result.instance.setDatasetPath(datasetPath);
+        Dataset dataset = null;
 
         if (new File(datasetPath, "README2.txt").exists()) {
             Result.extraInfo("Dataset class", OxfordDataset.class);
-            return OxfordDataset.createFromBase(workspace, datasetName);
+            dataset = OxfordDataset.createFromBase(workspace, datasetName);
         } else {
             throw new UnsupportedOperationException("unsupported dataset in " + datasetPath.getAbsolutePath());
         }
+        
+        Result.extraInfo("Dataset features", dataset.getFeaturesSize());
+        
+        return dataset;
 
     }
 

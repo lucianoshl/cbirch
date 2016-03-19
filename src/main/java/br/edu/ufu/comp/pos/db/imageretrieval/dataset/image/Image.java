@@ -3,8 +3,6 @@ package br.edu.ufu.comp.pos.db.imageretrieval.dataset.image;
 import java.io.File;
 import java.util.function.Consumer;
 
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.QueryResultItem;
-
 public abstract class Image {
 
     public abstract File getImage();

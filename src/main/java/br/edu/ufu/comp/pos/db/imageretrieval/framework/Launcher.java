@@ -20,6 +20,9 @@ public class Launcher {
         }
 
         Dataset dataset = new DatasetFactory().create(args);
+        
+        
+        
         ClusterTree tree = new TreeFactory().create(args);
 
         Result.instance.elapsedTime("all", () -> {

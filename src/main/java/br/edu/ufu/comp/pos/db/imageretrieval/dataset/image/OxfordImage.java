@@ -15,8 +15,10 @@ public class OxfordImage extends Image {
     @Getter
     public final File image;
 
+    @Getter
     public final long offset;
 
+    @Getter
     public final long size;
 
     public OxfordImage(File binaryFile, File image, long offset, long size) {
