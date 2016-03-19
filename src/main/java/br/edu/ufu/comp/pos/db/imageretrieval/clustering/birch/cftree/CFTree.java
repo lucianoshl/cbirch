@@ -234,7 +234,6 @@ public class CFTree implements ClusterTree {
 
         boolean insertEntry = insertEntry(x, instanceIndex);
         instanceIndex++;
-        System.gc();
         return insertEntry;
     }
 

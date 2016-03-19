@@ -21,7 +21,10 @@ public class Framework {
         
         result.elapsedTime("buildTree", () -> {
             logger.info("Building tree with test set...");
-            dataset.scanTrainSetSifts((sift) -> tree.insertEntry(sift));
+            dataset.scanTrainSet((img) -> {
+            	img.scan((sift) -> tree.insertEntry(sift));
+                System.gc();
+            });
             tree.finishBuild();
         });
 
