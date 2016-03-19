@@ -27,6 +27,7 @@ public class Framework {
             	img.scan((sift) -> tree.insertEntry(sift));
             	entryInserted++;
             	if (entryInserted%10 == 0){
+            		System.out.println("call gc");
             		System.gc();
             	}
             });
