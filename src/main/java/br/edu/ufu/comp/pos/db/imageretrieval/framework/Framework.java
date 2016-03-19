@@ -15,6 +15,8 @@ public class Framework {
 
     final static Logger logger = Logger.getLogger(Framework.class);
 
+    static int entryInserted = 0;
+    
     public Result run(Dataset dataset, ClusterTree tree, int K) {
 
         Result result = Result.instance;
@@ -23,7 +25,10 @@ public class Framework {
             logger.info("Building tree with test set...");
             dataset.scanTrainSet((img) -> {
             	img.scan((sift) -> tree.insertEntry(sift));
-//                System.gc();
+            	entryInserted++;
+            	if (entryInserted%10 == 0){
+            		System.gc();
+            	}
             });
             tree.finishBuild();
         });
