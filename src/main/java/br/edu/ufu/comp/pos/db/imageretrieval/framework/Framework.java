@@ -23,7 +23,7 @@ public class Framework {
             logger.info("Building tree with test set...");
             dataset.scanTrainSet((img) -> {
             	img.scan((sift) -> tree.insertEntry(sift));
-                System.gc();
+//                System.gc();
             });
             tree.finishBuild();
         });
