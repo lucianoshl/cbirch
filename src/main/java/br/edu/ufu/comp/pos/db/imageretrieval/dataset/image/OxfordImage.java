@@ -21,12 +21,15 @@ public class OxfordImage extends Image {
     @Getter
     public final long size;
 
-    public OxfordImage(File binaryFile, File image, long offset, long size) {
+    private Sift siftReader;
+
+    public OxfordImage(File binaryFile, File image, long offset, long size, Sift siftReader) {
         super();
         this.binaryFile = binaryFile;
         this.image = image;
         this.offset = offset;
         this.size = size;
+        this.siftReader = siftReader;
     }
 
     @Override
@@ -39,7 +42,7 @@ public class OxfordImage extends Image {
             byte[] buffer = new byte[128];
             for (int i = 0; i < size; i++) {
                 randomAccessFile.read(buffer);
-                c.accept(Sift.scale(buffer));
+                c.accept(siftReader.extract(buffer));
             }
             randomAccessFile.close();
         } catch (IOException e) {

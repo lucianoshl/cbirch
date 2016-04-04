@@ -13,44 +13,44 @@ import lombok.Setter;
 @Setter
 public class TreeNode implements AbstractTreeNode {
 
-	private static final EuclideanDistance distance = new EuclideanDistance();
-	private double[] centroid;
-	private List<TreeNode> entries;
-	private int id;
+    private static final EuclideanDistance distance = new EuclideanDistance();
+    private double[] centroid;
+    private List<TreeNode> entries;
+    private int id;
 
-	public TreeNode(double[] point, int k) {
-		this.centroid = point;
-		this.entries = new ArrayList<TreeNode>();
-	}
+    public TreeNode(double[] point, int k) {
+        this.centroid = point;
+        this.entries = new ArrayList<TreeNode>();
+    }
 
-	public void addChild(TreeNode createNode) {
-		entries.add(createNode);
+    public void addChild(TreeNode createNode) {
+        entries.add(createNode);
 
-	}
+    }
 
-	public boolean isLeaf() {
-		return entries.isEmpty();
-	}
+    public boolean isLeaf() {
+        return entries.isEmpty();
+    }
 
-	public TreeNode findClosestCluster(double[] sift) {
-		if (isLeaf()) {
-			return this;
-		} else {
-			entries.sort((a, b) -> {
-				return Double.compare(distance.compute(sift, a.getCentroid()), distance.compute(sift, b.getCentroid()));
-			});
-			return entries.get(0).findClosestCluster(sift);
-		}
-	}
+    public TreeNode findClosestCluster(double[] sift) {
+        if (isLeaf()) {
+            return this;
+        } else {
+            entries.sort((a, b) -> {
+                return Double.compare(distance.compute(sift, a.getCentroid()), distance.compute(sift, b.getCentroid()));
+            });
+            return entries.get(0).findClosestCluster(sift);
+        }
+    }
 
-	@Override
-	public int getId() {
-		return id;
-	}
+    @Override
+    public int getId() {
+        return id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
+    public void setId(int id) {
+        this.id = id;
 
-	}
+    }
 
 }

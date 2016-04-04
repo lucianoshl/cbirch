@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Sift;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.SiftScaled;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.MapCalculator;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.OxfordMapCalculator;
 import lombok.SneakyThrows;
@@ -53,7 +53,6 @@ public class OxfordDataset extends Dataset {
     private Map<String, List<String>> queryClass;
 
     private int scanLimit = -1;
-    // private int scanLimit = 500;
 
     @SuppressWarnings("resource")
     @SneakyThrows
@@ -104,7 +103,12 @@ public class OxfordDataset extends Dataset {
 
                 c.scan((d) -> {
                     try {
-                        FileUtils.writeByteArrayToFile(binary, Sift.removeScale(d), true);
+                        if (oxford.siftReader.getClass().equals(SiftScaled.class)) {
+                            FileUtils.writeByteArrayToFile(binary, SiftScaled.removeScale(d), true);
+                        } else {
+                            FileUtils.writeByteArrayToFile(binary, Utils.convertToByte(d), true);
+                        }
+
                     } catch (IOException e) {
                         throw new IllegalStateException(e);
                     }
@@ -168,7 +172,8 @@ public class OxfordDataset extends Dataset {
         aux.put("aux", 0l);
         scanOrderFile((fileName) -> {
             long siftSize = getImageSiftSize(fileName);
-            c.accept(new OxfordImage(binaryFile, new File(imageFolder, fileName), aux.get("aux"), siftSize));
+            c.accept(
+                    new OxfordImage(binaryFile, new File(imageFolder, fileName), aux.get("aux"), siftSize, siftReader));
             aux.put("aux", aux.get("aux") + siftSize * 128);
         });
 

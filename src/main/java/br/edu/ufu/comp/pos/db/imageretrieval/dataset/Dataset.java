@@ -6,7 +6,10 @@ import java.util.function.Consumer;
 import org.apache.log4j.Logger;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Sift;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.MapCalculator;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class Dataset {
 
@@ -19,6 +22,10 @@ public abstract class Dataset {
     private double percent;
 
     protected long featuresSize;
+
+    @Getter
+    @Setter
+    protected Sift siftReader = new Sift();
 
     protected abstract void trainSet(Consumer<Image> c);
 

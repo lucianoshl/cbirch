@@ -446,7 +446,7 @@ public class CFTree implements ClusterTree {
             logger.info("increase currentThreshold in 10% ");
             // newThreshold = 2 * currentThreshold;
             newThreshold = currentThreshold + 0.1;
-//            newThreshold = 1.1 * currentThreshold;
+            // newThreshold = 1.1 * currentThreshold;
         }
 
         return newThreshold;
@@ -794,11 +794,11 @@ public class CFTree implements ClusterTree {
         return entriesAmount;
     }
 
-	@Override
-	public void build(Dataset dataset) {
+    @Override
+    public void build(Dataset dataset) {
         dataset.scanTrainSet((img) -> {
-        	img.scan((sift) -> this.insertEntry(sift));
+            img.scan((sift) -> this.insertEntry(sift));
         });
-	}
+    }
 
 }

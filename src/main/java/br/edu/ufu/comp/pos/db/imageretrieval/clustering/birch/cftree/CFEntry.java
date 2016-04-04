@@ -28,7 +28,6 @@ import java.util.Arrays;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.AbstractTreeNode;
 
-
 /**
  * 
  * @author Roberto Perdisci (roberto.perdisci@gmail.com)
@@ -393,9 +392,9 @@ public class CFEntry implements AbstractTreeNode {
         return res;
     }
 
-	@Override
-	public int getId() {
-		return this.getSubclusterID();
-	}
+    @Override
+    public int getId() {
+        return this.getSubclusterID();
+    }
 
 }

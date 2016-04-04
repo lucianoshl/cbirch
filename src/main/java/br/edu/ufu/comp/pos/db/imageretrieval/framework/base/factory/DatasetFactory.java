@@ -8,6 +8,8 @@ import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.OxfordDataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Sift;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.SiftScaled;
 
 public class DatasetFactory {
 
@@ -16,7 +18,8 @@ public class DatasetFactory {
     public Dataset create(String[] args) {
 
         String workspace = System.getenv().get("DATASET_WORKSPACE");
-        String datasetName = args[1];
+        String datasetName = args[2];
+        Sift siftReader = args[1].equals("1") ? new SiftScaled() : new Sift();
 
         File datasetPath = Utils.getDatesetPath(workspace, datasetName);
 
@@ -30,18 +33,13 @@ public class DatasetFactory {
         if (new File(datasetPath, "README2.txt").exists()) {
             Result.extraInfo("Dataset class", OxfordDataset.class);
             dataset = OxfordDataset.createFromBase(workspace, datasetName);
+            dataset.setSiftReader(siftReader);
         } else {
             throw new UnsupportedOperationException("unsupported dataset in " + datasetPath.getAbsolutePath());
         }
-        
 
-//    	KMeansTree kMeansTree = new KMeansTree(2,8);
-//    	
-//		kMeansTree.build(new DatasetFactory().create(args));
-//		kMeansTree.finishBuild();
-        
         Result.extraInfo("Dataset features", dataset.getFeaturesSize());
-        
+
         return dataset;
 
     }
