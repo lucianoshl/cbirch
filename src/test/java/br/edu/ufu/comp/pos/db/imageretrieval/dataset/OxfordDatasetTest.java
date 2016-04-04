@@ -13,6 +13,7 @@ import org.junit.runners.MethodSorters;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Framework;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.SiftScaled;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory.TreeFactory;
 import junit.framework.TestCase;
 
@@ -27,8 +28,9 @@ public class OxfordDatasetTest {
     @Before
     public void before() {
         this.workspace = System.getenv().get("DATASET_WORKSPACE");
-        this.dsName = "oxford-15";
+        this.dsName = "oxford";
         this.dataset = OxfordDataset.createFromBase(workspace, dsName);
+        this.dataset.setSiftReader(new SiftScaled());
     }
 
     @Test
@@ -64,9 +66,17 @@ public class OxfordDatasetTest {
     public void simple500() throws IOException {
         validateSource(500, 7396, 0.6444444444444445);
     }
+    
+    @Test
+    public void simple1000() throws IOException {
+        validateSource(1000, 11958, 0.7055555555555556);
+    }
+//    @Test
+//    public void simple2000() throws IOException {
+//        validateSource(2000, 18082, 0.56875);
+//    }
 
     private void validateSource(int limit, int vocabularySize, double map) throws IOException {
-        // double threshold = 3000d;
         double threshold = 11.683065953654183;
         Result result = callExperiment(limit, threshold);
         TestCase.assertEquals(vocabularySize, result.getVocabularySize());
