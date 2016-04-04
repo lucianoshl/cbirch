@@ -1,15 +1,16 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework.base;
 
-import br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree.CFEntry;
+import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.AbstractTreeNode;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 
 public interface ClusterTree {
-
-    boolean insertEntry(double[] sift);
 
     void finishBuild();
 
     int getEntriesAmount();
 
-    CFEntry findClosestCluster(double[] sift);
+    AbstractTreeNode findClosestCluster(double[] sift);
+
+	void build(Dataset dataset);
 
 }

@@ -34,6 +34,12 @@ public class DatasetFactory {
             throw new UnsupportedOperationException("unsupported dataset in " + datasetPath.getAbsolutePath());
         }
         
+
+//    	KMeansTree kMeansTree = new KMeansTree(2,8);
+//    	
+//		kMeansTree.build(new DatasetFactory().create(args));
+//		kMeansTree.finishBuild();
+        
         Result.extraInfo("Dataset features", dataset.getFeaturesSize());
         
         return dataset;

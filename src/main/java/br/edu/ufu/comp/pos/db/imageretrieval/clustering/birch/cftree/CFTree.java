@@ -28,6 +28,8 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
+import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.AbstractTreeNode;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 import net.sourceforge.sizeof.SizeOf;
@@ -767,7 +769,7 @@ public class CFTree implements ClusterTree {
         }
     }
 
-    public CFEntry findClosestCluster(double[] sift) {
+    public AbstractTreeNode findClosestCluster(double[] sift) {
 
         return this.root.findClosestCluster(new CFEntry(sift));
     }
@@ -791,5 +793,12 @@ public class CFTree implements ClusterTree {
         }
         return entriesAmount;
     }
+
+	@Override
+	public void build(Dataset dataset) {
+        dataset.scanTrainSet((img) -> {
+        	img.scan((sift) -> this.insertEntry(sift));
+        });
+	}
 
 }

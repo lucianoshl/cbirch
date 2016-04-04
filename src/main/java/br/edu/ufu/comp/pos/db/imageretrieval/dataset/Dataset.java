@@ -1,5 +1,6 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.dataset;
 
+import java.io.File;
 import java.util.function.Consumer;
 
 import org.apache.log4j.Logger;
@@ -25,6 +26,8 @@ public abstract class Dataset {
 
 	public abstract String[] getTestClasses();
 
+	public abstract File getDatasetFeaturesFile();
+	
 	public void scanTrainSet(Consumer<Image> c) {
 		current = 0;
 		this.trainSet((img) -> {

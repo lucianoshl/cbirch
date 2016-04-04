@@ -2,7 +2,7 @@ package org.apache.commons.math3.ml.distance;
 
 import org.apache.commons.math3.exception.DimensionMismatchException;
 
-public class CosineDistance implements DistanceMeasure {
+public class CosineSimilarity implements DistanceMeasure {
 
     private static final long serialVersionUID = 2309775922906175342L;
 

@@ -6,7 +6,7 @@ import junit.framework.TestCase;
 
 public class CosineDistanceTest {
 
-    CosineDistance cosineDistance = new CosineDistance();
+    CosineSimilarity cosineDistance = new CosineSimilarity();
 
     @Test
     public void test1() {

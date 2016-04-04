@@ -2,7 +2,7 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram;
 
 import java.util.Arrays;
 
-import org.apache.commons.math3.ml.distance.CosineDistance;
+import org.apache.commons.math3.ml.distance.CosineSimilarity;
 import org.apache.commons.math3.ml.distance.DistanceMeasure;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
@@ -12,7 +12,7 @@ import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.cache.Hist
 
 public class Histogram {
 
-    private static DistanceMeasure distanceMeasure = new CosineDistance();
+    private static DistanceMeasure distanceMeasure = new CosineSimilarity();
 
     private static int GENERATOR = 0;
     private int uuid = ++GENERATOR;
@@ -92,7 +92,7 @@ public class Histogram {
 
         double[] content = new double[tree.getEntriesAmount()];
         img.scan((sift) -> {
-            content[tree.findClosestCluster(sift).getSubclusterID()]++;
+            content[tree.findClosestCluster(sift).getId()]++;
         });
         return new Histogram(img, content);
     }

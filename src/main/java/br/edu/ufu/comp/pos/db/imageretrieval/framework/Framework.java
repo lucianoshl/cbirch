@@ -23,14 +23,7 @@ public class Framework {
         
         result.elapsedTime("buildTree", () -> {
             logger.info("Building tree with test set...");
-            dataset.scanTrainSet((img) -> {
-            	img.scan((sift) -> tree.insertEntry(sift));
-            	entryInserted++;
-            	if (entryInserted%10 == 0){
-            		System.out.println("call gc");
-            		System.gc();
-            	}
-            });
+            tree.build(dataset);
             tree.finishBuild();
         });
 

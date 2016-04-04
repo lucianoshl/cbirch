@@ -3,6 +3,7 @@ package br.edu.ufu.comp.pos.db.imageretrieval.dataset;
 import static java.util.Arrays.asList;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import org.apache.log4j.Logger;
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Sift;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.MapCalculator;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.OxfordMapCalculator;
 import lombok.SneakyThrows;
@@ -57,11 +59,11 @@ public class OxfordDataset extends Dataset {
 	@SneakyThrows
 	public static void main(String[] args) {
 
-		String workspace = "/home/void/workspace/workspace-birch";
+		String workspace = System.getenv().get("DATASET_WORKSPACE");
 		OxfordDataset oxford = OxfordDataset.createFromBase(workspace, "oxford");
-		oxford.scanLimit = 100;
+		oxford.scanLimit = 15;
 
-		String target = "oxford-100";
+		String target = "oxford-"+oxford.scanLimit;
 		File datesetPath = Utils.getDatesetPath(workspace, target);
 		FileUtils.deleteQuietly(datesetPath);
 		datesetPath.mkdirs();
@@ -85,7 +87,9 @@ public class OxfordDataset extends Dataset {
 		position.mkdirs();
 
 		File images = new File(datesetPath, "images");
-		images.mkdirs();
+		images.mkdirs(); 
+		
+		FileUtils.copyDirectory(oxford.gtFilesFolder, new File(datesetPath,"gt_files"));
 
 		oxford.scanTrainSet((c) -> {
 			try {
@@ -100,18 +104,18 @@ public class OxfordDataset extends Dataset {
 				
 				c.scan((d) -> {
 					try {
-						FileUtils.writeByteArrayToFile(binary, Utils.convertToByte(d), true);
+						FileUtils.writeByteArrayToFile(binary, Sift.removeScale(d), true);
 					} catch (IOException e) {
 						throw new IllegalStateException(e);
 					}
 				});
 
-				FileUtils.writeByteArrayToFile(binary, new byte[12], true);
-
 			} catch (Exception e) {
 				throw new IllegalStateException(e);
 			}
 		});
+		
+		FileUtils.writeByteArrayToFile(binary, new byte[12], true);
 
 		writer.close();
 	}
@@ -203,11 +207,15 @@ public class OxfordDataset extends Dataset {
 				"images", "gt_files", "README2.txt");
 	}
 
+	@SneakyThrows
 	public OxfordDataset(String workspace, String datasetName, String binaryFile, String siftSizeFolderDescriptor,
 			String imagesFolderPath, String gtFiles, String orderInBinaryFile) {
 
 		// this.workspace = workspace;
 		this.datasetFolder = Utils.getDatesetPath(workspace, datasetName);
+		if (!this.datasetFolder.exists()){
+			throw new FileNotFoundException(this.datasetFolder.getAbsolutePath());
+		}
 		this.binaryFile = new File(datasetFolder, binaryFile);
 		this.rangeSwiftInBinary = new File(datasetFolder, siftSizeFolderDescriptor);
 		this.imageFolder = new File(datasetFolder, imagesFolderPath);
@@ -270,6 +278,11 @@ public class OxfordDataset extends Dataset {
 		}
 
 		return featuresSize;
+	}
+
+	@Override
+	public File getDatasetFeaturesFile() {
+		return binaryFile;
 	}
 
 }
