@@ -149,8 +149,8 @@ public class KMeansTree implements ClusterTree {
     @Override
     @SneakyThrows
     public void build(Dataset dataset) {
-        
-        if (dataset.getSiftReader().getClass().equals(SiftScaled.class)){
+
+        if (dataset.getSiftReader().getClass().equals(SiftScaled.class)) {
             throw new IllegalStateException("the dataset can not be scaled in hkm");
         }
 
@@ -172,7 +172,8 @@ public class KMeansTree implements ClusterTree {
         File scriptFile = new File(tmpFolder, "hkm.m");
         FileUtils.write(scriptFile, script);
 
-        Files.setPosixFilePermissions(scriptFile.toPath(), new HashSet<PosixFilePermission>(Arrays.asList(PosixFilePermission.values())));
+        Files.setPosixFilePermissions(scriptFile.toPath(),
+                new HashSet<PosixFilePermission>(Arrays.asList(PosixFilePermission.values())));
 
         logger.info("running matlab in " + tmpFolder);
         Process process = Runtime.getRuntime().exec(
