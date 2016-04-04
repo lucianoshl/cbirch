@@ -28,8 +28,9 @@ public class Result {
 	public static Result instance = new Result();
 
 	private double map;
-	private int vocabularySize;
 	private int cacheHits;
+
+	private int vocabularySize;
 
 	private Map<String, Long> elapsedTime = new HashMap<String, Long>();
 	private Map<String, List<Object>> statistics = new HashMap<String, List<Object>>();
@@ -42,10 +43,6 @@ public class Result {
 
 	private File datasetPath;
 
-	private Double finalThreshold;
-
-	private long finalTreeSize;
-
 	public void elapsedTime(String key, Runnable object) {
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
@@ -55,9 +52,6 @@ public class Result {
 	}
 
 	public static void registerBirch(Double threshould, Integer words, long treeSize) {
-		instance.finalThreshold = threshould;
-		instance.vocabularySize = words;
-		instance.finalTreeSize = treeSize;
 		Result.statistic("threshold", threshould);
 		Result.statistic("words", words);
 		Result.statistic("treeMemory", treeSize);

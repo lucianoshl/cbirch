@@ -1,6 +1,6 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.clustering.hkm;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.math3.ml.distance.EuclideanDistance;
@@ -15,33 +15,31 @@ public class TreeNode implements AbstractTreeNode {
 
 	private static final EuclideanDistance distance = new EuclideanDistance();
 	private double[] centroid;
-	private TreeNode[] entries;
-	private int insertedNodes = 0;
+	private List<TreeNode> entries;
 	private int id;
 
 	public TreeNode(double[] point, int k) {
 		this.centroid = point;
-		this.entries = new TreeNode[k];
+		this.entries = new ArrayList<TreeNode>();
 	}
 
 	public void addChild(TreeNode createNode) {
-		entries[insertedNodes++] = createNode;
+		entries.add(createNode);
 
 	}
 
 	public boolean isLeaf() {
-		return insertedNodes == 0;
+		return entries.isEmpty();
 	}
 
 	public TreeNode findClosestCluster(double[] sift) {
 		if (isLeaf()) {
 			return this;
 		} else {
-			List<TreeNode> elements = Arrays.asList(entries);
-			elements.sort((a, b) -> {
+			entries.sort((a, b) -> {
 				return Double.compare(distance.compute(sift, a.getCentroid()), distance.compute(sift, b.getCentroid()));
 			});
-			return elements.get(0).findClosestCluster(sift);
+			return entries.get(0).findClosestCluster(sift);
 		}
 	}
 
@@ -51,8 +49,8 @@ public class TreeNode implements AbstractTreeNode {
 	}
 
 	public void setId(int id) {
-		this.id  = id;
-		
+		this.id = id;
+
 	}
 
 }

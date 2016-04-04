@@ -27,7 +27,7 @@ public class KMeansTree implements ClusterTree {
 	final static Logger logger = Logger.getLogger(KMeansTree.class);
 
 	private static final EuclideanDistance distance = new EuclideanDistance();
-	
+
 	private long id;
 
 	private int k = 2;
@@ -51,9 +51,13 @@ public class KMeansTree implements ClusterTree {
 	@SneakyThrows
 	public void finishBuild() {
 		MatFileReader matFileReader = new MatFileReader(this.getStoredTreeFile());
+		logger.info("Build tree with matlab result");
 		createTree(matFileReader);
+		logger.info("Removing tmp files");
 		FileUtils.deleteDirectory(tmpFolder);
+		logger.info("labeling clusters");
 		getEntriesAmount();
+		logger.info("hkm tree build completed");
 	}
 
 	private void createTree(MatFileReader matFileReader) {
@@ -80,8 +84,8 @@ public class KMeansTree implements ClusterTree {
 	private TreeNode createNode(double[] point, MLInt32 centers, MLArray mlArray) {
 		TreeNode node = new TreeNode(point, k);
 
-		int pointsQte = centers.getSize()/128;
-		for (int i = 0; i < pointsQte; i++) { 
+		int pointsQte = centers.getSize() / 128;
+		for (int i = 0; i < pointsQte; i++) {
 			double[] center = extractCenter(centers, i);
 
 			if (mlArray instanceof MLEmptyArray) {
@@ -126,24 +130,20 @@ public class KMeansTree implements ClusterTree {
 			amountLeaves++;
 		} else {
 			for (TreeNode entry : treeNode.getEntries()) {
-				if (entry != null){
-					walk(entry);
-				}
+				entry.setId(-1);
+				walk(entry);
 			}
 		}
 	}
 
 	@Override
 	public AbstractTreeNode findClosestCluster(double[] sift) {
-		TreeNode[] closest = new TreeNode[k];
-		for (int i = 0; i < startCentroids.length; i++) {
-			closest[i] = startCentroids[i].findClosestCluster(sift);
-		}
-		Arrays.sort(closest, (a, b) -> {
+		
+		Arrays.sort(startCentroids,(a,b)->{
 			return Double.compare(distance.compute(sift, a.getCentroid()), distance.compute(sift, b.getCentroid()));
 		});
 
-		return closest[0];
+		return startCentroids[0].findClosestCluster(sift);
 	}
 
 	@Override
@@ -161,7 +161,6 @@ public class KMeansTree implements ClusterTree {
 
 		script = script.replace("%featuresFile%", featuresFile);
 		script = script.replace("%featuresAmount%", String.valueOf(featuresAmount));
-		// script = script.replace("%featuresAmount%", String.valueOf(364778));
 		script = script.replace("%branchingFactor%", String.valueOf(branchingFactor));
 		script = script.replace("%nLeaves%", String.valueOf(nLeaves));
 		script = script.replace("%outputFile%", outputFile);

@@ -28,9 +28,9 @@ public class Framework {
         });
 
         Index index = new Index(tree);
+        logger.info("Building tree index");
         result.elapsedTime("buildIndex", () -> {
             dataset.scanTrainSet((img) -> index.put(img));
-            System.gc();
         });
 
         logger.info("Calc mAP...");
