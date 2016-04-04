@@ -6,11 +6,11 @@ import lombok.Getter;
 @Getter
 public class QueryResultItem {
 
-	private String image;
-	private String classification;
+    private String image;
+    private String classification;
 
-	public QueryResultItem(Image image, String classification) {
-		this.image = image.getImage().getAbsolutePath();
-		this.classification = classification;
-	}
+    public QueryResultItem(Image image, String classification) {
+        this.image = image.getImage().getAbsolutePath();
+        this.classification = classification;
+    }
 }

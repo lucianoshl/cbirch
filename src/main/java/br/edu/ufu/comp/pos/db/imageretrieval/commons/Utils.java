@@ -47,12 +47,12 @@ public class Utils {
 
     }
 
-	public static byte[] convertToByte(double[] d) {
+    public static byte[] convertToByte(double[] d) {
 
-		byte[] result = new byte[d.length];
-		for (int i = 0; i < d.length; i++) {
-			result[i] = (byte) d[i];
-		}
-		return result;
-	}
+        byte[] result = new byte[d.length];
+        for (int i = 0; i < d.length; i++) {
+            result[i] = (byte) d[i];
+        }
+        return result;
+    }
 }

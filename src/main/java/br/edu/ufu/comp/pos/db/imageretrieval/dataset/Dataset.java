@@ -10,69 +10,69 @@ import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.MapCalculator;
 
 public abstract class Dataset {
 
-	final static Logger logger = Logger.getLogger(Dataset.class);
+    final static Logger logger = Logger.getLogger(Dataset.class);
 
-	private long trainSetSize;
+    private long trainSetSize;
 
-	private long current;
+    private long current;
 
-	private double percent;
-	
-	protected long featuresSize;
+    private double percent;
 
-	protected abstract void trainSet(Consumer<Image> c);
+    protected long featuresSize;
 
-	protected abstract void testSet(String clazz, Consumer<Image> c);
+    protected abstract void trainSet(Consumer<Image> c);
 
-	public abstract String[] getTestClasses();
+    protected abstract void testSet(String clazz, Consumer<Image> c);
 
-	public abstract File getDatasetFeaturesFile();
-	
-	public void scanTrainSet(Consumer<Image> c) {
-		current = 0;
-		this.trainSet((img) -> {
-			current = current + 1;
-			c.accept(img);
-			percent = (current / Double.valueOf(getTrainSetSize())) * 100;
-			logger.debug(String.format("%.2f%%", percent));
+    public abstract String[] getTestClasses();
 
-		});
+    public abstract File getDatasetFeaturesFile();
 
-	}
+    public void scanTrainSet(Consumer<Image> c) {
+        current = 0;
+        this.trainSet((img) -> {
+            current = current + 1;
+            c.accept(img);
+            percent = (current / Double.valueOf(getTrainSetSize())) * 100;
+            logger.debug(String.format("%.2f%%", percent));
 
-	public void scanTestSet(String clazz, Consumer<Image> c) {
-		this.testSet(clazz, c);
-	}
+        });
 
-	public long getTrainSetSize() {
+    }
 
-		trainSetSize = 0;
-		if (trainSetSize == 0) {
-			trainSet((i) -> this.trainSetSize = trainSetSize + 1);
-		}
-		return this.trainSetSize;
-	}
+    public void scanTestSet(String clazz, Consumer<Image> c) {
+        this.testSet(clazz, c);
+    }
 
-	public void scanTrainSetSifts(Consumer<double[]> c) {
+    public long getTrainSetSize() {
 
-		this.scanTrainSet((image) -> image.scan(c));
-	}
+        trainSetSize = 0;
+        if (trainSetSize == 0) {
+            trainSet((i) -> this.trainSetSize = trainSetSize + 1);
+        }
+        return this.trainSetSize;
+    }
 
-	public abstract String quality(Image query, String imgName);
+    public void scanTrainSetSifts(Consumer<double[]> c) {
 
-	public MapCalculator getMapCalculator() {
-		throw new UnsupportedOperationException();
-	}
+        this.scanTrainSet((image) -> image.scan(c));
+    }
 
-	public long getFeaturesSize() {
-		if (featuresSize == 0){
-			this.scanTrainSetSifts((c) ->{
-				featuresSize++;
-			});
-		}
+    public abstract String quality(Image query, String imgName);
 
-		return featuresSize;
-		
-	}
+    public MapCalculator getMapCalculator() {
+        throw new UnsupportedOperationException();
+    }
+
+    public long getFeaturesSize() {
+        if (featuresSize == 0) {
+            this.scanTrainSetSifts((c) -> {
+                featuresSize++;
+            });
+        }
+
+        return featuresSize;
+
+    }
 
 }

@@ -11,6 +11,6 @@ public interface ClusterTree {
 
     AbstractTreeNode findClosestCluster(double[] sift);
 
-	void build(Dataset dataset);
+    void build(Dataset dataset);
 
 }

@@ -9,16 +9,16 @@ import lombok.Getter;
 @Getter
 public class QueryResult {
 
-	List<QueryResultItem> results = new ArrayList<QueryResultItem>();
-	private String query;
-	
-	public QueryResult(Image query) {
-		this.query = query.getImage().getAbsolutePath();
-	}
+    List<QueryResultItem> results = new ArrayList<QueryResultItem>();
+    private String query;
 
-	public void add(QueryResultItem item) {
-		results.add(item);
-		
-	}
+    public QueryResult(Image query) {
+        this.query = query.getImage().getAbsolutePath();
+    }
+
+    public void add(QueryResultItem item) {
+        results.add(item);
+
+    }
 
 }

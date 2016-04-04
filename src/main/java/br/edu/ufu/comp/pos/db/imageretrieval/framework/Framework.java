@@ -16,11 +16,11 @@ public class Framework {
     final static Logger logger = Logger.getLogger(Framework.class);
 
     static int entryInserted = 0;
-    
+
     public Result run(Dataset dataset, ClusterTree tree, int K) {
 
         Result result = Result.instance;
-        
+
         result.elapsedTime("buildTree", () -> {
             logger.info("Building tree with test set...");
             tree.build(dataset);
