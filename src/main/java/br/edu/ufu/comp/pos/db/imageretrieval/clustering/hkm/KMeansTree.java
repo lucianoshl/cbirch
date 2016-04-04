@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.math3.ml.distance.EuclideanDistance;
@@ -173,10 +172,7 @@ public class KMeansTree implements ClusterTree {
         File scriptFile = new File(tmpFolder, "hkm.m");
         FileUtils.write(scriptFile, script);
 
-        Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
-        perms.addAll(Arrays.asList(PosixFilePermission.values()));
-
-        Files.setPosixFilePermissions(scriptFile.toPath(), perms);
+        Files.setPosixFilePermissions(scriptFile.toPath(), new HashSet<PosixFilePermission>(Arrays.asList(PosixFilePermission.values())));
 
         logger.info("running matlab in " + tmpFolder);
         Process process = Runtime.getRuntime().exec(
