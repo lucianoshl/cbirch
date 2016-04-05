@@ -7,7 +7,7 @@ public class SiftScaled extends Sift {
     public double[] extract(byte[] buffer) {
         double[] result = new double[buffer.length];
         for (int i = 0; i < result.length; i++) {
-            result[i] = buffer[i] / MAX_VALUE;
+            result[i] = Byte.toUnsignedInt(buffer[i]) / MAX_VALUE;
         }
         return result;
 

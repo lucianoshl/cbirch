@@ -71,11 +71,7 @@ public class OxfordDatasetTest {
     public void simple1000() throws IOException {
         validateSource(1000, 11958, 0.7055555555555556);
     }
-//    @Test
-//    public void simple2000() throws IOException {
-//        validateSource(2000, 18082, 0.56875);
-//    }
-
+    
     private void validateSource(int limit, int vocabularySize, double map) throws IOException {
         double threshold = 11.683065953654183;
         Result result = callExperiment(limit, threshold);
