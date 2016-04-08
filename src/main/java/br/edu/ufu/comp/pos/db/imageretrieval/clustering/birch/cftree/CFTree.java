@@ -443,7 +443,7 @@ public class CFTree implements ClusterTree {
                                                 // compared to
                                                 // currentThreshold
             logger.info("newThreshold <= currentThreshold");
-            logger.info("increase currentThreshold in 10% ");
+            logger.info("increase currentThreshold in +0.1 ");
             // newThreshold = 2 * currentThreshold;
             newThreshold = currentThreshold + 0.1;
             // newThreshold = 1.1 * currentThreshold;
@@ -606,6 +606,9 @@ public class CFTree implements ClusterTree {
      */
     public void finishBuild() {
 
+        this.rebuildTree();
+        this.rebuildTree();
+        
         CFNode l = leafListStart.getNextLeaf(); // the first leaf is dummy!
 
         this.entriesAmount = 0;

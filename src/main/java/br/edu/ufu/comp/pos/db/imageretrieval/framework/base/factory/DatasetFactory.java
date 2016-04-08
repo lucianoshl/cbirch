@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.GeneratedDataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.OxfordDataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Sift;
@@ -33,13 +34,17 @@ public class DatasetFactory {
         if (new File(datasetPath, "README2.txt").exists()) {
             Result.extraInfo("Dataset class", OxfordDataset.class);
             dataset = OxfordDataset.createFromBase(workspace, datasetName);
-            dataset.setSiftReader(siftReader);
+        }
+        if (new File(datasetPath, "train.sift").exists()) {
+            dataset = new GeneratedDataset(datasetName);
+
         } else {
             throw new UnsupportedOperationException("unsupported dataset in " + datasetPath.getAbsolutePath());
         }
 
         Result.extraInfo("Dataset features", dataset.getFeaturesSize());
 
+        dataset.setSiftReader(siftReader);
         return dataset;
 
     }

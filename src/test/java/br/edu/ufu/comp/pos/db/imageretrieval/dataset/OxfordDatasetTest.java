@@ -54,27 +54,29 @@ public class OxfordDatasetTest {
 
     @Test
     public void simple15() throws IOException {
-        validateSource(15, 1313, 1.0);
+        validateSource(15, 1536, 0.75);
     }
 
     @Test
     public void simple200() throws IOException {
-        validateSource(200, 4799, 0.875);
+        validateSource(200, 5751, 0.6666666666666666);
     }
 
     @Test
     public void simple500() throws IOException {
-        validateSource(500, 7396, 0.6444444444444445);
+        validateSource(500, 8809, 0.41435185185185186);
     }
-    
+
     @Test
     public void simple1000() throws IOException {
         validateSource(1000, 11958, 0.7055555555555556);
     }
-    
+
     private void validateSource(int limit, int vocabularySize, double map) throws IOException {
-        double threshold = 11.683065953654183;
+        double threshold = 10;
         Result result = callExperiment(limit, threshold);
+        // System.out.println(result.getVocabularySize());
+        // System.out.println(result.getMap());
         TestCase.assertEquals(vocabularySize, result.getVocabularySize());
         TestCase.assertEquals(map, result.getMap());
     }
