@@ -2,6 +2,7 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,6 +92,20 @@ public class Result {
         new GsonBuilder().setPrettyPrinting().create().toJson(this, writer);
         writer.close();
         logger.info("result file saved in " + resultFile.getAbsolutePath());
+        
+        this.generateMarkdownReport(resultFile.getAbsolutePath());
+        
+    }
+
+    @SneakyThrows
+    private void generateMarkdownReport(String absolutePath) {
+        String script = this.getClass().getClassLoader().getResource("r/report.r").getFile();
+        String template = this.getClass().getClassLoader().getResource("r/report.Rhtml").getFile();
+        String command = "Rscript" + " " + script + " " + absolutePath + " " + template;
+        Process process = Runtime.getRuntime().exec(command);
+        process.waitFor();
+        System.out.println("Report in " + absolutePath.replace("null.json", "null/report.html"));
+        
     }
 
     public void setError(Exception e) {

@@ -140,7 +140,7 @@ public class KMeansTree implements ClusterTree {
         String outputFile = this.getStoredTreeFile();
 
         String script = FileUtils
-                .readFileToString(new File(this.getClass().getClassLoader().getResource("hkm.m").getFile()));
+                .readFileToString(new File(this.getClass().getClassLoader().getResource("matlab/hkm.m").getFile()));
 
         script = script.replace("%featuresFile%", featuresFile);
         script = script.replace("%featuresAmount%", String.valueOf(featuresAmount));

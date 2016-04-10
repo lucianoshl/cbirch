@@ -7,25 +7,19 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftExtractor;
-import lombok.Builder;
 import lombok.SneakyThrows;
 
-@Builder
-public class DatasetGenerator {
-    private File originImageFolder;
-    private GeneratedDataset dataset;
+public abstract class DatasetGenerator {
+    protected File originImageFolder;
+    protected GeneratedDataset dataset;
 
-    @SneakyThrows
-    public static void main(String[] args) {
-
-        DatasetGenerator generator = DatasetGenerator.builder().dataset(new GeneratedDataset("ukbench"))
-                .originImageFolder(new File("/home/lucianos/tmp/ukbench/full")).build();
-        generator.generate();
-
+    public DatasetGenerator(GeneratedDataset generatedDataset, File file) {
+        this.dataset = generatedDataset;
+        this.originImageFolder = file;
     }
 
     @SneakyThrows
-    private void generate() {
+    public void generate() {
         FileUtils.deleteDirectory(dataset.base);
         copyImages();
 
@@ -34,7 +28,10 @@ public class DatasetGenerator {
 
         generateSifts(dataset.trainFiles, dataset.trainBinFile, train);
         generateSifts(dataset.testFiles, dataset.testBinFile, test);
+        generateGroundtruth();
     }
+
+    protected abstract void generateGroundtruth();
 
     @SneakyThrows
     private void generateListFiles(File trainFiles, File[] train) {
