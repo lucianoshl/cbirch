@@ -9,8 +9,8 @@ import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.GeneratedDataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.OxfordDataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Sift;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.SiftScaled;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.Sift;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
 
 public class DatasetFactory {
 
@@ -34,8 +34,7 @@ public class DatasetFactory {
         if (new File(datasetPath, "README2.txt").exists()) {
             Result.extraInfo("Dataset class", OxfordDataset.class);
             dataset = OxfordDataset.createFromBase(workspace, datasetName);
-        }
-        if (new File(datasetPath, "train.sift").exists()) {
+        } else if (new File(datasetPath, "train.sift").exists()) {
             dataset = new GeneratedDataset(datasetName);
 
         } else {

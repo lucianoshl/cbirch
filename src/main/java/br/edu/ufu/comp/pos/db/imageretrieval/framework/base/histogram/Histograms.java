@@ -9,8 +9,8 @@ import java.util.Map;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.log4j.Logger;
 
+import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 
 public class Histograms {
 

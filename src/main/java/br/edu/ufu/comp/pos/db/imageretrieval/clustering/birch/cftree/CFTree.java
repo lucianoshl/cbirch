@@ -29,9 +29,9 @@ import java.util.Arrays;
 import org.apache.log4j.Logger;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.AbstractTreeNode;
+import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 import net.sourceforge.sizeof.SizeOf;
 
 /**

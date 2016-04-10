@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.SiftExtractor;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftExtractor;
 import lombok.Builder;
 import lombok.SneakyThrows;
 

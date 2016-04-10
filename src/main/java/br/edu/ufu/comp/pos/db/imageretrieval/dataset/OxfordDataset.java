@@ -21,9 +21,9 @@ import org.apache.log4j.Logger;
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.SiftScaled;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.MapCalculator;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.OxfordMapCalculator;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
 import lombok.SneakyThrows;
 
 public class OxfordDataset extends Dataset {

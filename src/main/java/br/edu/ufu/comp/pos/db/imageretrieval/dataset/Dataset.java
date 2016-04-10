@@ -6,8 +6,8 @@ import java.util.function.Consumer;
 import org.apache.log4j.Logger;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Sift;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.MapCalculator;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.Sift;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -13,8 +13,8 @@ import org.junit.runners.MethodSorters;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Framework;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.SiftScaled;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory.TreeFactory;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
 import junit.framework.TestCase;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -75,8 +75,6 @@ public class OxfordDatasetTest {
     private void validateSource(int limit, int vocabularySize, double map) throws IOException {
         double threshold = 10;
         Result result = callExperiment(limit, threshold);
-        // System.out.println(result.getVocabularySize());
-        // System.out.println(result.getMap());
         TestCase.assertEquals(vocabularySize, result.getVocabularySize());
         TestCase.assertEquals(map, result.getMap());
     }

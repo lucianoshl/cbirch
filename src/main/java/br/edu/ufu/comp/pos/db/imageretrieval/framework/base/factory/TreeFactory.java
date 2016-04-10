@@ -3,9 +3,9 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory;
 import org.apache.log4j.Logger;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree.CFTree;
+import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.hkm.KMeansTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 
 public class TreeFactory {
 

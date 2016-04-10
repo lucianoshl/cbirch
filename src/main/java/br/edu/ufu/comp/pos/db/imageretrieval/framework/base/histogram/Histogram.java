@@ -5,8 +5,8 @@ import java.util.Arrays;
 import org.apache.commons.math3.ml.distance.CosineSimilarity;
 import org.apache.commons.math3.ml.distance.DistanceMeasure;
 
+import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.cache.HistogramCache;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.cache.HistogramDiskCache;
 

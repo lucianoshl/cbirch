@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.function.Consumer;
 
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Sift;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.Sift;
 import lombok.Getter;
 
 public class OxfordImage extends Image {

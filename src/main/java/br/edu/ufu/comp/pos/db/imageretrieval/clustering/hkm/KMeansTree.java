@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.math3.ml.distance.EuclideanDistance;
 import org.apache.log4j.Logger;
 
 import com.jmatio.io.MatFileReader;
@@ -17,31 +16,29 @@ import com.jmatio.types.MLInt32;
 import com.jmatio.types.MLStructure;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.AbstractTreeNode;
+import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.SiftScaled;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
 import lombok.SneakyThrows;
 
 public class KMeansTree implements ClusterTree {
 
     final static Logger logger = Logger.getLogger(KMeansTree.class);
 
-    private static final EuclideanDistance distance = new EuclideanDistance();
-
     private long id;
 
-    private int k = 2;
+    private int branchingFactor;
     private int leaves;
 
-    private File tmpFolder;
+    private TreeNode root;
 
-    private TreeNode[] startCentroids;
+    private File tmpFolder;
 
     private int amountLeaves = 0;
 
     @SneakyThrows
     public KMeansTree(int branchingFactor, int leaves) {
-        this.k = branchingFactor;
+        this.branchingFactor = branchingFactor;
         this.leaves = leaves;
         this.id = System.currentTimeMillis();
         this.tmpFolder = Files.createTempDirectory("khm-" + id).toFile();
@@ -65,31 +62,19 @@ public class KMeansTree implements ClusterTree {
         MLInt32 centers = (MLInt32) tree.getField("centers");
         MLArray subTree = tree.getField("sub");
 
-        startCentroids = new TreeNode[k];
-        for (int i = 0; i < k; i++) {
-            double[] point = extractCenter(centers, i);
-
-            if (subTree instanceof MLEmptyArray) {
-                startCentroids[i] = new TreeNode(point, k);
-            } else {
-                MLStructure subTreeStruct = (MLStructure) subTree;
-                startCentroids[i] = createNode(point, (MLInt32) subTreeStruct.getField("centers", i),
-                        subTreeStruct.getField("sub", i));
-            }
-
-        }
+        root = createNode(new double[branchingFactor], (MLInt32) centers, subTree);
 
     }
 
     private TreeNode createNode(double[] point, MLInt32 centers, MLArray mlArray) {
-        TreeNode node = new TreeNode(point, k);
+        TreeNode node = new TreeNode(point, branchingFactor);
 
         int pointsQte = centers.getSize() / 128;
         for (int i = 0; i < pointsQte; i++) {
             double[] center = extractCenter(centers, i);
 
             if (mlArray instanceof MLEmptyArray) {
-                node.addChild(new TreeNode(center, k));
+                node.addChild(new TreeNode(center, branchingFactor));
             } else {
                 MLStructure iterateSubTree = (MLStructure) mlArray;
                 node.addChild(createNode(center, (MLInt32) iterateSubTree.getField("centers", i),
@@ -116,9 +101,7 @@ public class KMeansTree implements ClusterTree {
     @Override
     public int getEntriesAmount() {
         if (amountLeaves == 0) {
-            for (TreeNode treeNode : startCentroids) {
-                walk(treeNode);
-            }
+            walk(root);
         }
 
         return amountLeaves;
@@ -139,11 +122,7 @@ public class KMeansTree implements ClusterTree {
     @Override
     public AbstractTreeNode findClosestCluster(double[] sift) {
 
-        Arrays.sort(startCentroids, (a, b) -> {
-            return Double.compare(distance.compute(sift, a.getCentroid()), distance.compute(sift, b.getCentroid()));
-        });
-
-        return startCentroids[0].findClosestCluster(sift);
+        return root.findClosestCluster(sift);
     }
 
     @Override
@@ -156,7 +135,7 @@ public class KMeansTree implements ClusterTree {
 
         String featuresFile = dataset.getDatasetFeaturesFile().getAbsolutePath();
         long featuresAmount = dataset.getFeaturesSize();
-        int branchingFactor = this.k;
+        int branchingFactor = this.branchingFactor;
         int nLeaves = this.leaves;
         String outputFile = this.getStoredTreeFile();
 
