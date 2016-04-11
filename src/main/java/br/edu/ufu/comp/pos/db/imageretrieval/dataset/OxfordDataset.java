@@ -286,8 +286,13 @@ public class OxfordDataset extends Dataset {
     }
 
     @Override
-    public File getDatasetFeaturesFile() {
+    public File getSiftTrainFile() {
         return binaryFile;
+    }
+
+    @Override
+    public File getSiftTestFile() {
+        throw new UnsupportedOperationException();
     }
 
 }

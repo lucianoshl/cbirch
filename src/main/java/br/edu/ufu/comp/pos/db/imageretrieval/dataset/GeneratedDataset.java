@@ -1,11 +1,19 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.dataset;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
+
+import org.apache.commons.io.IOUtils;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
+import lombok.SneakyThrows;
 
 public class GeneratedDataset extends Dataset {
 
@@ -36,25 +44,67 @@ public class GeneratedDataset extends Dataset {
     }
 
     @Override
+    @SneakyThrows
     protected void trainSet(Consumer<Image> c) {
-        throw new UnsupportedOperationException();
+        BufferedReader reader = new BufferedReader(new FileReader(trainFiles));
+
+        int offset = 0;
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] split = line.split(" ");
+            String fileName = split[0];
+            Integer siftSize = Integer.valueOf(split[1]);
+            c.accept(new OxfordImage(testBinFile, new File(images, fileName), offset, siftSize, siftReader));
+            offset += siftSize * 128;
+        }
+
+        reader.close();
 
     }
 
     @Override
+    @SneakyThrows
     protected void testSet(String clazz, Consumer<Image> c) {
-        throw new UnsupportedOperationException();
+        BufferedReader reader = new BufferedReader(new FileReader(testFiles));
+
+        int offset = 0;
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] split = line.split(" ");
+            String fileName = split[0];
+            Integer siftSize = Integer.valueOf(split[1]);
+            if (fileName.contains(clazz + ".")){
+                c.accept(new OxfordImage(testBinFile, new File(images, fileName), offset, siftSize, siftReader));
+            }
+            offset += siftSize * 128;
+        }
+
+        reader.close();
 
     }
 
     @Override
+    @SneakyThrows
     public String[] getTestClasses() {
-        throw new UnsupportedOperationException();
+
+        List<String> result = new ArrayList<String>();
+        List<String> readLines = IOUtils.readLines(new FileReader(this.testFiles));
+        for (String line : readLines) {
+            String fileName = line.split(" ")[0];
+            result.add(fileName.replace(".pgm", ""));
+        }
+
+        return result.toArray(new String[result.size()]);
     }
 
     @Override
-    public File getDatasetFeaturesFile() {
-        return new File(base, "sift.bin");
+    public File getSiftTrainFile() {
+        return new File(base, "train.sift");
+    }
+
+    @Override
+    public File getSiftTestFile() {
+        return new File(base, "test.sift");
     }
 
     @Override
@@ -72,8 +122,16 @@ public class GeneratedDataset extends Dataset {
         return listImagesFiles();
     }
 
-    protected File[] listTestImagesFilesFromTrainSet(){
-        return null;
+    protected File[] listTestImagesFilesFromTrainSet() {
+        File[] listTrainImagesFiles = this.listTrainImagesFiles();
+        List<File> result = new ArrayList<File>();
+        for (int i = 0; i < listTrainImagesFiles.length; i++) {
+            File file = listTrainImagesFiles[i];
+            if (i % 4 == 0) {
+                result.add(file);
+            }
+        }
+        return result.toArray(new File[result.size()]);
     }
 
 }

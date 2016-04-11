@@ -11,7 +11,7 @@ import lombok.SneakyThrows;
 public class SiftExtractor {
 
     @SneakyThrows
-    public static byte[][] extract(File file) {
+    public static byte[] extract(File file) {
 
         String output = runExternalLowe(file);
 
@@ -23,20 +23,24 @@ public class SiftExtractor {
 
         int siftCount = -1;
 
-        byte[][] result = new byte[totalSift][];
+//        byte[][] result = new byte[totalSift][];
+        byte[] result2 = new byte[totalSift*128];
+        
+        
 
         while (scanner.hasNextDouble()) {
             siftCount++;
             scanner.nextDouble();
             scanner.nextLine();
-            result[siftCount] = new byte[128];
-            for (int i = 0; i < result[siftCount].length; i++) {
-                result[siftCount][i] = (byte) scanner.nextInt();
+//            result[siftCount] = new byte[128];
+            for (int i = 0; i < 128; i++) {
+                result2[siftCount * 128 + i] = (byte) scanner.nextInt();
+//                System.out.println(siftCount * 128 + i);
             }
         }
         scanner.close();
 
-        return result;
+        return result2;
     };
 
     private static String runExternalLowe(File file) throws IOException, InterruptedException {

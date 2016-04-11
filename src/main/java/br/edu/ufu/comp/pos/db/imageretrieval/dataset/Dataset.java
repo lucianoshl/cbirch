@@ -33,7 +33,9 @@ public abstract class Dataset {
 
     public abstract String[] getTestClasses();
 
-    public abstract File getDatasetFeaturesFile();
+    public abstract File getSiftTrainFile();
+
+    public abstract File getSiftTestFile();
 
     public void scanTrainSet(Consumer<Image> c) {
         current = 0;

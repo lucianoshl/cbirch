@@ -133,7 +133,7 @@ public class KMeansTree implements ClusterTree {
             throw new IllegalStateException("the dataset can not be scaled in hkm");
         }
 
-        String featuresFile = dataset.getDatasetFeaturesFile().getAbsolutePath();
+        String featuresFile = dataset.getSiftTrainFile().getAbsolutePath();
         long featuresAmount = dataset.getFeaturesSize();
         int branchingFactor = this.branchingFactor;
         int nLeaves = this.leaves;

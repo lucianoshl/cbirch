@@ -57,12 +57,13 @@ public abstract class DatasetGenerator {
 
         for (int i = 0; i < images.length; i++) {
             File file = images[i];
-            byte[][] sifts = SiftExtractor.extract(file);
-            writer.write(file.getName() + " " + sifts.length);
-            for (byte[] bs : sifts) {
-                FileUtils.writeByteArrayToFile(binFile, bs, true);
+            byte[] sifts = SiftExtractor.extract(file);
 
-            }
+
+            writer.write(file.getName() + " " + sifts.length/128);
+            
+            FileUtils.writeByteArrayToFile(binFile, sifts, true);
+
             if (i + 1 < images.length) {
                 writer.write("\n");
             }
