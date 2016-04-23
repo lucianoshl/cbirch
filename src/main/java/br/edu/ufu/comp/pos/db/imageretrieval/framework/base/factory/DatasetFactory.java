@@ -20,7 +20,19 @@ public class DatasetFactory {
 
         String workspace = System.getenv().get("DATASET_WORKSPACE");
         String datasetName = args[2];
-        Sift siftReader = args[1].equals("1") ? new SiftScaled() : new Sift();
+        
+        Sift siftReader = null;
+        if (args[1].equals("normalized")){
+        	siftReader = new SiftScaled();
+            Result.extraInfo("Dataset normalized", true);
+        } else if (args[1].equals("non-normalized")){
+        	siftReader = new Sift();
+            Result.extraInfo("Dataset normalized", false);
+        } else {
+        	new IllegalStateException("invalid normalized parameter: normalized or non-normalized");
+        }
+        
+       
 
         File datasetPath = Utils.getDatesetPath(workspace, datasetName);
 
