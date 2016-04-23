@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-public class CosineDistanceTest {
+public class CosineSimilarityTest {
 
     CosineSimilarity cosineDistance = new CosineSimilarity();
 

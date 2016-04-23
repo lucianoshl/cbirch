@@ -28,7 +28,7 @@ public class HistogramsTest {
     }
 
     private Image createFakeImage(String path) {
-        return new Image() {
+        return new Image(null, null, 0, 0, null) {
             @Override
             public File getImage() {
                 return new File(path);
