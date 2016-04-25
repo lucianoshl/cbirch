@@ -1,9 +1,14 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework.base;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.AbstractTreeNode;
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.Histogram;
@@ -15,20 +20,49 @@ public class Index {
 
     private ClusterTree tree;
     private Histograms histograms;
+    
+    private Map<AbstractTreeNode,Set<Image>> index = new HashMap<AbstractTreeNode,Set<Image>>();
 
     public Index(ClusterTree tree) {
         this.tree = tree;
         this.histograms = new Histograms(tree.getEntriesAmount());
     }
 
-    public void put(Image img) {
-        histograms.add(Histogram.create(img, tree));
+    public void put(Image img) {  
+    	
+    	double[] histogramContent = new double[tree.getEntriesAmount()];
+    	
+    	img.scan((c)->{
+    		AbstractTreeNode treeNode = tree.findClosestCluster(c);
+    		histogramContent[treeNode.getId()]++;
+    		putInIndex(treeNode,img);
+    	});
+    	
+        histograms.add(new Histogram(img, histogramContent));
     }
 
-    public List<Histogram> findTop(Image query, int k) {
-        logger.debug("Find top" + k + " for " + query.getImage().getName());
+    private void putInIndex(AbstractTreeNode treeNode, Image img) {
+    	Set<Image> list = index.get(treeNode);
+    	if (list == null){
+    		list = new HashSet<Image>();
+    		index.put(treeNode, list);
+    	}
+    	list.add(img);
+		
+	}
 
-        return this.histograms.getSimilar(Histogram.create(query, tree), k);
+	public List<Histogram> findTop(Image query, int k) {
+        logger.debug("Find top" + k + " for " + query.getImage().getName());
+        
+        Set<Image> candidates = new HashSet<Image>();
+        
+        query.scan((c)->{
+    		AbstractTreeNode treeNode = tree.findClosestCluster(c);
+    		candidates.addAll(index.get(treeNode));
+    	});
+        
+        
+        return this.histograms.getSimilar(Histogram.create(query, tree),candidates, k);
     }
 
 }
