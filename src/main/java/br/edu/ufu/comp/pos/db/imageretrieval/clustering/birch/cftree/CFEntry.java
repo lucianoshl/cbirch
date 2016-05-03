@@ -26,14 +26,12 @@ package br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.AbstractTreeNode;
-
 /**
  * 
  * @author Roberto Perdisci (roberto.perdisci@gmail.com)
  *
  */
-public class CFEntry implements AbstractTreeNode {
+public class CFEntry {
 
     private static final String LINE_SEP = System.getProperty("line.separator");
 
@@ -390,11 +388,6 @@ public class CFEntry implements AbstractTreeNode {
         for (int i = 0; i < sumX.length; i++)
             res[i] = sumX[i] / n;
         return res;
-    }
-
-    @Override
-    public int getId() {
-        return this.getSubclusterID();
     }
 
 }

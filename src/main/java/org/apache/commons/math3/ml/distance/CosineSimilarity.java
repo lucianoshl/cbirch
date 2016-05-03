@@ -8,10 +8,6 @@ public class CosineSimilarity implements DistanceMeasure {
 
     @Override
     public double compute(double[] a, double[] b) throws DimensionMismatchException {
-        return similarity(a, b);
-    }
-
-    private double similarity(double[] a, double[] b) {
         double dotProduct = 0.0;
         double magnitude1 = 0.0;
         double magnitude2 = 0.0;

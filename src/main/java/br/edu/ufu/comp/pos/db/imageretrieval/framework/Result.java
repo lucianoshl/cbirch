@@ -9,11 +9,12 @@ import java.util.Map;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.time.StopWatch;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import com.google.gson.GsonBuilder;
 
-import br.edu.ufu.comp.pos.db.imageretrieval.commons.CustomFileAppender;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,14 +24,14 @@ import lombok.SneakyThrows;
 @Setter
 public class Result {
 
-    final static Logger logger = Logger.getLogger(Result.class);
+    final static Logger logger = LoggerFactory.getLogger(Result.class);
+    private long id;
 
-    public static Result instance = new Result();
+    public static Result current;
 
     private double map;
-    private int cacheHits;
-
     private int vocabularySize;
+    private int cacheHits;
 
     private Map<String, Long> elapsedTime = new HashMap<String, Long>();
     private Map<String, List<Object>> statistics = new HashMap<String, List<Object>>();
@@ -43,6 +44,16 @@ public class Result {
 
     private File datasetPath;
 
+    private Double finalThreshold;
+
+    private long finalTreeSize;
+
+    public Result() {
+        this.id = System.currentTimeMillis();
+        Result.current = this;
+        MDC.put("running", String.valueOf(this.id));
+    }
+
     public void elapsedTime(String key, Runnable object) {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
@@ -50,25 +61,29 @@ public class Result {
         stopWatch.stop();
         elapsedTime.put(key, stopWatch.getTime());
     }
+    
+    
 
     public static void registerBirch(Double threshould, Integer words, long treeSize) {
+        getCurrent().finalThreshold = threshould;
+        getCurrent().vocabularySize = words;
+        getCurrent().finalTreeSize = treeSize;
         Result.statistic("threshold", threshould);
         Result.statistic("words", words);
         Result.statistic("treeMemory", treeSize);
     }
 
     public static void statistic(String name, Object value) {
-        List<Object> list = instance.statistics.get(name);
+        List<Object> list = current.statistics.get(name);
         if (list == null) {
             list = new ArrayList<Object>();
-            instance.statistics.put(name, list);
+            getCurrent().statistics.put(name, list);
         }
         list.add(value);
     }
 
     public static void extraInfo(String name, Object value) {
-        logger.info(name + ": " + value);
-        instance.extraInfo.put(name, String.valueOf(value));
+        getCurrent().extraInfo.put(name, String.valueOf(value));
     }
 
     @Override
@@ -86,25 +101,11 @@ public class Result {
         if (!resultsDir.exists()) {
             resultsDir.mkdirs();
         }
-        File resultFile = new File(resultsDir, CustomFileAppender.datePart + ".json");
+        File resultFile = new File(resultsDir, this.id + ".json");
         FileWriter writer = new FileWriter(resultFile);
         new GsonBuilder().setPrettyPrinting().create().toJson(this, writer);
         writer.close();
         logger.info("result file saved in " + resultFile.getAbsolutePath());
-        
-        this.generateMarkdownReport(resultFile.getAbsolutePath());
-        
-    }
-
-    @SneakyThrows
-    private void generateMarkdownReport(String absolutePath) {
-        String script = this.getClass().getClassLoader().getResource("r/report.r").getFile();
-        String template = this.getClass().getClassLoader().getResource("r/report.Rhtml").getFile();
-        String command = "Rscript" + " " + script + " " + absolutePath + " " + template;
-        Process process = Runtime.getRuntime().exec(command);
-        process.waitFor();
-        System.out.println("Report in " + absolutePath.replace("null.json", "null/report.html"));
-        
     }
 
     public void setError(Exception e) {
@@ -133,6 +134,10 @@ public class Result {
         QueryResult result = new QueryResult(query);
         this.results.add(result);
         return result;
+    }
+
+    public static Result getCurrent() {
+        return current == null ? new Result() : current;
     }
 
 }

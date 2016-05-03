@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<style type="text/css">
+.knitr .inline {
+  background-color: #f7f7f7;
+  border:solid 1px #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+}
+.warning {
+	font-weight: bold;
+}
+.message {
+	font-style: italic;
+}
+.source, .output, .warning, .error, .message {
+	padding: 0 1em;
+  border:solid 1px #F7F7F7;
+}
+.source {
+  background-color: #f5f5f5;
+}
+.rimage .left {
+  text-align: left;
+}
+.rimage .right {
+  text-align: right;
+}
+.rimage .center {
+  text-align: center;
+}
+.hl.num {
+  color: #AF0F91;
+}
+.hl.str {
+  color: #317ECC;
+}
+.hl.com {
+  color: #AD95AF;
+  font-style: italic;
+}
+.hl.opt {
+  color: #000000;
+}
+.hl.std {
+  color: #585858;
+}
+.hl.kwa {
+  color: #295F94;
+  font-weight: bold;
+}
+.hl.kwb {
+  color: #B05A65;
+}
+.hl.kwc {
+  color: #55aa55;
+}
+.hl.kwd {
+  color: #BC5A65;
+  font-weight: bold;
+}
+</style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+  </head>
+<div class="chunk" id="unnamed-chunk-1"><div class="rcode"><div class="message"><pre class="knitr r">## Loading required package: methods
+</pre></div>
+</div></div>
+  <body>
+    <div class="container">
+
+      <div class="page-header">
+        <h1>Experiment result</h1>
+        <p class="lead"><code class="knitr inline">2016-03-16 07:56:18</code></p>
+      </div>
+
+      <h3>Results</h3>
+      <div class="row">
+        <div class="col-md-12"> mAP: <code class="knitr inline">0.725</code> </div>
+        <div class="col-md-12"> Vocabulary size: <code class="knitr inline">7973</code> </div>
+        <div class="col-md-12"> Build tree: <code class="knitr inline">0.0389975</code> hours</div>
+        <div class="col-md-12"> Build index: <code class="knitr inline">0.0331867</code> hours</div>
+        <div class="col-md-12"> Testing model: <code class="knitr inline">0.0016636</code> hours </div>
+      </div>
+
+      <h3>Parameters</h3>
+<div class="chunk" id="unnamed-chunk-2"><div class="rcode"><div class="output"><pre class="knitr r">## $`Dataset name`
+## [1] &quot;oxford&quot;
+## 
+## $`Branching factor`
+## [1] &quot;100&quot;
+## 
+## $Memory
+## [1] &quot;1024&quot;
+## 
+## $Tree
+## [1] &quot;birch&quot;
+## 
+## $`Dataset class`
+## [1] &quot;class br.edu.ufu.comp.pos.db.imageretrieval.dataset.OxfordDataset&quot;
+## 
+## $`Dataset workspace`
+## [1] &quot;/home/void/workspace&quot;
+## 
+## $`Dataset path`
+## [1] &quot;/home/void/workspace/datasets/oxford&quot;
+## 
+## $Threshold
+## [1] &quot;3000.0&quot;
+</pre></div>
+</div></div>
+
+      <h3>Query results</h3>
+Query: <br>
+<div style='display:inline-block;width:300px'><img class='img-responsive' src='/home/void/workspace/datasets/oxford/images/all_souls_000013.jpg' /></div><br>
+Results: <br>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000013.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000134.jpg' class='img-responsive'/>ok</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000015.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000205.jpg' class='img-responsive'/>junk</div>
+<hr>
+Query: <br>
+<div style='display:inline-block;width:300px'><img class='img-responsive' src='/home/void/workspace/datasets/oxford/images/all_souls_000026.jpg' /></div><br>
+Results: <br>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000026.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000140.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000209.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000091.jpg' class='img-responsive'/>good</div>
+<hr>
+Query: <br>
+<div style='display:inline-block;width:300px'><img class='img-responsive' src='/home/void/workspace/datasets/oxford/images/all_souls_000051.jpg' /></div><br>
+Results: <br>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000051.jpg' class='img-responsive'/>ok</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000153.jpg' class='img-responsive'/>ok</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000197.jpg' class='img-responsive'/>ok</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000148.jpg' class='img-responsive'/>ok</div>
+<hr>
+Query: <br>
+<div style='display:inline-block;width:300px'><img class='img-responsive' src='/home/void/workspace/datasets/oxford/images/ashmolean_000000.jpg' /></div><br>
+Results: <br>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/ashmolean_000000.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/ashmolean_000314.jpg' class='img-responsive'/>absent</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/ashmolean_000303.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/ashmolean_000002.jpg' class='img-responsive'/>good</div>
+<hr>
+Query: <br>
+<div style='display:inline-block;width:300px'><img class='img-responsive' src='/home/void/workspace/datasets/oxford/images/ashmolean_000007.jpg' /></div><br>
+Results: <br>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/ashmolean_000007.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000205.jpg' class='img-responsive'/>absent</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/ashmolean_000028.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000120.jpg' class='img-responsive'/>absent</div>
+<hr>
+Query: <br>
+<div style='display:inline-block;width:300px'><img class='img-responsive' src='/home/void/workspace/datasets/oxford/images/ashmolean_000058.jpg' /></div><br>
+Results: <br>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/ashmolean_000058.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/ashmolean_000016.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/ashmolean_000002.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/ashmolean_000028.jpg' class='img-responsive'/>good</div>
+<hr>
+Query: <br>
+<div style='display:inline-block;width:300px'><img class='img-responsive' src='/home/void/workspace/datasets/oxford/images/ashmolean_000269.jpg' /></div><br>
+Results: <br>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/ashmolean_000269.jpg' class='img-responsive'/>ok</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000159.jpg' class='img-responsive'/>absent</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000073.jpg' class='img-responsive'/>absent</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000014.jpg' class='img-responsive'/>absent</div>
+<hr>
+Query: <br>
+<div style='display:inline-block;width:300px'><img class='img-responsive' src='/home/void/workspace/datasets/oxford/images/ashmolean_000305.jpg' /></div><br>
+Results: <br>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/ashmolean_000305.jpg' class='img-responsive'/>ok</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/balliol_000057.jpg' class='img-responsive'/>absent</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/balliol_000013.jpg' class='img-responsive'/>absent</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/balliol_000064.jpg' class='img-responsive'/>absent</div>
+<hr>
+Query: <br>
+<div style='display:inline-block;width:300px'><img class='img-responsive' src='/home/void/workspace/datasets/oxford/images/balliol_000051.jpg' /></div><br>
+Results: <br>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/balliol_000051.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/balliol_000075.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/ashmolean_000280.jpg' class='img-responsive'/>absent</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/balliol_000187.jpg' class='img-responsive'/>ok</div>
+<hr>
+Query: <br>
+<div style='display:inline-block;width:300px'><img class='img-responsive' src='/home/void/workspace/datasets/oxford/images/balliol_000167.jpg' /></div><br>
+Results: <br>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/balliol_000167.jpg' class='img-responsive'/>ok</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/ashmolean_000036.jpg' class='img-responsive'/>absent</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/balliol_000208.jpg' class='img-responsive'/>absent</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000034.jpg' class='img-responsive'/>absent</div>
+<hr>
+Query: <br>
+<div style='display:inline-block;width:300px'><img class='img-responsive' src='/home/void/workspace/datasets/oxford/images/balliol_000187.jpg' /></div><br>
+Results: <br>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/balliol_000187.jpg' class='img-responsive'/>ok</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000007.jpg' class='img-responsive'/>absent</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/balliol_000051.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/balliol_000075.jpg' class='img-responsive'/>good</div>
+<hr>
+Query: <br>
+<div style='display:inline-block;width:300px'><img class='img-responsive' src='/home/void/workspace/datasets/oxford/images/balliol_000194.jpg' /></div><br>
+Results: <br>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/balliol_000194.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/balliol_000085.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/balliol_000051.jpg' class='img-responsive'/>good</div>
+<div style='display:inline-block;width:200px'><img src='/home/void/workspace/datasets/oxford/images/all_souls_000159.jpg' class='img-responsive'/>absent</div>
+<hr>
+NULL
+
+
+
+      <h3>Evolution</h3>
+      <div class="row">
+<div class="chunk" id="unnamed-chunk-4"><div class="rimage default"><img src="figure/unnamed-chunk-4-1.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" class="plot" /></div><div class="rimage default"><img src="figure/unnamed-chunk-4-2.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" class="plot" /></div></div>
+      </div>
+
+    </div>
+  </body>
+</html>

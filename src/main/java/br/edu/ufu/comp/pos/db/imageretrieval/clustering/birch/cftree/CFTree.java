@@ -26,12 +26,11 @@ package br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.AbstractTreeNode;
-import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
-import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 import net.sourceforge.sizeof.SizeOf;
 
 /**
@@ -46,7 +45,7 @@ import net.sourceforge.sizeof.SizeOf;
  */
 public class CFTree implements ClusterTree {
 
-    final static Logger logger = Logger.getLogger(CFTree.class);
+    final static Logger logger = LoggerFactory.getLogger(CFTree.class);
 
     /**
      * Used when computing if the tree is reaching memory limit
@@ -443,7 +442,7 @@ public class CFTree implements ClusterTree {
                                                 // compared to
                                                 // currentThreshold
             logger.info("newThreshold <= currentThreshold");
-            logger.info("increase currentThreshold in +0.1 ");
+            logger.info("increase currentThreshold in 10% ");
             // newThreshold = 2 * currentThreshold;
             newThreshold = currentThreshold + 0.1;
             // newThreshold = 1.1 * currentThreshold;
@@ -606,9 +605,6 @@ public class CFTree implements ClusterTree {
      */
     public void finishBuild() {
 
-        this.rebuildTree();
-        this.rebuildTree();
-        
         CFNode l = leafListStart.getNextLeaf(); // the first leaf is dummy!
 
         this.entriesAmount = 0;
@@ -772,7 +768,7 @@ public class CFTree implements ClusterTree {
         }
     }
 
-    public AbstractTreeNode findClosestCluster(double[] sift) {
+    public CFEntry findClosestCluster(double[] sift) {
 
         return this.root.findClosestCluster(new CFEntry(sift));
     }
@@ -795,13 +791,6 @@ public class CFTree implements ClusterTree {
             entriesAmount = result;
         }
         return entriesAmount;
-    }
-
-    @Override
-    public void build(Dataset dataset) {
-        dataset.scanTrainSet((img) -> {
-            img.scan((sift) -> this.insertEntry(sift));
-        });
     }
 
 }

@@ -16,14 +16,14 @@ import java.util.Scanner;
 import java.util.function.Consumer;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.MapCalculator;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.OxfordMapCalculator;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
 import lombok.SneakyThrows;
 
 public class OxfordDataset extends Dataset {
@@ -34,7 +34,7 @@ public class OxfordDataset extends Dataset {
             .negative(asList("absent"))//
             .build();
 
-    final static Logger logger = Logger.getLogger(OxfordDataset.class);
+    final static Logger logger = LoggerFactory.getLogger(OxfordDataset.class);
 
     private File binaryFile;
 
@@ -53,6 +53,7 @@ public class OxfordDataset extends Dataset {
     private Map<String, List<String>> queryClass;
 
     private int scanLimit = -1;
+    // private int scanLimit = 500;
 
     @SuppressWarnings("resource")
     @SneakyThrows
@@ -60,7 +61,7 @@ public class OxfordDataset extends Dataset {
 
         String workspace = System.getenv().get("DATASET_WORKSPACE");
         OxfordDataset oxford = OxfordDataset.createFromBase(workspace, "oxford");
-        oxford.scanLimit = 15;
+        oxford.scanLimit = 1000;
 
         String target = "oxford-" + oxford.scanLimit;
         File datesetPath = Utils.getDatesetPath(workspace, target);
@@ -87,8 +88,8 @@ public class OxfordDataset extends Dataset {
 
         File images = new File(datesetPath, "images");
         images.mkdirs();
-
-        FileUtils.copyDirectory(oxford.gtFilesFolder, new File(datesetPath, "gt_files"));
+        
+        FileUtils.copyDirectory(oxford.gtFilesFolder,new File(datesetPath,"gt_files")); 
 
         oxford.scanTrainSet((c) -> {
             try {
@@ -103,23 +104,18 @@ public class OxfordDataset extends Dataset {
 
                 c.scan((d) -> {
                     try {
-                        if (oxford.siftReader.getClass().equals(SiftScaled.class)) {
-                            FileUtils.writeByteArrayToFile(binary, SiftScaled.removeScale(d), true);
-                        } else {
-                            FileUtils.writeByteArrayToFile(binary, Utils.convertToByte(d), true);
-                        }
-
+                        FileUtils.writeByteArrayToFile(binary, Utils.convertToByte(d), true);
                     } catch (IOException e) {
                         throw new IllegalStateException(e);
                     }
                 });
 
+                FileUtils.writeByteArrayToFile(binary, new byte[6], true);
+
             } catch (Exception e) {
                 throw new IllegalStateException(e);
             }
         });
-
-        FileUtils.writeByteArrayToFile(binary, new byte[12], true);
 
         writer.close();
     }
@@ -172,8 +168,7 @@ public class OxfordDataset extends Dataset {
         aux.put("aux", 0l);
         scanOrderFile((fileName) -> {
             long siftSize = getImageSiftSize(fileName);
-            c.accept(
-                    new OxfordImage(binaryFile, new File(imageFolder, fileName), aux.get("aux"), siftSize, siftReader));
+            c.accept(new OxfordImage(binaryFile, new File(imageFolder, fileName), aux.get("aux"), siftSize));
             aux.put("aux", aux.get("aux") + siftSize * 128);
         });
 
@@ -212,21 +207,32 @@ public class OxfordDataset extends Dataset {
                 "images", "gt_files", "README2.txt");
     }
 
-    @SneakyThrows
     public OxfordDataset(String workspace, String datasetName, String binaryFile, String siftSizeFolderDescriptor,
             String imagesFolderPath, String gtFiles, String orderInBinaryFile) {
 
         // this.workspace = workspace;
         this.datasetFolder = Utils.getDatesetPath(workspace, datasetName);
-        if (!this.datasetFolder.exists()) {
-            throw new FileNotFoundException(this.datasetFolder.getAbsolutePath());
-        }
         this.binaryFile = new File(datasetFolder, binaryFile);
         this.rangeSwiftInBinary = new File(datasetFolder, siftSizeFolderDescriptor);
         this.imageFolder = new File(datasetFolder, imagesFolderPath);
         this.gtFilesFolder = new File(datasetFolder, gtFiles);
         this.orderInBinaryFile = new File(this.datasetFolder, orderInBinaryFile);
+
+        checkFolderExists(this.datasetFolder);
+        checkFolderExists(this.binaryFile);
+        checkFolderExists(this.rangeSwiftInBinary);
+        checkFolderExists(this.imageFolder);
+        checkFolderExists(this.gtFilesFolder);
+        checkFolderExists(this.orderInBinaryFile);
+
         this.fillQueryFiles();
+
+    }
+
+    private void checkFolderExists(File folder) {
+        if (!folder.exists()) {
+            throw new IllegalStateException(new FileNotFoundException(folder.getAbsolutePath()));
+        }
 
     }
 
@@ -283,16 +289,6 @@ public class OxfordDataset extends Dataset {
         }
 
         return featuresSize;
-    }
-
-    @Override
-    public File getSiftTrainFile() {
-        return binaryFile;
-    }
-
-    @Override
-    public File getSiftTestFile() {
-        throw new UnsupportedOperationException();
     }
 
 }

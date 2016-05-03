@@ -3,60 +3,76 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
-import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Index;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.Histogram;
 
 public class Framework {
 
-    final static Logger logger = Logger.getLogger(Framework.class);
-
-    static int entryInserted = 0;
+    final static Logger logger = LoggerFactory.getLogger(Framework.class);
 
     public Result run(Dataset dataset, ClusterTree tree, int K) {
 
-        Result result = Result.instance;
+        Result result = Result.current = new Result();
+        
+        MDC.put("resultId", String.valueOf(result.getId()));
 
-        result.elapsedTime("buildTree", () -> {
-            logger.info("Building tree with test set...");
-            tree.build(dataset);
-            tree.finishBuild();
+        result.elapsedTime("all", () -> {
+            result.elapsedTime("buildTree", () -> {
+                buildTree(dataset, tree);
+            });
+
+            Index index = new Index(tree);
+            result.elapsedTime("buildIndex", () -> {
+                buildIndex(dataset, index);
+            });
+
+            List<Double> averagePrecision = new ArrayList<Double>();
+            result.elapsedTime("testingModel", () -> {
+                testModel(dataset, K, index, averagePrecision);
+            });
+
+            double map = averagePrecision.stream().mapToDouble(a -> a).average().getAsDouble();
+
+            result.setMap(map);
+            result.setVocabularySize(tree.getEntriesAmount());
         });
 
-        Index index = new Index(tree);
-        logger.info("Building tree index");
-        result.elapsedTime("buildIndex", () -> {
-            dataset.scanTrainSet((img) -> index.put(img));
-        });
-
-        logger.info("Calc mAP...");
-        List<Double> averagePrecision = new ArrayList<Double>();
-        result.elapsedTime("testingModel", () -> {
-
-            for (String clazz : dataset.getTestClasses()) {
-                logger.debug("Queries for class " + clazz);
-                List<Double> precisionList = new ArrayList<Double>();
-                dataset.scanTestSet(clazz, (query) -> {
-                    precisionList.add(precision(clazz, dataset, index, query, K));
-                });
-
-                if (!precisionList.isEmpty()) { // for developer testing
-                    double currentAveragePrecision = precisionList.stream().mapToDouble(a -> a).average().getAsDouble();
-                    logger.info("Average precision for " + clazz + " is " + currentAveragePrecision);
-                    averagePrecision.add(currentAveragePrecision);
-                }
-            }
-        });
-
-        double map = averagePrecision.stream().mapToDouble(a -> a).average().getAsDouble();
-
-        result.setMap(map);
-        result.setVocabularySize(tree.getEntriesAmount());
         return result;
+    }
+
+    private void testModel(Dataset dataset, int K, Index index, List<Double> averagePrecision) {
+        for (String clazz : dataset.getTestClasses()) {
+            logger.debug("Queries for class " + clazz);
+            List<Double> precisionList = new ArrayList<Double>();
+            dataset.scanTestSet(clazz, (query) -> {
+                precisionList.add(precision(clazz, dataset, index, query, K));
+            });
+
+            if (!precisionList.isEmpty()) { // for developer testing
+                double currentAveragePrecision = precisionList.stream().mapToDouble(a -> a).average().getAsDouble();
+                logger.info("Average precision for " + clazz + " is " + currentAveragePrecision);
+                averagePrecision.add(currentAveragePrecision);
+            }
+        }
+    }
+
+    private void buildIndex(Dataset dataset, Index index) {
+        dataset.scanTrainSet((img) -> index.put(img));
+    }
+
+    private void buildTree(Dataset dataset, ClusterTree tree) {
+        logger.info("Building tree with test set...");
+        dataset.scanTrainSet((img) -> {
+            img.scan((sift) -> tree.insertEntry(sift));
+        });
+        tree.finishBuild();
     }
 
     private double precision(String clazz, Dataset dataset, Index index, Image query, int K) {
@@ -72,7 +88,7 @@ public class Framework {
             String classification = dataset.quality(query, imgName);
             log.append("\n\t").append(imgName).append("=").append(classification).append(" ");
             qualities.add(classification);
-            Result.instance.addResult(clazz, query, results.get(j).getImage(), classification);
+            Result.current.addResult(clazz, query, results.get(j).getImage(), classification);
         }
 
         Double result = dataset.getMapCalculator().calc(qualities);
