@@ -98,12 +98,12 @@ public class Result {
 
     @SneakyThrows
     private void generateMarkdownReport(String absolutePath) {
-        String script = this.getClass().getClassLoader().getResource("r/report.r").getFile();
-        String template = this.getClass().getClassLoader().getResource("r/report.Rhtml").getFile();
-        String command = "Rscript" + " " + script + " " + absolutePath + " " + template;
-        Process process = Runtime.getRuntime().exec(command);
-        process.waitFor();
-        System.out.println("Report in " + absolutePath.replace("null.json", "null/report.html"));
+//        String script = this.getClass().getClassLoader().getResource("r/report.r").getFile();
+//        String template = this.getClass().getClassLoader().getResource("r/report.Rhtml").getFile();
+//        String command = "Rscript" + " " + script + " " + absolutePath + " " + template;
+//        Process process = Runtime.getRuntime().exec(command);
+//        process.waitFor();
+//        System.out.println("Report in " + absolutePath.replace("null.json", "null/report.html"));
         
     }
 
