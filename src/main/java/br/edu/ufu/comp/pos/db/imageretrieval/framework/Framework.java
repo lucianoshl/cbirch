@@ -107,5 +107,6 @@ public class Framework {
         sb.append("allocated memory: " + format.format(allocatedMemory / 1024) + "\n");
         sb.append("max memory: " + format.format(maxMemory / 1024) + "\n");
         sb.append("total free memory: " + format.format((freeMemory + (maxMemory - allocatedMemory)) / 1024) + "\n");
+        logger.info( sb );
     }
 }
