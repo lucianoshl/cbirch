@@ -1,5 +1,6 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +22,21 @@ public class Framework {
 
         Result result = Result.instance;
 
+        logMemory( "start build tree" );
         result.elapsedTime("buildTree", () -> {
             logger.info("Building tree with test set...");
             tree.build(dataset);
+        });
+        
+        logMemory( "rebuild" );
+        result.elapsedTime("rebuild", () -> {
             tree.finishBuild();
         });
+        
+        logMemory( "finishRebuild" );
+        logger.info( String.format( "Tree build finish. now we have %s leaves", tree.getEntriesAmount() ) );
+        System.gc();
+        logMemory( "gc after finishRebuild" );
 
         Index index = new Index(tree);
         logger.info("Building tree index");
@@ -79,5 +90,22 @@ public class Framework {
         log.append("average precision=").append(result);
         logger.debug(log.toString());
         return result;
+    }
+    
+    public void logMemory(String moment){
+        Runtime runtime = Runtime.getRuntime();
+
+        NumberFormat format = NumberFormat.getInstance();
+
+        StringBuilder sb = new StringBuilder();
+        long maxMemory = runtime.maxMemory();
+        long allocatedMemory = runtime.totalMemory();
+        long freeMemory = runtime.freeMemory();
+
+        sb.append(moment + "\n" );
+        sb.append("free memory: " + format.format(freeMemory / 1024) + "\n");
+        sb.append("allocated memory: " + format.format(allocatedMemory / 1024) + "\n");
+        sb.append("max memory: " + format.format(maxMemory / 1024) + "\n");
+        sb.append("total free memory: " + format.format((freeMemory + (maxMemory - allocatedMemory)) / 1024) + "\n");
     }
 }
