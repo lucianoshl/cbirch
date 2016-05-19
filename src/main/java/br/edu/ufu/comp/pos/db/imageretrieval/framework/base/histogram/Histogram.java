@@ -8,7 +8,7 @@ import org.apache.commons.math3.ml.distance.DistanceMeasure;
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.cache.HistogramCache;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.cache.HistogramMemoryCache;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.cache.HistogramDiskCache;
 
 public class Histogram {
 
@@ -18,7 +18,7 @@ public class Histogram {
 	private int uuid = ++GENERATOR;
 
 	// HistogramCache cache = new HistogramHybridCache(512 * 1024 * 1024);
-	HistogramCache cache = new HistogramMemoryCache();
+    HistogramCache cache = new HistogramDiskCache();
 
 	private Histogram normalized;
 
