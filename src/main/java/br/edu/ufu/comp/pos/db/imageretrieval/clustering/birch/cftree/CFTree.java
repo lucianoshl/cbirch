@@ -606,8 +606,8 @@ public class CFTree implements ClusterTree {
      */
     public void finishBuild() {
 
-        while (this.getEntriesAmount() > 2000000){
-            logger.info( "this.getEntriesAmount() > 2000000 rebuilding"  );
+        while (this.getEntriesAmount() > 1600000){
+            logger.info( "this.getEntriesAmount() > 1600000 rebuilding"  );
             this.rebuildTree();
         }
         
