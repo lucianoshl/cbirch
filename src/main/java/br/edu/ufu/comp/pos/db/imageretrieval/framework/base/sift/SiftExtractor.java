@@ -1,12 +1,17 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Scanner;
-
-import org.apache.commons.io.FileUtils;
 
 import lombok.SneakyThrows;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
+
 
 public class SiftExtractor {
 
@@ -45,6 +50,14 @@ public class SiftExtractor {
 
     private static String runExternalLowe(File file) throws IOException, InterruptedException {
         String lowePath = SiftExtractor.class.getClassLoader().getResource("binaries/siftLowe").getFile();
+
+        Set perms = new HashSet();
+        perms.add( PosixFilePermission.OWNER_EXECUTE );
+        perms.add( PosixFilePermission.OWNER_READ );
+        perms.add( PosixFilePermission.OWNER_WRITE );
+
+        Files.setPosixFilePermissions( new File( lowePath ).toPath(), perms );
+
         File siftTmpFile = File.createTempFile("sift", file.getName());
         ProcessBuilder processBuilder = new ProcessBuilder(lowePath);
         processBuilder.redirectInput(file);
