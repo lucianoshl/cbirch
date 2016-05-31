@@ -1,15 +1,16 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.cache;
 
-import static org.apache.commons.io.FileUtils.readFileToByteArray;
-import static org.apache.commons.io.FileUtils.writeByteArrayToFile;
-import static org.apache.commons.lang3.SerializationUtils.deserialize;
-import static org.apache.commons.lang3.SerializationUtils.serialize;
+
+import lombok.SneakyThrows;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.SneakyThrows;
+import static org.apache.commons.io.FileUtils.readFileToByteArray;
+import static org.apache.commons.io.FileUtils.writeByteArrayToFile;
+import static org.apache.commons.lang3.SerializationUtils.deserialize;
+import static org.apache.commons.lang3.SerializationUtils.serialize;
 
 public class HistogramDiskCache implements HistogramCache {
 
@@ -38,6 +39,7 @@ public class HistogramDiskCache implements HistogramCache {
         if (file == null) {
             file = new File(cacheLocation, uuid + ".bin");
             file.createNewFile();
+            file.deleteOnExit();
             this.index.put(uuid, file);
         }
         writeByteArrayToFile(file, serialize(content));
