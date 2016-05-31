@@ -4,5 +4,5 @@
 datasets/
 target/
 logs/
-dsl-cbir.iml
+*.iml
 nohup.out
