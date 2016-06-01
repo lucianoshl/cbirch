@@ -90,13 +90,20 @@ public class OxfordDatasetTest {
     // validateSource( 100, 301375, 0.75 );
     // }
 
-
     @Test
-    public void simple200()
+    public void simple150()
         throws IOException {
 
-        validateSource( 200, -1, -1 );
+        validateSource( 150, -1, -1 );
     }
+
+
+    // @Test
+    // public void simple200()
+    // throws IOException {
+    //
+    // validateSource( 200, 445926, 0.9583333333333333 );
+    // }
 
 
     // @Test
@@ -105,7 +112,6 @@ public class OxfordDatasetTest {
     //
     // validateSource( 100, 301375, -1 );
     // }
-
 
     // @Test
     // public void simple100()
