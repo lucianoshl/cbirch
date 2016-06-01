@@ -4,6 +4,8 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework.base;
 import java.io.File;
 import java.util.function.Consumer;
 
+import junit.framework.TestCase;
+
 import org.junit.Test;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
@@ -21,12 +23,12 @@ public class HistogramsTest {
         histograms.add( new Histogram( createFakeImage( "2" ), new double[] { 0, 0, 1, 1, 0, 1 } ) );
         histograms.add( new Histogram( createFakeImage( "3" ), new double[] { 1, 1, 0, 0, 1, 0 } ) );
 
-        // TestCase.assertEquals(1.0986122886681098, histograms.idf(0));
-        // TestCase.assertEquals(1.0986122886681098, histograms.idf(1));
-        // TestCase.assertEquals(0.4054651081081644, histograms.idf(2));
-        // TestCase.assertEquals(1.0986122886681098, histograms.idf(3));
-        // TestCase.assertEquals(0.4054651081081644, histograms.idf(4));
-        // TestCase.assertEquals(0.4054651081081644, histograms.idf(5));
+        TestCase.assertEquals( 1.0986122886681098, histograms.idf( 0 ) );
+        TestCase.assertEquals( 1.0986122886681098, histograms.idf( 1 ) );
+        TestCase.assertEquals( 0.4054651081081644, histograms.idf( 2 ) );
+        TestCase.assertEquals( 1.0986122886681098, histograms.idf( 3 ) );
+        TestCase.assertEquals( 0.4054651081081644, histograms.idf( 4 ) );
+        TestCase.assertEquals( 0.4054651081081644, histograms.idf( 5 ) );
 
     }
 
