@@ -77,7 +77,7 @@ public class OxfordDatasetTest {
     public void simple50()
         throws IOException {
 
-        validateSource( 50, 143729, 0.888888888888888 );
+        validateSource( 50, 143729, 0.8888888888888888 );
     }
 
 
