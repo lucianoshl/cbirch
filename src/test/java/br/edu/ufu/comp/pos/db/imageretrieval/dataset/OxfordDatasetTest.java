@@ -81,6 +81,14 @@ public class OxfordDatasetTest {
     }
 
 
+    @Test
+    public void simple100()
+        throws IOException {
+
+        validateSource( 100, -1, -1 );
+    }
+
+
     // @Test
     // public void simple100()
     // throws IOException {
