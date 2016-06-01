@@ -7,6 +7,7 @@ import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory.TreeFactory;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
 import junit.framework.TestCase;
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -20,6 +21,8 @@ import java.io.RandomAccessFile;
 
 @FixMethodOrder( MethodSorters.NAME_ASCENDING )
 public class OxfordDatasetTest {
+
+    final static Logger logger = Logger.getLogger( OxfordDatasetTest.class );
 
     OxfordImage test;
 
@@ -90,8 +93,8 @@ public class OxfordDatasetTest {
 
         double threshold = 10;
         Result result = callExperiment( limit, threshold );
-        System.out.print( result.getVocabularySize() );
-        System.out.print( result.getMap() );
+        logger.debug( result.getVocabularySize() );
+        logger.debug( result.getMap() );
         TestCase.assertEquals( vocabularySize, result.getVocabularySize() );
         TestCase.assertEquals( map, result.getMap() );
     }
