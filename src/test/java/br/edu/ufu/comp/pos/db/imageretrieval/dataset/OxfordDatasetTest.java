@@ -66,7 +66,7 @@ public class OxfordDatasetTest {
     public void simple15()
         throws IOException {
 
-        validateSource( 15, 1536, 0.75 );
+        validateSource( 15, 3723, 0.75 );
     }
 
 
