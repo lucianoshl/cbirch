@@ -91,7 +91,7 @@ public class OxfordDatasetTest {
     private void validateSource( int limit, int vocabularySize, double map )
         throws IOException {
 
-        double threshold = 10;
+        double threshold = 5;
         Result result = callExperiment( limit, threshold );
         logger.debug( result.getVocabularySize() );
         logger.debug( result.getMap() );
