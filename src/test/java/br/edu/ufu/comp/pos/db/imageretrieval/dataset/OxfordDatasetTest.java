@@ -1,12 +1,12 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.dataset;
 
 
-import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.Framework;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory.TreeFactory;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+
 import junit.framework.TestCase;
+
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,9 +14,11 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.Framework;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory.TreeFactory;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
 
 
 @FixMethodOrder( MethodSorters.NAME_ASCENDING )
@@ -65,35 +67,35 @@ public class OxfordDatasetTest {
     }
 
 
-    @Test
-    public void simple15()
-        throws IOException {
-
-        validateSource( 15, 41424, 0.75 );
-    }
-
-
-    @Test
-    public void simple50()
-        throws IOException {
-
-        validateSource( 50, 143729, 0.8888888888888888 );
-    }
-
-
-    @Test
-    public void simple100()
-        throws IOException {
-
-        validateSource( 100, 301375, 0.75 );
-    }
+    // @Test
+    // public void simple15()
+    // throws IOException {
+    //
+    // validateSource( 15, 41424, 0.75 );
+    // }
+    //
+    //
+    // @Test
+    // public void simple50()
+    // throws IOException {
+    //
+    // validateSource( 50, 143729, 0.8888888888888888 );
+    // }
+    //
+    //
+    // @Test
+    // public void simple100()
+    // throws IOException {
+    //
+    // validateSource( 100, 301375, 0.75 );
+    // }
 
 
     @Test
     public void simple200()
         throws IOException {
 
-        validateSource( 100, -1, -1 );
+        validateSource( 200, -1, -1 );
     }
 
 
