@@ -70,6 +70,10 @@ public class OxfordDatasetTest {
         throws IOException {
 
         validateSource( 15, 41424, 0.75 );
+        validateSource( 50, 41424, 0.75 );
+        validateSource( 100, 41424, 0.75 );
+        validateSource( 150, 41424, 0.75 );
+        validateSource( 200, 41424, 0.75 );
     }
 
 
