@@ -70,28 +70,41 @@ public class OxfordDatasetTest {
         throws IOException {
 
         validateSource( 15, 41424, 0.75 );
-        validateSource( 50, 41424, 0.75 );
-        validateSource( 100, 41424, 0.75 );
-        validateSource( 150, 41424, 0.75 );
-        validateSource( 200, 41424, 0.75 );
     }
 
 
-    // @Test
-    // public void simple200() throws IOException {
-    // validateSource(200, 5751, 0.6666666666666666);
-    // }
-    //
-    // @Test
-    // public void simple500() throws IOException {
-    // validateSource(500, 8809, 0.41435185185185186);
-    // }
-    //
-    // @Test
-    // public void simple1000() throws IOException {
-    // validateSource(1000, 11958, 0.7055555555555556);
-    // }
-    //
+    @Test
+    public void simple100()
+        throws IOException {
+
+        validateSource( 100, 5751, 0.6666666666666666 );
+    }
+
+
+    @Test
+    public void simple200()
+        throws IOException {
+
+        validateSource( 200, 5751, 0.6666666666666666 );
+    }
+
+
+    @Test
+    public void simple500()
+        throws IOException {
+
+        validateSource( 500, 8809, 0.41435185185185186 );
+    }
+
+
+    @Test
+    public void simple1000()
+        throws IOException {
+
+        validateSource( 1000, 11958, 0.7055555555555556 );
+    }
+
+
     private void validateSource( int limit, int vocabularySize, double map )
         throws IOException {
 
