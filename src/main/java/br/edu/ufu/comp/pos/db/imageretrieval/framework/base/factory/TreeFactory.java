@@ -19,12 +19,14 @@ public class TreeFactory {
             Integer branchingFactor = Integer.valueOf(args[startIndex++]);
             Double threshold = Double.valueOf(args[startIndex++]);
             Integer memory = Integer.valueOf(args[startIndex++]);
+            Integer leavesLimit = Integer.valueOf( args[ startIndex++ ] );
 
             Result.extraInfo("Branching factor", branchingFactor);
             Result.extraInfo("Threshold", threshold);
             Result.extraInfo("Memory", memory);
+            Result.extraInfo( "LeavesLimit", leavesLimit );
 
-            return createCFTree(branchingFactor, threshold, memory);
+            return createCFTree( branchingFactor, threshold, memory, leavesLimit );
         }
         if (treeName.equals("hkm")) {
             Integer branchingFactor = Integer.valueOf(args[startIndex++]);
@@ -39,11 +41,13 @@ public class TreeFactory {
         }
     }
 
-    public ClusterTree createCFTree(Integer branchingFactor, Double threshold, Integer memory) {
+
+    public ClusterTree createCFTree( Integer branchingFactor, Double threshold, Integer memory, Integer leavesLimit ) {
         Result.registerBirch(threshold, 0, 0);
         CFTree tree = new CFTree(branchingFactor, threshold, 1, true);
         tree.setAutomaticRebuild(true);
         tree.setMemoryLimitMB(memory);
+        tree.setLeavesLimit( leavesLimit );
         return tree;
     }
 

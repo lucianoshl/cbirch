@@ -1,21 +1,20 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.dataset;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Framework;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory.TreeFactory;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
 import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OxfordDatasetTest {
@@ -81,7 +80,7 @@ public class OxfordDatasetTest {
 
     private Result callExperiment(int limit, double threshold) {
         dataset.setScanLimit(limit);
-        Result result = new Framework().run(dataset, new TreeFactory().createCFTree(100, threshold, 1024), 4);
+        Result result = new Framework().run( dataset, new TreeFactory().createCFTree( 100, threshold, 1024, 1000000 ), 4 );
         dataset.setScanLimit(-1);
         return result;
     }

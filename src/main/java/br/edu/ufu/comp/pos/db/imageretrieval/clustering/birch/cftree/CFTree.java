@@ -26,13 +26,14 @@ package br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import net.sourceforge.sizeof.SizeOf;
+
 import org.apache.log4j.Logger;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.AbstractTreeNode;
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
-import net.sourceforge.sizeof.SizeOf;
 
 /**
  * This is an implementation of the BIRCH clustering algorithm described in:
@@ -114,6 +115,8 @@ public class CFTree implements ClusterTree {
 
     private int entriesAmount;
     private boolean finishBuild;
+
+    private Integer leavesLimit;
 
     /**
      * 
@@ -606,8 +609,8 @@ public class CFTree implements ClusterTree {
      */
     public void finishBuild() {
 
-        while (this.getEntriesAmount() > 1600000){
-            logger.info( "this.getEntriesAmount() > 1600000 rebuilding"  );
+        while ( this.getEntriesAmount() > this.leavesLimit ) {
+            logger.info( String.format( "this.getEntriesAmount() > %s rebuilding", this.leavesLimit ) );
             this.rebuildTree();
         }
         
@@ -806,4 +809,9 @@ public class CFTree implements ClusterTree {
         });
     }
 
+
+    public void setLeavesLimit( Integer leavesLimit ) {
+
+        this.leavesLimit = leavesLimit;
+    }
 }
