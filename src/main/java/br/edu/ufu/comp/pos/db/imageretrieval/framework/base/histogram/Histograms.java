@@ -118,4 +118,7 @@ public class Histograms {
 		return Math.log(docs.size() / n);
 	}
 
+	public int getSize() {
+		return content.values().size();
+	}
 }
