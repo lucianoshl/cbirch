@@ -1,16 +1,15 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory;
 
-import java.io.File;
-
-import org.apache.log4j.Logger;
-
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.GeneratedDataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.OxfordDataset;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.Sift;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
+import cbirch.Report;
+import org.apache.log4j.Logger;
+
+import java.io.File;
 
 public class DatasetFactory {
 
@@ -20,31 +19,29 @@ public class DatasetFactory {
 
         String workspace = System.getenv().get("DATASET_WORKSPACE");
         String datasetName = args[2];
-        
+
         Sift siftReader = null;
-        if (args[1].equals("normalized")){
-        	siftReader = new SiftScaled();
-            Result.extraInfo("Dataset normalized", true);
-        } else if (args[1].equals("non-normalized")){
-        	siftReader = new Sift();
-            Result.extraInfo("Dataset normalized", false);
+        boolean normalized = args[1].equals("normalized");
+        Report.info("Normalized", normalized);
+        if (normalized) {
+            siftReader = new SiftScaled();
+        } else if (args[1].equals("non-normalized")) {
+            siftReader = new Sift();
         } else {
-        	new IllegalStateException("invalid normalized parameter: normalized or non-normalized");
+            new IllegalStateException("invalid normalized parameter: normalized or non-normalized");
         }
-        
-       
+
 
         File datasetPath = Utils.getDatesetPath(workspace, datasetName);
 
-        Result.extraInfo("Dataset workspace", workspace);
-        Result.extraInfo("Dataset name", datasetName);
-        Result.extraInfo("Dataset path", datasetPath);
+        Report.info("Dataset workspace", workspace);
+        Report.info("Dataset name", datasetName);
+        Report.info("Dataset path", datasetPath);
 
-        Result.instance.setDatasetPath(datasetPath);
         Dataset dataset = null;
 
         if (new File(datasetPath, "README2.txt").exists()) {
-            Result.extraInfo("Dataset class", OxfordDataset.class);
+            Report.info("Dataset class", OxfordDataset.class);
             dataset = OxfordDataset.createFromBase(workspace, datasetName);
         } else if (new File(datasetPath, "train.sift").exists()) {
             dataset = new GeneratedDataset(datasetName);
@@ -53,7 +50,7 @@ public class DatasetFactory {
             throw new UnsupportedOperationException("unsupported dataset in " + datasetPath.getAbsolutePath());
         }
 
-        Result.extraInfo("Dataset features", dataset.getFeaturesSize());
+        Report.info("Dataset features", dataset.getFeaturesSize());
 
         dataset.setSiftReader(siftReader);
         return dataset;

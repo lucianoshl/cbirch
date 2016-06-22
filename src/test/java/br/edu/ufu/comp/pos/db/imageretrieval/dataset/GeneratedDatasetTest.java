@@ -84,14 +84,14 @@
 //    // private void validateSource(int limit, int vocabularySize, double map)
 //    // throws IOException {
 //    // double threshold = 10;
-//    // Result result = callExperiment(limit, threshold);
+//    // Report result = callExperiment(limit, threshold);
 //    // TestCase.assertEquals(vocabularySize, result.getVocabularySize());
 //    // TestCase.assertEquals(map, result.getMap());
 //    // }
 //    //
-//    // private Result callExperiment(int limit, double threshold) {
+//    // private Report callExperiment(int limit, double threshold) {
 //    // dataset.setScanLimit(limit);
-//    // Result result = new Framework().run(dataset, new
+//    // Report result = new Framework().run(dataset, new
 //    // TreeFactory().createCFTree(100, threshold, 1024), 4);
 //    // dataset.setScanLimit(-1);
 //    // return result;

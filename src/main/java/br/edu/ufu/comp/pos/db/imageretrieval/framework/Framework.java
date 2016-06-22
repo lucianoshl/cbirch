@@ -4,6 +4,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import cbirch.Report;
 import org.apache.log4j.Logger;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
@@ -18,18 +19,16 @@ public class Framework {
 
     static int entryInserted = 0;
 
-    public Result run(Dataset dataset, ClusterTree tree, int K) {
-
-        Result result = Result.instance;
+    public void run(Dataset dataset, ClusterTree tree, int K) {
 
         logMemory( "start build tree" );
-        result.elapsedTime("buildTree", () -> {
+        Report.elapsedTime("buildTree", () -> {
             logger.info("Building tree with test set...");
             tree.build(dataset);
         });
         
         logMemory( "rebuild" );
-        result.elapsedTime("rebuild", () -> {
+        Report.elapsedTime("rebuild", () -> {
             tree.finishBuild();
         });
         
@@ -40,13 +39,13 @@ public class Framework {
 
         Index index = new Index(tree);
         logger.info("Building tree index");
-        result.elapsedTime("buildIndex", () -> {
+        Report.elapsedTime("buildIndex", () -> {
             dataset.scanTrainSet((img) -> index.put(img));
         });
 
         logger.info("Calc mAP...");
         List<Double> averagePrecision = new ArrayList<Double>();
-        result.elapsedTime("testingModel", () -> {
+        Report.elapsedTime("testingModel", () -> {
 
             for (String clazz : dataset.getTestClasses()) {
                 logger.debug("Queries for class " + clazz);
@@ -65,9 +64,8 @@ public class Framework {
 
         double map = averagePrecision.stream().mapToDouble(a -> a).average().getAsDouble();
 
-        result.setMap(map);
-        result.setVocabularySize(tree.getEntriesAmount());
-        return result;
+        Report.info("map",map);
+        Report.info("vocabulary_size",tree.getEntriesAmount());
     }
 
     private double precision(String clazz, Dataset dataset, Index index, Image query, int K) {
@@ -83,7 +81,7 @@ public class Framework {
             String classification = dataset.quality(query, imgName);
             log.append("\n\t").append(imgName).append("=").append(classification).append(" ");
             qualities.add(classification);
-            Result.instance.addResult(clazz, query, results.get(j).getImage(), classification);
+            Report.addResult(clazz, query, results.get(j).getImage(), classification);
         }
 
         Double result = dataset.getMapCalculator().calc(qualities);
