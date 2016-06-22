@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 
 import com.google.gson.GsonBuilder;
 
-import br.edu.ufu.comp.pos.db.imageretrieval.commons.CustomFileAppender;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import lombok.Getter;
 import lombok.Setter;
