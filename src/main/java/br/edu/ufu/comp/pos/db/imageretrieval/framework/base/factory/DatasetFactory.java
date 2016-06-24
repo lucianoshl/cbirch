@@ -1,9 +1,5 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory;
 
-import java.io.File;
-
-import org.apache.log4j.Logger;
-
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.GeneratedDataset;
@@ -11,6 +7,9 @@ import br.edu.ufu.comp.pos.db.imageretrieval.dataset.OxfordDataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.Sift;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
+import org.apache.log4j.Logger;
+
+import java.io.File;
 
 public class DatasetFactory {
 
@@ -19,20 +18,28 @@ public class DatasetFactory {
     public Dataset create(String[] args) {
 
         String workspace = System.getenv().get("DATASET_WORKSPACE");
+
+        if (args.length < 2) {
+            throw new IllegalArgumentException("A normalização do dataset");
+        }
+
+        if (args.length < 3) {
+            throw new IllegalArgumentException("Informe o dataset");
+        }
         String datasetName = args[2];
-        
+
         Sift siftReader = null;
-        if (args[1].equals("normalized")){
-        	siftReader = new SiftScaled();
+        if (args[1].equals("normalized")) {
+            siftReader = new SiftScaled();
             Result.extraInfo("Dataset normalized", true);
-        } else if (args[1].equals("non-normalized")){
-        	siftReader = new Sift();
+        } else if (args[1].equals("non-normalized")) {
+            siftReader = new Sift();
             Result.extraInfo("Dataset normalized", false);
         } else {
-        	new IllegalStateException("invalid normalized parameter: normalized or non-normalized");
+            new IllegalStateException("invalid normalized parameter: normalized or non-normalized");
         }
-        
-       
+
+
 
         File datasetPath = Utils.getDatesetPath(workspace, datasetName);
 
@@ -46,6 +53,7 @@ public class DatasetFactory {
         if (new File(datasetPath, "README2.txt").exists()) {
             Result.extraInfo("Dataset class", OxfordDataset.class);
             dataset = OxfordDataset.createFromBase(workspace, datasetName);
+            ((OxfordDataset) dataset).setScanLimit(15);
         } else if (new File(datasetPath, "train.sift").exists()) {
             dataset = new GeneratedDataset(datasetName);
 
@@ -61,3 +69,4 @@ public class DatasetFactory {
     }
 
 }
+

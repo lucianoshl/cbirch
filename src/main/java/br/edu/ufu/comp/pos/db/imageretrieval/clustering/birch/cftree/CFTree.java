@@ -609,10 +609,13 @@ public class CFTree implements ClusterTree {
      */
     public void finishBuild() {
 
-        while ( this.getEntriesAmount() > this.leavesLimit ) {
-            logger.info( String.format( "this.getEntriesAmount() > %s rebuilding", this.leavesLimit ) );
-            this.rebuildTree();
-        }
+        // while ( this.getEntriesAmount() > this.leavesLimit ) {
+        // logger.info( String.format(
+        // "this.getEntriesAmount() > %s rebuilding", this.leavesLimit ) );
+        // this.rebuildTree();
+        // }
+
+        this.rebuildTree();
         
         CFNode l = leafListStart.getNextLeaf(); // the first leaf is dummy!
 

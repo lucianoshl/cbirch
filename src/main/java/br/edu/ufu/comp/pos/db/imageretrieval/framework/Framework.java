@@ -1,16 +1,15 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework;
 
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Index;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.Histogram;
+import org.apache.log4j.Logger;
+
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Framework {
 
@@ -27,12 +26,21 @@ public class Framework {
             logger.info("Building tree with test set...");
             tree.build(dataset);
         });
-        
+
+        executeStep( dataset, tree, K, result );
+        executeStep( dataset, tree, K, result );
+        return result;
+    }
+
+
+    private void executeStep( Dataset dataset, ClusterTree tree, int K, Result result ) {
+
+        result.newExecution();
         logMemory( "rebuild" );
         result.elapsedTime("rebuild", () -> {
             tree.finishBuild();
         });
-        
+
         logMemory( "finishRebuild" );
         logger.info( String.format( "Tree build finish. now we have %s leaves", tree.getEntriesAmount() ) );
         System.gc();
@@ -67,7 +75,7 @@ public class Framework {
 
         result.setMap(map);
         result.setVocabularySize(tree.getEntriesAmount());
-        return result;
+        result.save();
     }
 
     private double precision(String clazz, Dataset dataset, Index index, Image query, int K) {

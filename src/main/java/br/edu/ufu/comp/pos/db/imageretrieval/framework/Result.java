@@ -1,5 +1,16 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework;
 
+
+import br.edu.ufu.comp.pos.db.imageretrieval.commons.CustomFileAppender;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
+import com.google.gson.GsonBuilder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.SneakyThrows;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.lang3.time.StopWatch;
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -7,17 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.commons.lang3.time.StopWatch;
-import org.apache.log4j.Logger;
-
-import com.google.gson.GsonBuilder;
-
-import br.edu.ufu.comp.pos.db.imageretrieval.commons.CustomFileAppender;
-import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.SneakyThrows;
 
 @Getter
 @Setter
@@ -42,6 +42,9 @@ public class Result {
     private String error;
 
     private File datasetPath;
+
+    private int execution = 0;
+
 
     public void elapsedTime(String key, Runnable object) {
         StopWatch stopWatch = new StopWatch();
@@ -86,7 +89,7 @@ public class Result {
         if (!resultsDir.exists()) {
             resultsDir.mkdirs();
         }
-        File resultFile = new File(resultsDir, CustomFileAppender.datePart + ".json");
+        File resultFile = new File( resultsDir, CustomFileAppender.datePart + "-" + execution + ".json" );
         FileWriter writer = new FileWriter(resultFile);
         new GsonBuilder().setPrettyPrinting().create().toJson(this, writer);
         writer.close();
@@ -133,6 +136,16 @@ public class Result {
         QueryResult result = new QueryResult(query);
         this.results.add(result);
         return result;
+    }
+
+
+    public void newExecution() {
+
+        this.statistics.get( "words" ).remove( this.statistics.get( "words" ).size() - 1 );
+        this.statistics.get( "threshold" ).remove( this.statistics.get( "threshold" ).size() - 1 );
+        this.statistics.get( "treeMemory" ).remove( this.statistics.get( "treeMemory" ).size() - 1 );
+        this.results.clear();
+        this.execution++;
     }
 
 }
