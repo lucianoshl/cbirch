@@ -55,7 +55,7 @@ public class OxfordDataset extends Dataset {
 
     private Map<String, List<String>> queryClass;
 
-    private int scanLimit = 15;
+    private int scanLimit = -1;
 
     @SuppressWarnings("resource")
     @SneakyThrows
