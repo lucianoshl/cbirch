@@ -1,24 +1,38 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory.DatasetFactory;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory.TreeFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class Launcher {
+    static {
+        SimpleDateFormat startLauncherDateFormat = new SimpleDateFormat("yyyy-M-dd_hh-mm-ss");
+        String startLauncherDate = startLauncherDateFormat.format(new Date());
+        MDC.put("launcher-date", startLauncherDate);
+        MDC.put("log-id", MDC.get("launcher-date") + "-0-startup");
+    }
+
 
     final static Logger logger = LoggerFactory.getLogger(Launcher.class);
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args)
+            throws IOException {
         exec(args);
     }
 
-    public static void exec(String[] args) throws IOException {
+
+    public static void exec(String[] args)
+            throws IOException {
 
         Result result = new Result();
         try {
@@ -30,6 +44,7 @@ public class Launcher {
         }
 
     }
+
 
     private static void callExperiment(String[] args) {
 

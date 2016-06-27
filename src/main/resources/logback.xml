@@ -10,20 +10,20 @@
 	</appender>
 	<appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
 		<discriminator>
-			<key>running</key>
-			<defaultValue>startup</defaultValue>
+			<key>log-id</key>
+			<defaultValue>0</defaultValue>
 		</discriminator>
 		<sift>
 			<appender name="FILE-${running}"
 				class="ch.qos.logback.core.rolling.RollingFileAppender">
-				<file>${LOG_HOME}/${running}.log</file>
+				<file>${LOG_HOME}/${log-id}.log</file>
 				<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 					<Pattern>
 						%d{dd/MM HH:mm:ss} %mdc %-5level %logger{36} - %msg%n
 					</Pattern>
 				</encoder>
 				<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-					<fileNamePattern>${LOG_HOME}/${running}-%d{yyyy-MM-dd}.%i.txt</fileNamePattern>
+					<fileNamePattern>${LOG_HOME}/${log-id}-%d{yyyy-MM-dd}.%i.txt</fileNamePattern>
 					<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 						<maxFileSize>10MB</maxFileSize>
 					</timeBasedFileNamingAndTriggeringPolicy>
