@@ -12,4 +12,6 @@ public interface ClusterTree {
 
     void build(Dataset dataset);
 
+
+    int setClustersNames();
 }

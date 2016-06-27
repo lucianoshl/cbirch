@@ -1,25 +1,27 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.clustering.hkm;
 
+
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import lombok.SneakyThrows;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+
+import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.AbstractTreeNode;
+import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
 
 import com.jmatio.io.MatFileReader;
 import com.jmatio.types.MLArray;
 import com.jmatio.types.MLEmptyArray;
 import com.jmatio.types.MLInt32;
 import com.jmatio.types.MLStructure;
-
-import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.AbstractTreeNode;
-import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
-import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
-import lombok.SneakyThrows;
 
 public class KMeansTree implements ClusterTree {
 
@@ -160,6 +162,13 @@ public class KMeansTree implements ClusterTree {
 
         process.waitFor();
         logger.info("command completed");
+    }
+
+
+    @Override
+    public int setClustersNames() {
+
+        return 0;
     }
 
 }

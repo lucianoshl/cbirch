@@ -1,5 +1,6 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.dataset;
 
+
 import static java.util.Arrays.asList;
 
 import java.io.File;
@@ -15,6 +16,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
+import lombok.SneakyThrows;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -24,7 +27,6 @@ import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.MapCalculator;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.OxfordMapCalculator;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
-import lombok.SneakyThrows;
 
 public class OxfordDataset extends Dataset {
 
@@ -52,7 +54,7 @@ public class OxfordDataset extends Dataset {
 
     private Map<String, List<String>> queryClass;
 
-    private int scanLimit = -1;
+    private int scanLimit = 15;
 
     @SuppressWarnings("resource")
     @SneakyThrows

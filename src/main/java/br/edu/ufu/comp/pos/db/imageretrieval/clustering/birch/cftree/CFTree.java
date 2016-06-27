@@ -33,7 +33,6 @@ import org.apache.log4j.Logger;
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.AbstractTreeNode;
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
-import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
 
 /**
  * This is an implementation of the BIRCH clustering algorithm described in:
@@ -322,7 +321,8 @@ public class CFTree implements ClusterTree {
         logger.info("Preparing to rebuild tree");
         logger.info("Actual threshold " + root.getDistThreshold());
         logger.info("Actual leafs: " + this.getEntriesAmount());
-        Result.registerBirch(root.getDistThreshold(), this.entriesAmount, computeMemorySize(this));
+        // Result.registerBirch(root.getDistThreshold(), this.entriesAmount,
+        // computeMemorySize(this));
         logger.info("Computing new threshould...");
         double newThreshold = computeNewThreshold(leafListStart, root.getDistFunction(), root.getDistThreshold());
         logger.info("New threshold: " + newThreshold);
@@ -616,34 +616,18 @@ public class CFTree implements ClusterTree {
         // }
 
         this.rebuildTree();
-        
-        CFNode l = leafListStart.getNextLeaf(); // the first leaf is dummy!
 
-        this.entriesAmount = 0;
-
-        int id = 0;
-        while (l != null) {
-            if (!l.isDummy()) {
-                for (CFEntry e : l.getEntries()) {
-                    e.setSubclusterID(id);
-                    if (e.getN() == 0) {
-                        System.out.println(e);
-                    }
-                    id++;
-                }
-            }
-            l = l.getNextLeaf();
-        }
-        entriesAmount = id;
-        finishBuild = true;
-        Result.registerBirch(root.getDistThreshold(), this.entriesAmount, this.computeMemorySize(this));
+        entriesAmount = this.setClustersNames();
+        // Result.registerBirch(root.getDistThreshold(), this.entriesAmount,
+        // this.computeMemorySize(this));
     }
+
 
     /**
      * Retrieves the subcluster id of the closest leaf entry to e
+     *
+     * the entry to be mapped
      * 
-     * @param e
-     *            the entry to be mapped
      * @return a positive integer, if the leaf entries were enumerated using
      *         finishedInsertingData(), otherwise -1
      */
@@ -810,6 +794,30 @@ public class CFTree implements ClusterTree {
         dataset.scanTrainSet((img) -> {
             img.scan((sift) -> this.insertEntry(sift));
         });
+    }
+
+
+    @Override
+    public int setClustersNames() {
+
+        CFNode l = leafListStart.getNextLeaf(); // the first leaf is dummy!
+
+        this.entriesAmount = 0;
+
+        int id = 0;
+        while ( l != null ) {
+            if ( !l.isDummy() ) {
+                for ( CFEntry e : l.getEntries() ) {
+                    e.setSubclusterID( id );
+                    if ( e.getN() == 0 ) {
+                        System.out.println( e );
+                    }
+                    id++;
+                }
+            }
+            l = l.getNextLeaf();
+        }
+        return id;
     }
 
 
