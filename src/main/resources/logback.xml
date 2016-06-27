@@ -35,9 +35,6 @@
 
     <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
-    </root>
-
-    <root level="INFO">
         <appender-ref ref="SIFT"/>
     </root>
 
