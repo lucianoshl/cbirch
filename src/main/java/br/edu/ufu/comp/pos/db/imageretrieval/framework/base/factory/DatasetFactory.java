@@ -3,7 +3,8 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
@@ -16,7 +17,7 @@ import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
 
 public class DatasetFactory {
 
-    final static Logger logger = Logger.getLogger( DatasetFactory.class );
+    final static Logger logger = LoggerFactory.getLogger( DatasetFactory.class );
 
 
     public Dataset create( String[] args ) {

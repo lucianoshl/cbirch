@@ -7,7 +7,8 @@ import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.Index;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.Histogram;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class Framework {
 
-    final static Logger logger = Logger.getLogger( Framework.class );
+    final static Logger logger = LoggerFactory.getLogger( Framework.class );
 
 
     public Result run( Dataset dataset, ClusterTree tree, int K ) {
@@ -32,12 +33,12 @@ public class Framework {
         int runnings = 2;
 
         for ( int i = 0; i < runnings; i++ ) {
+            result.newExecution();
             tree.setClustersNames();
             executeStep( dataset, tree, K, result );
             if ( i + 1 < runnings ) {
                 logMemory( "rebuild" );
                 result.elapsedTime( "rebuild", ( ) -> {
-                    result.newExecution();
                     ( (CFTree) tree ).rebuildTree();
                 } );
             }
@@ -126,6 +127,6 @@ public class Framework {
         sb.append( "allocated memory: " + format.format( allocatedMemory / 1024 ) + "\n" );
         sb.append( "max memory: " + format.format( maxMemory / 1024 ) + "\n" );
         sb.append( "total free memory: " + format.format( ( freeMemory + ( maxMemory - allocatedMemory ) ) / 1024 ) + "\n" );
-        logger.info( sb );
+        logger.info( sb.toString() );
     }
 }

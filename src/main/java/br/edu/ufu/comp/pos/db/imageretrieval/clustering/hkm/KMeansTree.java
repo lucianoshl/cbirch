@@ -10,7 +10,8 @@ import java.util.HashSet;
 import lombok.SneakyThrows;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.AbstractTreeNode;
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
@@ -25,7 +26,7 @@ import com.jmatio.types.MLStructure;
 
 public class KMeansTree implements ClusterTree {
 
-    final static Logger logger = Logger.getLogger(KMeansTree.class);
+    final static Logger logger = LoggerFactory.getLogger( KMeansTree.class );
 
     private long id;
 

@@ -1,7 +1,6 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework;
 
 
-import br.edu.ufu.comp.pos.db.imageretrieval.commons.CustomFileAppender;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
@@ -9,7 +8,9 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.time.StopWatch;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -21,7 +22,7 @@ import java.util.Map;
 @Setter
 public class Result {
 
-    final static Logger logger = Logger.getLogger( Result.class );
+    final static Logger logger = LoggerFactory.getLogger( Result.class );
 
     public static Result instance = new Result();
 
@@ -42,7 +43,7 @@ public class Result {
 
     private File datasetPath;
 
-    private int execution = 1;
+    private int execution = 0;
 
 
     public void elapsedTime( String key, Runnable object ) {
@@ -98,11 +99,11 @@ public class Result {
         if ( !resultsDir.exists() ) {
             resultsDir.mkdirs();
         }
-        File resultFile = new File( resultsDir, CustomFileAppender.datePart + "-" + execution + ".json" );
+        File resultFile = new File( resultsDir, MDC.get( "launcher-date" ) + "-" + execution + ".json" );
+        logger.info( "result file saved in " + resultFile.getAbsolutePath() );
         FileWriter writer = new FileWriter( resultFile );
         new GsonBuilder().setPrettyPrinting().create().toJson( this, writer );
         writer.close();
-        logger.info( "result file saved in " + resultFile.getAbsolutePath() );
 
         this.generateMarkdownReport( resultFile.getAbsolutePath() );
 
@@ -173,6 +174,7 @@ public class Result {
         // "treeMemory" ).size() - 1 );
         // this.results.clear();
         this.execution++;
+        MDC.put( "log-id", MDC.get( "launcher-date" ) + "-" + execution );
     }
 
 }

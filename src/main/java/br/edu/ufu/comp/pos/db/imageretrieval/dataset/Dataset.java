@@ -3,17 +3,19 @@ package br.edu.ufu.comp.pos.db.imageretrieval.dataset;
 import java.io.File;
 import java.util.function.Consumer;
 
-import org.apache.log4j.Logger;
+import lombok.Getter;
+import lombok.Setter;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.MapCalculator;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.Sift;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class Dataset {
 
-    final static Logger logger = Logger.getLogger(Dataset.class);
+    final static Logger logger = LoggerFactory.getLogger( Dataset.class );
 
     private long trainSetSize;
 

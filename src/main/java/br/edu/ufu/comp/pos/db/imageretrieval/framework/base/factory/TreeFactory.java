@@ -1,6 +1,8 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory;
 
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree.CFTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
@@ -9,7 +11,7 @@ import br.edu.ufu.comp.pos.db.imageretrieval.framework.Result;
 
 public class TreeFactory {
 
-    final static Logger logger = Logger.getLogger(TreeFactory.class);
+    final static Logger logger = LoggerFactory.getLogger( TreeFactory.class );
 
     public ClusterTree create(String[] args) {
         String treeName = args[0];

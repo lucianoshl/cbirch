@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.AbstractTreeNode;
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
@@ -16,7 +17,7 @@ import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.Histograms
 
 public class Index {
 
-    final static Logger logger = Logger.getLogger(Index.class);
+    final static Logger logger = LoggerFactory.getLogger( Index.class );
 
     private ClusterTree tree;
     private Histograms histograms;

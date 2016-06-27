@@ -1,5 +1,6 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,14 +9,15 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.time.StopWatch;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 
 public class Histograms {
 
-	final static Logger logger = Logger.getLogger(Histograms.class);
+    final static Logger logger = LoggerFactory.getLogger( Histograms.class );
 
 	Map<Image, Histogram> content = new HashMap<Image, Histogram>();
 

@@ -19,7 +19,8 @@ import java.util.function.Consumer;
 import lombok.SneakyThrows;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
@@ -36,7 +37,7 @@ public class OxfordDataset extends Dataset {
             .negative(asList("absent"))//
             .build();
 
-    final static Logger logger = Logger.getLogger(OxfordDataset.class);
+    final static Logger logger = LoggerFactory.getLogger( OxfordDataset.class );
 
     private File binaryFile;
 

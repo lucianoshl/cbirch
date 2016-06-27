@@ -23,16 +23,15 @@
 
 package br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import net.sourceforge.sizeof.SizeOf;
-
-import org.apache.log4j.Logger;
-
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.AbstractTreeNode;
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
+import net.sourceforge.sizeof.SizeOf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * This is an implementation of the BIRCH clustering algorithm described in:
@@ -46,7 +45,7 @@ import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
  */
 public class CFTree implements ClusterTree {
 
-    final static Logger logger = Logger.getLogger(CFTree.class);
+    final static Logger logger = LoggerFactory.getLogger( CFTree.class );
 
     /**
      * Used when computing if the tree is reaching memory limit
