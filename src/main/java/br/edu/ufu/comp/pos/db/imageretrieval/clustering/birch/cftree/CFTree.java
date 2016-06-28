@@ -45,6 +45,8 @@ import java.util.Arrays;
  */
 public class CFTree implements ClusterTree {
 
+    public static int total;
+
     final static Logger logger = LoggerFactory.getLogger( CFTree.class );
 
     /**

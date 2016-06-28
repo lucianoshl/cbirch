@@ -55,25 +55,6 @@ public class Result {
         elapsedTime.put( key, stopWatch.getTime() );
     }
 
-
-    // public static void registerBirch( Double threshould, Integer words, long
-    // treeSize ) {
-    //
-    // Result.statistic( "threshold", threshould );
-    // Result.statistic( "words", words );
-    // Result.statistic( "treeMemory", treeSize );
-    // }
-
-    // public static void statistic( String name, Object value ) {
-    //
-    // List< Object > list = instance.statistics.get( name );
-    // if ( list == null ) {
-    // list = new ArrayList< Object >();
-    // instance.statistics.put( name, list );
-    // }
-    // list.add( value );
-    // }
-
     public static void extraInfo( String name, Object value ) {
 
         logger.info( name + ": " + value );
