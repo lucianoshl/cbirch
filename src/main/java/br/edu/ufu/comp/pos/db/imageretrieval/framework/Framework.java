@@ -30,7 +30,7 @@ public class Framework {
             tree.build( dataset );
         } );
 
-        int runnings = 2;
+        int runnings = 3;
 
         for ( int i = 0; i < runnings; i++ ) {
             result.newExecution();

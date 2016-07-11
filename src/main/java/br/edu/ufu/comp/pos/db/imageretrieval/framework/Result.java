@@ -6,6 +6,8 @@ import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
@@ -14,6 +16,7 @@ import org.slf4j.MDC;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +33,7 @@ public class Result {
 
     private int vocabularySize;
 
-    private Map< String, Long > elapsedTime = new HashMap< String, Long >();
+    private Map< String, Double > elapsedTime = new HashMap< String, Double >();
 
     // private Map< String, List< Object >> statistics = new HashMap< String,
     // List< Object >>();
@@ -52,8 +55,9 @@ public class Result {
         stopWatch.start();
         object.run();
         stopWatch.stop();
-        elapsedTime.put( key, stopWatch.getTime() );
+        elapsedTime.put( key, new Long( stopWatch.getTime() ).doubleValue() / 1000d / 60d / 60d );
     }
+
 
     public static void extraInfo( String name, Object value ) {
 
@@ -80,6 +84,9 @@ public class Result {
         if ( !resultsDir.exists() ) {
             resultsDir.mkdirs();
         }
+
+        this.createCSVTable( resultsDir );
+
         File resultFile = new File( resultsDir, MDC.get( "launcher-date" ) + "-" + execution + ".json" );
         logger.info( "result file saved in " + resultFile.getAbsolutePath() );
         FileWriter writer = new FileWriter( resultFile );
@@ -88,6 +95,30 @@ public class Result {
 
         this.generateMarkdownReport( resultFile.getAbsolutePath() );
 
+    }
+
+
+    @SneakyThrows
+    private void createCSVTable( File resultsDir ) {
+
+        File file = new File( resultsDir, "results.csv" );
+        if ( !file.exists() ) {
+            file.createNewFile();
+            FileUtils.write( file, "id;tree;bf,memory;dataset;execution;vocabulary;map\n", true );
+        }
+
+        String line = StringUtils.join( //
+            new Object[] { MDC.get( "launcher-date" ),//
+                this.extraInfo.get( "Tree" ),//
+                this.extraInfo.get( "Branching factor" ),//
+                this.extraInfo.get( "Memory" ),//
+                this.extraInfo.get( "Dataset name" ),//
+                execution,//
+                this.getVocabularySize(),//
+                this.getMap() },//
+            ";" );
+
+        FileUtils.writeLines( file, Arrays.asList( line ), true );
     }
 
 
@@ -143,7 +174,6 @@ public class Result {
     // this.results.add( result );
     // return result;
     // }
-
 
     public void newExecution() {
 

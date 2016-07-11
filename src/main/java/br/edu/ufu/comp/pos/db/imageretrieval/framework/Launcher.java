@@ -41,6 +41,7 @@ public class Launcher {
             callExperiment( args );
         } catch ( Exception e ) {
             result.setError( e );
+            e.printStackTrace();
         } finally {
             // result.save();
         }
