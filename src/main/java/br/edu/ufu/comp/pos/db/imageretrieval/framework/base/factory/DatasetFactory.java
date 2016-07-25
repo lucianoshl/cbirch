@@ -53,6 +53,10 @@ public class DatasetFactory {
         Result.instance.setDatasetPath( datasetPath );
         Dataset dataset = null;
 
+        if (!datasetPath.exists()){
+            throw new IllegalStateException(String.format("Caminho do dataset %s não existe",datasetPath));
+        }
+
         if ( new File( datasetPath, "README2.txt" ).exists() ) {
             Result.extraInfo( "Dataset class", OxfordDataset.class );
             dataset = OxfordDataset.createFromBase( workspace, datasetName );
