@@ -49,7 +49,12 @@ public class SiftExtractor {
     };
 
     private static String runExternalLowe(File file) throws IOException, InterruptedException {
-        String lowePath = SiftExtractor.class.getClassLoader().getResource("binaries/siftLowe").getFile();
+
+        String binFile = "binaries/siftLowe";
+        if (System.getProperty("os.name").startsWith("Windows")){
+            binFile = "binaries/siftWin32.exe";
+        }
+        String lowePath = SiftExtractor.class.getClassLoader().getResource(binFile).getFile();
 
         Set perms = new HashSet();
         perms.add( PosixFilePermission.OWNER_EXECUTE );
