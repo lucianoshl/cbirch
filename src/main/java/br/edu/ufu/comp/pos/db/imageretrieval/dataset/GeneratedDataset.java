@@ -8,12 +8,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.commons.Utils;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.OxfordImage;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class GeneratedDataset extends Dataset {
 
@@ -108,8 +110,12 @@ public class GeneratedDataset extends Dataset {
     }
 
     @Override
+    @SneakyThrows
     public String quality(Image query, String imgName) {
-        throw new UnsupportedOperationException();
+
+        File gtFiles = new File(base,"gt_files");
+        String[] itens = FileUtils.readFileToString(new File(gtFiles, query.getImage().getName() + ".txt")).split("\n");
+        return ArrayUtils.contains(itens,imgName) ? "good" : "absent";
     }
 
     protected File[] listImagesFiles() {

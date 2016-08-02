@@ -14,7 +14,10 @@ public class OxfordMapCalculator implements MapCalculator {
 
     public double calc(List<String> qualities) {
         qualities = new ArrayList<>(qualities);
-        qualities.removeAll(ignore);
+        if (ignore != null){
+            qualities.removeAll(ignore);
+        }
+
 
         int positives = 0;
         int total = qualities.size();

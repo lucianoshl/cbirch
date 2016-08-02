@@ -60,8 +60,8 @@ public abstract class DatasetGenerator {
             byte[] sifts = SiftExtractor.extract(file);
 
 
-            writer.write(file.getName() + " " + sifts.length/128);
-            
+            writer.write(file.getName() + " " + sifts.length / 128);
+
             FileUtils.writeByteArrayToFile(binFile, sifts, true);
 
             if (i + 1 < images.length) {
@@ -81,7 +81,12 @@ public abstract class DatasetGenerator {
 
         File[] listImages = originImageFolder.listFiles();
         for (File originImage : listImages) {
-            convertImage(originImage, "pgm");
+            if (originImage.getName().endsWith(".pgm")) {
+                FileUtils.copyFile(originImage,new File(dataset.images,originImage.getName()));
+            } else {
+                convertImage(originImage, "pgm");
+            }
+
         }
 
     }

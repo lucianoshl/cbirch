@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -21,6 +22,7 @@ public class SiftExtractor {
         String output = runExternalLowe(file);
 
         Scanner scanner = new Scanner(output);
+        scanner.useLocale(Locale.US);
 
         int totalSift = scanner.nextInt();
 
@@ -28,20 +30,18 @@ public class SiftExtractor {
 
         int siftCount = -1;
 
-//        byte[][] result = new byte[totalSift][];
         byte[] result2 = new byte[totalSift*128];
         
         
 
         while (scanner.hasNextDouble()) {
             siftCount++;
-            scanner.nextDouble();
             scanner.nextLine();
-//            result[siftCount] = new byte[128];
             for (int i = 0; i < 128; i++) {
-                result2[siftCount * 128 + i] = (byte) scanner.nextInt();
-//                System.out.println(siftCount * 128 + i);
+                byte b = (byte) scanner.nextInt();
+                result2[siftCount * 128 + i] = b;
             }
+            scanner.nextLine();
         }
         scanner.close();
 

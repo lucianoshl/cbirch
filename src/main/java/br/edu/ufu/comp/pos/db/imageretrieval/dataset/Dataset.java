@@ -3,6 +3,7 @@ package br.edu.ufu.comp.pos.db.imageretrieval.dataset;
 import java.io.File;
 import java.util.function.Consumer;
 
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.OxfordMapCalculator;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,9 +14,16 @@ import br.edu.ufu.comp.pos.db.imageretrieval.dataset.image.Image;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.MapCalculator;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.Sift;
 
+import static java.util.Arrays.asList;
+
 public abstract class Dataset {
 
     final static Logger logger = LoggerFactory.getLogger( Dataset.class );
+
+    private static final OxfordMapCalculator MAP_CALCULATOR = OxfordMapCalculator.builder()//
+            .positive( asList( "ok", "good" ) )//
+            .negative( asList( "absent" ) )//
+            .build();
 
     private long trainSetSize;
 
@@ -72,7 +80,7 @@ public abstract class Dataset {
     public abstract String quality(Image query, String imgName);
 
     public MapCalculator getMapCalculator() {
-        throw new UnsupportedOperationException();
+        return MAP_CALCULATOR;
     }
 
     public long getFeaturesSize() {
