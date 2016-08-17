@@ -1,6 +1,7 @@
 package cbirch.dataset;
 
 import cbirch.sift.LoweSiftExtractor;
+import cbirch.sift.OpenCVExtractor;
 import org.junit.Test;
 
 /**
@@ -11,7 +12,7 @@ public class DatasetGeneratorTest {
     @Test
     public void testGenerate(){
         System.setProperty("cbirch_workspace","/home/lucianos/pesquisa/workspace");
-        new DatasetGenerator(new LoweSiftExtractor(),"leeds-butterfly-dataset-full").generate();
+        new DatasetGenerator(new OpenCVExtractor(),"leeds-butterfly-dataset-full").generate();
     }
 
 }

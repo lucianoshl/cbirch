@@ -38,7 +38,8 @@ public class DatasetGenerator {
     public DatasetGenerator( SiftExtractor extractor, String rawName ) {
         this.extractor = extractor;
         this.workspaceFolder = new File( System.getProperty( "cbirch_workspace" ) );
-        String dsname = String.format( "%s-%s", rawName, extractor.identifier() );
+        String extension = extractor.supportedTypes().get( 0 );
+        String dsname = String.format( "%s-%s-%s", rawName, extension, extractor.identifier() );
         this.datasetFolder = new File( new File( this.workspaceFolder, "datasets" ), dsname );
         this.imagesFolder = new File( new File( this.workspaceFolder, "raw-datasets" ), rawName );
         this.targetImageFolder = new File( this.datasetFolder, "images" );
