@@ -17,6 +17,17 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.uncommons.maths</groupId>
+            <artifactId>uncommons-maths</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.6.1</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.7</version>
@@ -47,11 +58,6 @@
             <version>2.4</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-math3</artifactId>
-            <version>3.6</version>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
@@ -78,6 +84,7 @@
             <artifactId>jmagick</artifactId>
             <version>6.6.9</version>
         </dependency>
+
         <dependency>
             <groupId>nu.pattern</groupId>
             <artifactId>opencv</artifactId>

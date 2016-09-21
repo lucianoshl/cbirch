@@ -11,8 +11,8 @@ public class DatasetGeneratorTest {
 
     @Test
     public void testGenerate(){
-        System.setProperty("cbirch_workspace","/home/lucianos/pesquisa/workspace");
-        new DatasetGenerator(new OpenCVExtractor(),"leeds-butterfly-dataset-full").generate();
+        System.setProperty("cbirch_workspace","/home/void/workspace/mestrado/workspace");
+        new DatasetGenerator(new LoweSiftExtractor(),"leedsbutterfly").generate();
     }
 
 }

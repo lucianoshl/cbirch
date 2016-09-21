@@ -131,6 +131,11 @@ public class SizeOf {
             Class<? extends Object> clazz = o.getClass();
             Field[] fields = getFields(clazz);
             for (Field f : fields) {
+
+                if (f.getName().equals("parent")){
+                    continue;
+                }
+
                 f.setAccessible(true);
                 Object obj = f.get(o);
                 if (isComputable(f))

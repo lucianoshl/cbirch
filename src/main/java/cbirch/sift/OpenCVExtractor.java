@@ -28,8 +28,8 @@ public class OpenCVExtractor implements SiftExtractor {
 
     @Override
     public int[] extract( File image ) {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Mat objectImage = Highgui.imread(image.getAbsolutePath(), Highgui.CV_LOAD_IMAGE_COLOR);
+//        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        Mat objectImage = Highgui.imread(image.getAbsolutePath(), Highgui.CV_LOAD_IMAGE_GRAYSCALE);
 
         MatOfKeyPoint objectKeyPoints = new MatOfKeyPoint();
         FeatureDetector featureDetector = FeatureDetector.create(FeatureDetector.SIFT);

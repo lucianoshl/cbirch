@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static cbirch.utils.ImageUtils.convert;
 import static cbirch.utils.ImageUtils.getExtension;
@@ -113,6 +114,9 @@ public class DatasetGenerator {
 
         logger.info( "Copying images: start" );
         String[] list = imagesFolder.list();
+        if (list == null || list.length == 0){
+            throw new IllegalArgumentException(String.format("A pasta %s não possui nenhuma imagem",imagesFolder));
+        }
         Arrays.sort( list );
 
         if ( targetImageFolder.list().length != 0 && targetImageFolder.list().length == list.length ) {

@@ -140,4 +140,14 @@ public class GeneratedDataset extends Dataset {
         return result.toArray(new File[result.size()]);
     }
 
+    public List<double[]> trainSet() {
+        List<double[]> result =  new ArrayList<>();
+        scanTrainSet((c)-> {
+            c.scan((sift) -> {
+                result.add(sift);
+            });
+        });
+
+        return result;
+    }
 }
