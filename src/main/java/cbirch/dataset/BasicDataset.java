@@ -6,6 +6,7 @@ import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.MapCalculator;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.OxfordMapCalculator;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.Sift;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -15,10 +16,13 @@ import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import static java.util.Arrays.asList;
 
@@ -26,7 +30,7 @@ import static java.util.Arrays.asList;
 /**
  * Created by void on 9/11/16.
  */
-public class BasicDataset implements Dataset {
+public class BasicDataset extends Dataset {
 
     final Logger logger = LoggerFactory.getLogger( BasicDataset.class );
 
@@ -42,8 +46,6 @@ public class BasicDataset implements Dataset {
 
     private final File gtFolder;
 
-    private Object allFeatures;
-
 
     public BasicDataset( String datasetName ) {
         File base = Utils.getDatesetPath( System.getenv().get( "cbirch_workspace" ), datasetName );
@@ -51,20 +53,6 @@ public class BasicDataset implements Dataset {
         this.siftBinary = new File( base, "sift.binary" );
         this.gtFolder = new File( base, "gt_files" );
     }
-
-
-    @SneakyThrows
-    public double[][] getAllFeatures() {
-
-        double[][] result = new double[ (int) ( this.siftBinary.length() / 128 ) ][ 128 ];
-
-        scanAllFeatures( ( sift, position ) -> {
-            result[ position ] = sift;
-        } );
-
-        return result;
-    }
-
 
     @Override
     @SneakyThrows
@@ -74,35 +62,27 @@ public class BasicDataset implements Dataset {
 
         RandomAccessFile randomAccessFile = new RandomAccessFile( this.siftBinary, "r" );
 
-        int[] siftOrder = new int[totalSifts];
+        List<Integer> siftOrder = new ArrayList<>();
 
-        for (int i = 0; i < siftOrder.length; i++) {
-            siftOrder[i] = i;
+        for (int i = 0; i < totalSifts; i++) {
+            siftOrder.add(i);
         }
+
+        siftOrder = siftOrderReader.apply(siftOrder);
 
         Sift sift = new SiftScaled();
 
         logger.debug( "Reading binary file: start" );
         byte[] buffer = new byte[ 128 ];
 
-        for (int i = 0; i < siftOrder.length; i++) {
-            randomAccessFile.seek(siftOrder[i] * buffer.length);
+        for (int i = 0; i < siftOrder.size(); i++) {
+            randomAccessFile.seek(siftOrder.get(i) * buffer.length);
             randomAccessFile.read( buffer );
             double[] extracted = sift.extract( buffer );
             lambda.accept( extracted, i );
             logger.trace( Arrays.toString( extracted ) );
             logger.trace( String.format( "%s/%s", i + 1, extracted.length ) );
         }
-
-
-
-//        for ( int i = 0; i < totalSifts; i++ ) {
-//            randomAccessFile.read( buffer );
-//            double[] extracted = sift.extract( buffer );
-//            lambda.accept( extracted, i );
-//            logger.trace( Arrays.toString( extracted ) );
-//            logger.trace( String.format( "%s/%s", i + 1, extracted.length ) );
-//        }
 
         logger.debug( "Reading binary file: end" );
     }

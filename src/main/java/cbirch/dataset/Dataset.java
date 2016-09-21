@@ -2,30 +2,59 @@ package cbirch.dataset;
 
 
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.MapCalculator;
+import lombok.Setter;
+import lombok.SneakyThrows;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 
 /**
  * Created by void on 9/11/16.
  */
-public interface Dataset {
+public abstract class Dataset {
 
-    double[][] getAllFeatures();
+    @Setter
+    Function< List< Integer >, List< Integer > > siftOrderReader = ( original ) -> {
+        Collections.shuffle( original );
+        return original;
+    };
 
-    void scanAllFeatures( BiConsumer< double[],Integer > lambda );
 
-    int getTotalFeatures();
+    public abstract void scanAllFeatures( BiConsumer< double[], Integer > lambda );
 
-    void scanAllImages( BiConsumer< Image,Integer > lambda );
 
-    String[] getTestClasses();
+    public abstract int getTotalFeatures();
 
-    Image[] getQueries(String testClass);
 
-    String quality(String clazz, Image query, Image result);
+    public abstract void scanAllImages( BiConsumer< Image, Integer > lambda );
 
-    MapCalculator getMapCalculator();
 
-    int getTotalImages();
+    public abstract String[] getTestClasses();
+
+
+    public abstract Image[] getQueries( String testClass );
+
+
+    public abstract String quality( String clazz, Image query, Image result );
+
+
+    public abstract MapCalculator getMapCalculator();
+
+
+    public abstract int getTotalImages();
+
+    @SneakyThrows
+    public double[][] getAllFeatures() {
+
+        double[][] result = new double[ this.getTotalFeatures() ][ 128 ];
+
+        scanAllFeatures( ( sift, position ) -> {
+            result[ position ] = sift;
+        } );
+
+        return result;
+    }
 }

@@ -54,6 +54,8 @@ public class FrameworkTest {
         Framework framework = new Framework();
 
         Dataset dataset = new BasicDataset( "leedsbutterfly-pgm-lowe" );
+        dataset.setSiftOrderReader((list) -> list);
+
         ClusteringMethod cfTree = new CFTree( 75, 0, distance, 500l, true );
 
         double mAP = framework.run( dataset, cfTree, 4 );
