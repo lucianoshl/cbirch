@@ -85,11 +85,11 @@
             <version>6.6.9</version>
         </dependency>
 
-        <dependency>
-            <groupId>nu.pattern</groupId>
-            <artifactId>opencv</artifactId>
-            <version>2.4.9-4</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>nu.pattern</groupId>-->
+            <!--<artifactId>opencv</artifactId>-->
+            <!--<version>2.4.9-4</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>
