@@ -4,6 +4,7 @@ package cbirch.dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +19,9 @@ import java.util.function.Consumer;
 public class Image {
 
     @Getter
+    private final int id;
+
+    @Getter
     private final String imageName;
 
     private final long startPosition;
@@ -29,7 +33,8 @@ public class Image {
     private final File siftBinary;
 
 
-    public Image( String imageName, long startPosition, long endPosition, int totalSifts, File siftBinary ) {
+    public Image(int id, String imageName, long startPosition, long endPosition, int totalSifts, File siftBinary) {
+        this.id = id;
         this.imageName = imageName;
         this.startPosition = startPosition;
         this.endPosition = endPosition;

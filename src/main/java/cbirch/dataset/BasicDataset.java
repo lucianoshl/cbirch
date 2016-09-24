@@ -109,7 +109,7 @@ public class BasicDataset extends Dataset {
             long endPosition = Long.valueOf( information[ 2 ] );
             int totalSifts = Integer.valueOf( information[ 3 ] );
 
-            Image image = new Image( imageName, startPosition, endPosition, totalSifts, siftBinary );
+            Image image = new Image( i ,imageName, startPosition, endPosition, totalSifts, siftBinary );
             lambda.accept( image, i );
         }
     }

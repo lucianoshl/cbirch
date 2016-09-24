@@ -29,7 +29,7 @@ public class Framework {
         logger.info("Build vocabulary: end");
 
         logger.info("Build index: start");
-        Index index = new Index(dataset);
+        Index index = new TreeIndex(dataset);
         index.build(clustering);
         logger.info("Build index: end");
 
