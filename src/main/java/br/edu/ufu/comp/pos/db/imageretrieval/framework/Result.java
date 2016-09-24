@@ -122,7 +122,6 @@ public class Result {
     }
 
 
-    @SneakyThrows
     private void generateMarkdownReport( String absolutePath ) {
 
         // String script =
