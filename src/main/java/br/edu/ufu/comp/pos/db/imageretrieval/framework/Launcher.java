@@ -8,6 +8,7 @@ import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory.TreeFactory;
 import cbirch.clustering.ClusteringMethod;
 import cbirch.clustering.birch.CFTree;
 import cbirch.dataset.BasicDataset;
+import cbirch.dataset.OxfordDataset;
 import org.apache.commons.math3.ml.distance.EuclideanDistance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,7 @@ public class Launcher {
 
         cbirch.framework.Framework framework = new cbirch.framework.Framework();
 
-        cbirch.dataset.Dataset dataset = new BasicDataset( "leedsbutterfly-pgm-lowe" );
+        cbirch.dataset.Dataset dataset = new OxfordDataset();
         dataset.setSiftOrderReader((list) -> list);
 
         ClusteringMethod cfTree = new CFTree( 75, 0, new EuclideanDistance(), 4 * 1024, true );
