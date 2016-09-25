@@ -29,7 +29,8 @@ public class Framework {
         logger.info("Build vocabulary: end");
 
         logger.info("Build index: start");
-        Index index = new TreeIndex(dataset);
+//        Index index = new TreeIndex(dataset);
+        Index index = new HistogramIndex(dataset);
         index.build(clustering);
         logger.info("Build index: end");
 
