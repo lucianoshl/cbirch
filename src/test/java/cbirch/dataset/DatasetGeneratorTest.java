@@ -11,8 +11,7 @@ public class DatasetGeneratorTest {
 
     @Test
     public void testGenerate(){
-        System.setProperty("cbirch_workspace","/home/void/workspace/mestrado/workspace");
-        new DatasetGenerator(new LoweSiftExtractor(),"leedsbutterfly").generate();
+//        new DatasetGenerator(new LoweSiftExtractor(),"leedsbutterfly").generate();
     }
 
 }
