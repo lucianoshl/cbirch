@@ -93,7 +93,7 @@ public class BasicDataset extends Dataset {
             double[] extracted = sift.extract( buffer );
             lambda.accept( extracted, i );
             logger.trace( Arrays.toString( extracted ) );
-            logger.info( String.format( "%s/%s", i + 1, siftOrder.size() ) );
+            logger.trace( String.format( "%s/%s", i + 1, siftOrder.size() ) );
         }
 
         logger.debug( "Reading binary file: end" );
