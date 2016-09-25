@@ -40,19 +40,31 @@ public class BasicDataset extends Dataset {
         .negative( asList( "absent" ) )//
         .build();
 
-    private final File siftPositions;
+    protected File siftPositions;
 
-    private final File siftBinary;
+    protected File siftBinary;
 
-    private final File gtFolder;
+    protected File gtFolder;
 
 
     public BasicDataset( String datasetName ) {
+        createDataSource( datasetName, "sift.binary", "sift.positions" );
+    }
+
+
+    protected BasicDataset( String datasetName, String siftBinaryFileName, String siftPositionsFileName ) {
+        createDataSource( datasetName, siftBinaryFileName, siftPositionsFileName );
+    }
+
+
+    private void createDataSource( String datasetName, String siftBinaryFileName, String siftPositionsFileName ) {
+
         File base = Utils.getDatesetPath( System.getenv().get( "cbirch_workspace" ), datasetName );
-        this.siftPositions = new File( base, "sift.positions" );
-        this.siftBinary = new File( base, "sift.binary" );
+        this.siftPositions = new File( base, siftPositionsFileName );
+        this.siftBinary = new File( base, siftBinaryFileName );
         this.gtFolder = new File( base, "gt_files" );
     }
+
 
     @Override
     @SneakyThrows
@@ -62,26 +74,26 @@ public class BasicDataset extends Dataset {
 
         RandomAccessFile randomAccessFile = new RandomAccessFile( this.siftBinary, "r" );
 
-        List<Integer> siftOrder = new ArrayList<>();
+        List< Integer > siftOrder = new ArrayList<>();
 
-        for (int i = 0; i < totalSifts; i++) {
-            siftOrder.add(i);
+        for ( int i = 0; i < totalSifts; i++ ) {
+            siftOrder.add( i );
         }
 
-        siftOrder = siftOrderReader.apply(siftOrder);
+        siftOrder = siftOrderReader.apply( siftOrder );
 
         Sift sift = new SiftScaled();
 
         logger.debug( "Reading binary file: start" );
         byte[] buffer = new byte[ 128 ];
 
-        for (int i = 0; i < siftOrder.size(); i++) {
-            randomAccessFile.seek(siftOrder.get(i) * buffer.length);
+        for ( int i = 0; i < siftOrder.size(); i++ ) {
+            randomAccessFile.seek( siftOrder.get( i ) * buffer.length );
             randomAccessFile.read( buffer );
             double[] extracted = sift.extract( buffer );
             lambda.accept( extracted, i );
             logger.trace( Arrays.toString( extracted ) );
-            logger.trace( String.format( "%s/%s", i + 1, extracted.length ) );
+            logger.info( String.format( "%s/%s", i + 1, siftOrder.size() ) );
         }
 
         logger.debug( "Reading binary file: end" );
@@ -109,7 +121,7 @@ public class BasicDataset extends Dataset {
             long endPosition = Long.valueOf( information[ 2 ] );
             int totalSifts = Integer.valueOf( information[ 3 ] );
 
-            Image image = new Image( i ,imageName, startPosition, endPosition, totalSifts, siftBinary );
+            Image image = new Image( i, imageName, startPosition, endPosition, totalSifts, siftBinary );
             lambda.accept( image, i );
         }
     }
@@ -183,6 +195,7 @@ public class BasicDataset extends Dataset {
     @Override
     @SneakyThrows
     public int getTotalImages() {
-        return FileUtils.readLines(this.siftPositions).size();
+
+        return FileUtils.readLines( this.siftPositions ).size();
     }
 }
