@@ -27,12 +27,14 @@ public class Framework {
         logger.info("Build vocabulary: start");
         clustering.build(dataset);
         logger.info("Build vocabulary: end");
+        System.gc();
 
         logger.info("Build index: start");
 //        Index index = new TreeIndex(dataset);
         Index index = new HistogramIndex(dataset);
         index.build(clustering);
         logger.info("Build index: end");
+        System.gc();
 
         logger.info("Testing model: start");
         String[] testClasses = dataset.getTestClasses();
@@ -43,6 +45,7 @@ public class Framework {
             List<Double> precisions = new ArrayList<Double>();
             for (Image query : queries) {
                 Image[] results = index.find(query,k);
+                System.gc();
                 List<String> qualities = new ArrayList<>();
                 for (Image result : results) {
                     qualities.add(dataset.quality(testClass,query,result));
