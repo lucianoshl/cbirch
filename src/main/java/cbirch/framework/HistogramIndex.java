@@ -5,6 +5,7 @@ import cbirch.clustering.ClusteringMethod;
 import cbirch.clustering.TreeNode;
 import cbirch.dataset.Dataset;
 import cbirch.dataset.Image;
+import cbirch.utils.MemoryUtils;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 /**
  * Created by void on 9/12/16.
  */
-public class HistogramIndex extends Index {
+public class HistogramIndex extends Index< Set< Image > > {
 
     final static Logger logger = LoggerFactory.getLogger( HistogramIndex.class );
 
@@ -84,6 +85,7 @@ public class HistogramIndex extends Index {
     @SneakyThrows
     public Image[] find( Image query, int k ) {
 
+        logger.info("Find image: start");
         int[] histogram = SerializationUtils.deserialize( FileUtils.readFileToByteArray( histograms.get( query ) ) );
 
         double[] queryHistogram = normalize( histogram );
@@ -97,12 +99,17 @@ public class HistogramIndex extends Index {
         }
 
         // Ordenação deve ser decrescente por se for perto de 1 é mais similar
+        logger.info("Sort disk list: start");
+        MemoryUtils.logMemory("Disk sort");
         sortList.sort( ( a, b ) -> {
             return b.getSecond().compareTo( a.getSecond() );
         } );
+        logger.info("Sort disk list: end");
 
         List< Image > listResult = sortList.subList( 0, k ).stream().map( ( a ) -> a.getFirst() ).collect( Collectors.toList() );
-        return listResult.toArray( new Image[ listResult.size() ] );
+        Image[] result = listResult.toArray(new Image[listResult.size()]);
+        logger.info("Find image: end");
+        return result;
     }
 
 

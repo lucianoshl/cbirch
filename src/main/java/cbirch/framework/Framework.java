@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import cbirch.utils.MemoryUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,14 +28,19 @@ public class Framework {
         logger.info("Build vocabulary: start");
         clustering.build(dataset);
         logger.info("Build vocabulary: end");
+
+        MemoryUtils.logMemory("before create tree");
         System.gc();
+        MemoryUtils.logMemory("after create tree gc()");
 
         logger.info("Build index: start");
 //        Index index = new TreeIndex(dataset);
         Index index = new HistogramIndex(dataset);
         index.build(clustering);
         logger.info("Build index: end");
+        MemoryUtils.logMemory("before create index");
         System.gc();
+        MemoryUtils.logMemory("after create tree gc()");
 
         logger.info("Testing model: start");
         String[] testClasses = dataset.getTestClasses();

@@ -39,70 +39,70 @@ public class OxfordDatasetTest {
 
     @Test
     public void getTotalFeatures()
-        throws Exception {
+            throws Exception {
 
-        Assert.assertEquals( 16334970, oxfordDataset.getTotalFeatures() );
+        Assert.assertEquals(16334970, oxfordDataset.getTotalFeatures());
     }
 
 
     @Test
     public void scanAllImages()
-        throws Exception {
+            throws Exception {
 
-        final int[] total = { 0 };
+        final int[] total = {0};
 
-        oxfordDataset.scanAllImages( ( image, i ) -> total[ 0 ]++ );
+        oxfordDataset.scanAllImages((image, i) -> total[0]++);
 
-        TestCase.assertEquals( total[ 0 ], oxfordDataset.getTotalImages() );
+        TestCase.assertEquals(total[0], oxfordDataset.getTotalImages());
     }
 
 
     @Test
     public void getTestClasses()
-        throws Exception {
+            throws Exception {
 
         String[] result = oxfordDataset.getTestClasses();
-        String[] expected = new String[] { "all_souls", "ashmolean", "balliol", "bodleian", "christ_church", "cornmarket", "hertford", "keble", "magdalen",
-            "pitt_rivers", "radcliffe_camera" };
+        String[] expected = new String[]{"all_souls", "ashmolean", "balliol", "bodleian", "christ_church", "cornmarket", "hertford", "keble", "magdalen",
+                "pitt_rivers", "radcliffe_camera"};
 
-        Arrays.sort( expected );
-        Arrays.sort( result );
+        Arrays.sort(expected);
+        Arrays.sort(result);
 
-        TestCase.assertTrue( Arrays.equals( expected, result ) );
+        TestCase.assertTrue(Arrays.equals(expected, result));
     }
 
 
     @Test
     public void getQueries()
-        throws Exception {
+            throws Exception {
 
         String[] testClasses = oxfordDataset.getTestClasses();
-        for ( int i = 0; i < testClasses.length; i++ ) {
-            Image[] queries = oxfordDataset.getQueries( testClasses[ i ] );
-            System.out.println( Arrays.toString( queries ) );
+        for (int i = 0; i < testClasses.length; i++) {
+            Image[] queries = oxfordDataset.getQueries(testClasses[i]);
+            System.out.println(Arrays.toString(queries));
         }
     }
 
 
     @Test
     public void quality()
-        throws Exception {
+            throws Exception {
 
-        String clazz = oxfordDataset.getTestClasses()[ 0 ];
+        String clazz = oxfordDataset.getTestClasses()[0];
 
-        Image query = oxfordDataset.getQueries( clazz )[ 0 ];
+        Image query = oxfordDataset.getQueries(clazz)[0];
 
-        Image all_souls_000220 = oxfordDataset.cache().get( "all_souls_000220" );
+        Image all_souls_000220 = oxfordDataset.cache().get("all_souls_000220");
 
-        String quality = oxfordDataset.quality( clazz, query, all_souls_000220);
+        String quality = oxfordDataset.quality(clazz, query, all_souls_000220);
 
-        TestCase.assertEquals( "junk", quality );
+        TestCase.assertEquals("junk", quality);
     }
 
 
     @Test
     public void getMapCalculator()
-        throws Exception {
+            throws Exception {
 
         oxfordDataset.getMapCalculator();
     }
@@ -110,9 +110,18 @@ public class OxfordDatasetTest {
 
     @Test
     public void getTotalImages()
-        throws Exception {
+            throws Exception {
 
-        Assert.assertEquals( 5062, oxfordDataset.getTotalImages() );
+        Assert.assertEquals(5062, oxfordDataset.getTotalImages());
+    }
+
+    @Test
+    public void testQueryQte() {
+        String[] testClasses = oxfordDataset.getTestClasses();
+        TestCase.assertEquals(11, testClasses.length);
+        for (String testClass : testClasses) {
+            TestCase.assertEquals(5, oxfordDataset.getQueries(testClass).length);
+        }
     }
 
 }

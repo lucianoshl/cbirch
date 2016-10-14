@@ -15,11 +15,11 @@ import java.util.Set;
 /**
  * Created by void on 9/21/16.
  */
-public abstract class Index {
+public abstract class Index<IndexElement> {
 
     public final Dataset dataset;
 
-    protected final Map< TreeNode, Set< Image > > index = new HashMap<>();
+    protected final Map< TreeNode, IndexElement > index = new HashMap<>();
 
 
     protected Index( Dataset dataset ) {

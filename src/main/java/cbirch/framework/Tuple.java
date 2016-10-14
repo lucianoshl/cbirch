@@ -3,6 +3,7 @@ package cbirch.framework;
 
 import cbirch.dataset.Image;
 import lombok.Getter;
+import lombok.Setter;
 
 
 /**
@@ -14,7 +15,8 @@ public class Tuple< T, T1 > {
     private final T first;
 
     @Getter
-    private final T1 second;
+    @Setter
+    private T1 second;
 
 
     public Tuple( T first, T1 second ) {
