@@ -1,6 +1,10 @@
 package cbirch.utils;
 
 
+import cbirch.framework.HistogramIndex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.NumberFormat;
 
 
@@ -8,6 +12,8 @@ import java.text.NumberFormat;
  * Created by void on 10/14/16.
  */
 public class MemoryUtils {
+
+    final static Logger logger = LoggerFactory.getLogger( MemoryUtils.class );
 
     public static void logMemory( String moment ) {
 
