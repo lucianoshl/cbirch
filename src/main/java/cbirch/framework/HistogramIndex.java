@@ -88,15 +88,22 @@ public class HistogramIndex extends Index< Set< Image > > {
         logger.info("Find image: start");
         int[] histogram = SerializationUtils.deserialize( FileUtils.readFileToByteArray( histograms.get( query ) ) );
 
+        logger.info("Normalizing query: start");
         double[] queryHistogram = normalize( histogram );
+        logger.info("Normalizing query: end");
 
         List< Tuple< Image, Double > > sortList = new ArrayList< Tuple< Image, Double > >();
         Set< Image > images = this.histograms.keySet();
+
+        logger.info("Loading histograns: start");
+        int i = 0;
         for ( Image image : images ) {
+            logger.info(String.format("Loading %s/%s",images.size(),++i));
             int[] originHistogram = SerializationUtils.deserialize( FileUtils.readFileToByteArray( histograms.get( image ) ) );
             double[] normalizedHistogram = normalize( originHistogram );
             sortList.add( new Tuple( image, distance( normalizedHistogram, queryHistogram ) ) );
         }
+        logger.info("Loading histograns: start");
 
         // Ordenação deve ser decrescente por se for perto de 1 é mais similar
         logger.info("Sort disk list: start");

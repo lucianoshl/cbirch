@@ -1,8 +1,10 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.framework;
 
 
+import br.edu.ufu.comp.pos.db.imageretrieval.clustering.birch.cftree.CFTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
+import br.edu.ufu.comp.pos.db.imageretrieval.dataset.OxfordDataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory.DatasetFactory;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory.TreeFactory;
 import org.slf4j.Logger;
@@ -55,9 +57,13 @@ public class Launcher {
             throw new IllegalArgumentException( "tree name is required" );
         }
 
-        Dataset dataset = new DatasetFactory().create( args );
+        Dataset dataset = OxfordDataset.createFromBase( System.getenv().get( "cbirch_workspace" ), "oxford" );
 
-        ClusterTree tree = new TreeFactory().create( args );
+//        Dataset dataset = new DatasetFactory().create( args );
+
+        ClusterTree tree = new CFTree( 75, 0, 0, true );
+        ((CFTree)tree).setMemoryLimitMB(500);
+//        ClusterTree tree = new TreeFactory().create( args );
 
         int k = 4;
 
