@@ -5,11 +5,6 @@ import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory.DatasetFactory;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.factory.TreeFactory;
-import cbirch.clustering.ClusteringMethod;
-import cbirch.clustering.birch.CFTree;
-import cbirch.dataset.BasicDataset;
-import cbirch.dataset.OxfordDataset;
-import org.apache.commons.math3.ml.distance.EuclideanDistance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -34,17 +29,7 @@ public class Launcher {
     public static void main( String[] args )
         throws IOException {
 
-        cbirch.framework.Framework framework = new cbirch.framework.Framework();
-
-        cbirch.dataset.Dataset dataset = new OxfordDataset();
-        dataset.setSiftOrderReader((list) -> list);
-
-        ClusteringMethod cfTree = new CFTree( 75, 0, new EuclideanDistance(), 4 * 1024, true );
-
-        double mAP = framework.run( dataset, cfTree, 4 );
-        logger.info("map = " + mAP);
-
-//        exec( args );
+        exec( args );
     }
 
 
