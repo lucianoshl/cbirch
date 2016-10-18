@@ -61,9 +61,7 @@ public class Launcher {
 
 //        Dataset dataset = new DatasetFactory().create( args );
 
-        ClusterTree tree = new CFTree( 75, 0, 0, true );
-        ((CFTree)tree).setMemoryLimitMB(500);
-//        ClusterTree tree = new TreeFactory().create( args );
+        ClusterTree tree = new TreeFactory().create( args );
 
         int k = 4;
 
