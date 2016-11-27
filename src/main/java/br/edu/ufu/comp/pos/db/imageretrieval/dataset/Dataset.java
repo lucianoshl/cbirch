@@ -1,6 +1,7 @@
 package br.edu.ufu.comp.pos.db.imageretrieval.dataset;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.function.Consumer;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.OxfordMapCalculator;
@@ -58,6 +59,10 @@ public abstract class Dataset {
         });
 
     }
+
+    public abstract void scanSifts(Consumer<double[]> c);
+
+
 
     public void scanTestSet(String clazz, Consumer<Image> c) {
         this.testSet(clazz, c);

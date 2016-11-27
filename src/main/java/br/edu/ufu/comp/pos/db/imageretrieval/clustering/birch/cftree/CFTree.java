@@ -792,8 +792,8 @@ public class CFTree implements ClusterTree {
 
     @Override
     public void build(Dataset dataset) {
-        dataset.scanTrainSet((img) -> {
-            img.scan((sift) -> this.insertEntry(sift));
+        dataset.scanSifts((sift) -> {
+            this.insertEntry(sift);
         });
     }
 

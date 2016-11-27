@@ -110,6 +110,11 @@ public class GeneratedDataset extends Dataset {
     }
 
     @Override
+    public void scanSifts(Consumer<double[]> c) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     @SneakyThrows
     public String quality(Image query, String imgName) {
 

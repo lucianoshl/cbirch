@@ -3,19 +3,13 @@ package br.edu.ufu.comp.pos.db.imageretrieval.dataset;
 
 import static java.util.Arrays.asList;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.Sift;
+import lombok.Setter;
 import lombok.SneakyThrows;
 
 import org.apache.commons.io.FileUtils;
@@ -31,6 +25,12 @@ import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.SiftScaled;
 
 
 public class OxfordDataset extends Dataset {
+
+    @Setter
+    Function< List< Integer >, List< Integer > > siftOrderReader = (original ) -> {
+        Collections.shuffle( original );
+        return original;
+    };
 
     private static final OxfordMapCalculator MAP_CALCULATOR = OxfordMapCalculator.builder()//
         .ignore( asList( "junk" ) )//
@@ -327,6 +327,38 @@ public class OxfordDataset extends Dataset {
     public File getSiftTestFile() {
 
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    @SneakyThrows
+    public void scanSifts(Consumer<double[]> c) {
+        long totalSifts = this.getFeaturesSize();
+
+        RandomAccessFile randomAccessFile = new RandomAccessFile(this.binaryFile, "r");
+
+        List<Integer> siftOrder = new ArrayList<>();
+
+        for (int i = 0; i < totalSifts; i++) {
+            siftOrder.add(i);
+        }
+
+        siftOrder = siftOrderReader.apply(siftOrder);
+
+        Sift sift = new SiftScaled();
+
+        logger.debug("Reading binary file: start");
+        byte[] buffer = new byte[128];
+
+        for (int i = 0; i < siftOrder.size(); i++) {
+            randomAccessFile.seek(siftOrder.get(i) * buffer.length);
+            randomAccessFile.read(buffer);
+            double[] extracted = sift.extract(buffer);
+            c.accept(extracted);
+            logger.trace(Arrays.toString(extracted));
+            logger.trace(String.format("%s/%s", i + 1, siftOrder.size()));
+        }
+
+        logger.debug("Reading binary file: end");
     }
 
 }
