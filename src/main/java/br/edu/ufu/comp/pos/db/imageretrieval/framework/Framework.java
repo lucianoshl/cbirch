@@ -33,8 +33,8 @@ public class Framework {
 //        int runnings = 3;
 
 //        for ( int i = 0; i < runnings; i++ ) {
-//            result.newExecution();
-//            tree.setClustersNames();
+            result.newExecution();
+            tree.setClustersNames();
             executeStep( dataset, tree, K, result );
 //            if ( i + 1 < runnings ) {
 //                logMemory( "rebuild" );
