@@ -2,6 +2,7 @@ package br.edu.ufu.comp.pos.db.imageretrieval.dataset;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.function.Consumer;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.map.OxfordMapCalculator;
@@ -99,4 +100,7 @@ public abstract class Dataset {
 
     }
 
+    public double[][] getSifts(List<Integer> indexes) {
+        return new double[0][];
+    }
 }

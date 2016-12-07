@@ -28,7 +28,7 @@ public class OxfordDataset extends Dataset {
 
     @Setter
     Function< List< Integer >, List< Integer > > siftOrderReader = (original ) -> {
-        Collections.shuffle( original );
+//        Collections.shuffle( original );
         return original;
     };
 
@@ -361,4 +361,29 @@ public class OxfordDataset extends Dataset {
         logger.debug("Reading binary file: end");
     }
 
+    @Override
+    @SneakyThrows
+    public double[][] getSifts(List<Integer> siftOrder) {
+        double[][] result = new double[siftOrder.size()][];
+
+        RandomAccessFile randomAccessFile = new RandomAccessFile(this.binaryFile, "r");
+
+
+        Sift sift = new SiftScaled();
+
+        logger.debug("Reading binary file: start");
+        byte[] buffer = new byte[128];
+
+        for (int i = 0; i < siftOrder.size(); i++) {
+            randomAccessFile.seek(siftOrder.get(i) * buffer.length);
+            randomAccessFile.read(buffer);
+            double[] extracted = sift.extract(buffer);
+            result[i] = extracted;
+            logger.trace(Arrays.toString(extracted));
+            logger.debug(String.format("%s/%s", i + 1, siftOrder.size()));
+        }
+
+        logger.debug("Reading binary file: end");
+        return result;
+    }
 }

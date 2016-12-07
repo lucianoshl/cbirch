@@ -30,19 +30,19 @@ public class Framework {
             tree.build( dataset );
         } );
 
-        int runnings = 3;
+//        int runnings = 3;
 
-        for ( int i = 0; i < runnings; i++ ) {
-            result.newExecution();
-            tree.setClustersNames();
+//        for ( int i = 0; i < runnings; i++ ) {
+//            result.newExecution();
+//            tree.setClustersNames();
             executeStep( dataset, tree, K, result );
-            if ( i + 1 < runnings ) {
-                logMemory( "rebuild" );
-                result.elapsedTime( "rebuild", ( ) -> {
-                    ( (CFTree) tree ).rebuildTree();
-                } );
-            }
-        }
+//            if ( i + 1 < runnings ) {
+//                logMemory( "rebuild" );
+//                result.elapsedTime( "rebuild", ( ) -> {
+//                    ( (CFTree) tree ).rebuildTree();
+//                } );
+//            }
+//        }
         return result;
     }
 

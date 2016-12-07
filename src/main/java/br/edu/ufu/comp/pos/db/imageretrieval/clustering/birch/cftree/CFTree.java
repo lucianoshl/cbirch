@@ -27,27 +27,28 @@ import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.AbstractTreeNode
 import br.edu.ufu.comp.pos.db.imageretrieval.clustering.commons.ClusterTree;
 import br.edu.ufu.comp.pos.db.imageretrieval.dataset.Dataset;
 import net.sourceforge.sizeof.SizeOf;
+import org.apache.commons.math3.ml.clustering.CentroidCluster;
+import org.apache.commons.math3.ml.clustering.Clusterable;
+import org.apache.commons.math3.ml.clustering.KMeansPlusPlusClusterer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * This is an implementation of the BIRCH clustering algorithm described in:
- * 
+ * <p>
  * T. Zhang, R. Ramakrishnan, and M. Livny. "BIRCH: A New Data Clustering
  * Algorithm and Its Applications" Data Mining and Knowledge Discovery, 1997.
- * 
+ *
  * @author Roberto Perdisci (roberto.perdisci@gmail.com)
  * @version 0.1
- *
  */
 public class CFTree implements ClusterTree {
 
     public static int total;
 
-    final static Logger logger = LoggerFactory.getLogger( CFTree.class );
+    final static Logger logger = LoggerFactory.getLogger(CFTree.class);
 
     /**
      * Used when computing if the tree is reaching memory limit
@@ -110,8 +111,8 @@ public class CFTree implements ClusterTree {
      * used when automatic rebuilding is active
      */
     private long periodicMemLimitCheck = 100000; // checks if memeory limit is
-                                                 // exceeded every 100,000
-                                                 // insertions
+    // exceeded every 100,000
+    // insertions
 
     private int entriesAmount;
     private boolean finishBuild;
@@ -119,16 +120,11 @@ public class CFTree implements ClusterTree {
     private Integer leavesLimit;
 
     /**
-     * 
-     * @param maxNodeEntries
-     *            parameter B
-     * @param distThreshold
-     *            parameter T
-     * @param distFunction
-     *            must be one of CFTree.D0_DIST,...,CFTree.D4_DIST, otherwise it
-     *            will default to D0_DIST
-     * @param applyMergingRefinement
-     *            if true, activates merging refinement after each node split
+     * @param maxNodeEntries         parameter B
+     * @param distThreshold          parameter T
+     * @param distFunction           must be one of CFTree.D0_DIST,...,CFTree.D4_DIST, otherwise it
+     *                               will default to D0_DIST
+     * @param applyMergingRefinement if true, activates merging refinement after each node split
      */
     public CFTree(int maxNodeEntries, double distThreshold, int distFunction, boolean applyMergingRefinement) {
         if (distFunction < D0_DIST || distFunction > D4_DIST)
@@ -136,23 +132,22 @@ public class CFTree implements ClusterTree {
 
         root = new CFNode(maxNodeEntries, distThreshold, distFunction, applyMergingRefinement, true);
         leafListStart = new CFNode(0, 0, distFunction, applyMergingRefinement, true); // this
-                                                                                      // is
-                                                                                      // a
-                                                                                      // dummy
-                                                                                      // node
-                                                                                      // that
-                                                                                      // points
-                                                                                      // to
-                                                                                      // the
-                                                                                      // fist
-                                                                                      // leaf
+        // is
+        // a
+        // dummy
+        // node
+        // that
+        // points
+        // to
+        // the
+        // fist
+        // leaf
         leafListStart.setNextLeaf(root); // at this point root is the only
-                                         // node
-                                         // and therefore also the only leaf
+        // node
+        // and therefore also the only leaf
     }
 
     /**
-     * 
      * @return the current memory limit used to trigger automatic rebuilding
      */
     public long getMemoryLimit() {
@@ -163,7 +158,7 @@ public class CFTree implements ClusterTree {
     /**
      * Gets the start of the list of leaf nodes (remember: the first node is a
      * dummy node)
-     * 
+     *
      * @return
      */
     public CFNode getLeafListStart() {
@@ -172,9 +167,7 @@ public class CFTree implements ClusterTree {
     }
 
     /**
-     * 
-     * @param limit
-     *            memory limit in bytes
+     * @param limit memory limit in bytes
      */
     public void setMemoryLimit(long limit) {
 
@@ -182,9 +175,7 @@ public class CFTree implements ClusterTree {
     }
 
     /**
-     * 
-     * @param limit
-     *            memory limit in Mbytes
+     * @param limit memory limit in Mbytes
      */
     public void setMemoryLimitMB(long limit) {
 
@@ -192,9 +183,7 @@ public class CFTree implements ClusterTree {
     }
 
     /**
-     * 
-     * @param limit
-     *            memory limit in Gbytes
+     * @param limit memory limit in Gbytes
      */
     public void setMemoryLimitGB(long limit) {
 
@@ -202,10 +191,8 @@ public class CFTree implements ClusterTree {
     }
 
     /**
-     * 
-     * @param auto
-     *            if true, and memory limit is reached, the tree is
-     *            automatically rebuilt with larger threshold
+     * @param auto if true, and memory limit is reached, the tree is
+     *             automatically rebuilt with larger threshold
      */
     public void setAutomaticRebuild(boolean auto) {
 
@@ -213,10 +200,8 @@ public class CFTree implements ClusterTree {
     }
 
     /**
-     * 
-     * @param period
-     *            the number of insert operations after which we check whether
-     *            the tree has reached the memory limit
+     * @param period the number of insert operations after which we check whether
+     *               the tree has reached the memory limit
      */
     public void setPeriodicMemLimitCheck(long period) {
 
@@ -225,9 +210,8 @@ public class CFTree implements ClusterTree {
 
     /**
      * Inserts a single pattern vector into the CFTree
-     * 
-     * @param x
-     *            the pattern vector to be inserted in the tree
+     *
+     * @param x the pattern vector to be inserted in the tree
      * @return true if insertion was successful
      */
     public boolean insertEntry(double[] x) {
@@ -245,11 +229,9 @@ public class CFTree implements ClusterTree {
     /**
      * Insert a pattern vector with a specific associated pattern vector index.
      * This method does not use periodic memory limit checks.
-     * 
-     * @param x
-     *            the pattern vector to be inserted in the tree
-     * @param index
-     *            a specific index associated to the pattern vector x
+     *
+     * @param x     the pattern vector to be inserted in the tree
+     * @param index a specific index associated to the pattern vector x
      * @return true if insertion was successful
      */
     public boolean insertEntry(double[] x, int index) {
@@ -261,9 +243,8 @@ public class CFTree implements ClusterTree {
 
     /**
      * Inserts an entire CFEntry into the tree. Used for tree rebuilding.
-     * 
-     * @param e
-     *            the CFEntry to insert
+     *
+     * @param e the CFEntry to insert
      * @return true if insertion happened without problems
      */
     private boolean insertEntry(CFEntry e) {
@@ -282,28 +263,28 @@ public class CFTree implements ClusterTree {
         }
 
         return true; // after root is split, we are sure x was inserted
-                     // correctly in the tree, and we return true
+        // correctly in the tree, and we return true
     }
 
     /**
      * Every time we split the root, we check whether the memory limit imposed
      * on the tree has been reached. In this case, we automatically increase the
      * distance threshold and rebuild the tree.
-     * 
+     * <p>
      * It is worth noting that since we only check memory consumption only
      * during root split, and not for all node splits (for performance reasons),
      * we cannot guarantee that the memory limit will not be exceeded. The tree
      * may grow significantly between a root split and the next. Furthermore,
      * the computation of memory consumption using the SizeOf class is only
      * approximate.
-     * 
+     * <p>
      * Notice also that if the threshold grows to the point that all the entries
      * fall into one entry of the root (i.e., the root is the only node in the
      * tree, and has only one sub-cluster) the automatic rebuild cannot decrease
      * the memory consumption (because increasing the threshold has not effect
      * on reducing the size of the tree), and if Java runs out of memory the
      * program will terminate.
-     * 
+     *
      * @return true if rebuilt
      */
     private boolean rebuildIfAboveMemLimit() {
@@ -391,9 +372,8 @@ public class CFTree implements ClusterTree {
     /**
      * Overwrites the structure of this tree (all nodes, entreis, and leaf list)
      * with the structure of newTree.
-     * 
-     * @param newTree
-     *            the tree to be copied
+     *
+     * @param newTree the tree to be copied
      */
     private void copyTree(CFTree newTree) {
 
@@ -404,10 +384,9 @@ public class CFTree implements ClusterTree {
     /**
      * Computes a new threshold based on the average distance of the closest
      * subclusters in each leaf node
-     * 
-     * @param leafListStart
-     *            the pointer to the start of the list (the first node is
-     *            assumed to be a place-holder dummy node)
+     *
+     * @param leafListStart    the pointer to the start of the list (the first node is
+     *                         assumed to be a place-holder dummy node)
      * @param distFunction
      * @param currentThreshold
      * @return the new threshold
@@ -442,10 +421,10 @@ public class CFTree implements ClusterTree {
             newThreshold = avgDist / n;
 
         if (newThreshold <= currentThreshold) { // this guarantees that
-                                                // newThreshold always
-                                                // increases
-                                                // compared to
-                                                // currentThreshold
+            // newThreshold always
+            // increases
+            // compared to
+            // currentThreshold
             logger.info("newThreshold <= currentThreshold");
             logger.info("increase currentThreshold in +0.1 ");
             // newThreshold = 2 * currentThreshold;
@@ -459,11 +438,9 @@ public class CFTree implements ClusterTree {
     /**
      * True if CFTree's memory occupation exceeds or is almost equal to the
      * memory limit
-     * 
-     * @param tree
-     *            the tree to be tested
-     * @param limit
-     *            the memory limit
+     *
+     * @param tree  the tree to be tested
+     * @param limit the memory limit
      * @return true if memory limit has been reached
      */
     private boolean hasReachedMemoryLimit(CFTree tree, long limit) {
@@ -483,9 +460,8 @@ public class CFTree implements ClusterTree {
 
     /**
      * Computes the memory usage of a CFTree
-     * 
-     * @param t
-     *            a CFTree
+     *
+     * @param t a CFTree
      * @return memory usage in bytes
      */
     protected long computeMemorySize(CFTree t) {
@@ -505,58 +481,53 @@ public class CFTree implements ClusterTree {
      * the same. Namely, given a tree t_i build using threshold T_i, if we set a
      * new threshold T_(i+1) and call rebuildTree (assuming maxEntries stays the
      * same) we will obtain a more compact tree.
-     * 
+     * <p>
      * Since the CFTree is sensitive to the order of the data, there may be
      * cases in which, if we set the T_(i+1) so that non of the sub-clusters
      * (i.e., the leaf entries) can be merged (e.g., T_(i+1)=-1) we might
      * actually obtain a new tree t_(i+1) containing more nodes than t_i.
      * However, the obtained sub-clusters in t_(i+1) will be identical to the
      * sub-clusters in t_i.
-     * 
+     * <p>
      * In practice, though, if T_(i+1) > T_(i), the tree t_(i+1) will usually be
      * smaller than t_i. Although the Reducibility Theorem in Section 4.5 may
      * not hold anymore, in practice this will not be a big problem, since even
      * in those cases in which t_(i+1)>t_i, the growth should be very small.
-     * 
+     * <p>
      * The advantage is that relaxing the constraint that the size of t_(i+1)
      * must be less than t_i makes the implementation of the rebuilding
      * algorithm much easier.
-     * 
-     * @param newMaxEntries
-     *            the new number of entries per node
-     * @param newThreshold
-     *            the new threshold
-     * @param applyMergingRefinement
-     *            if true, merging refinement will be applied after every split
-     * @param discardOldTree
-     *            if true, the old tree will be discarded (to free memory)
-     * 
+     *
+     * @param newMaxEntries          the new number of entries per node
+     * @param newThreshold           the new threshold
+     * @param applyMergingRefinement if true, merging refinement will be applied after every split
+     * @param discardOldTree         if true, the old tree will be discarded (to free memory)
      * @return the new (usually more compact) CFTree
      */
     public CFTree rebuildTree(int newMaxEntries, double newThreshold, int distFunction, boolean applyMergingRefinement,
-            boolean discardOldTree) {
+                              boolean discardOldTree) {
 
         CFTree newTree = new CFTree(newMaxEntries, newThreshold, distFunction, applyMergingRefinement);
         newTree.instanceIndex = this.instanceIndex;
         newTree.memLimit = this.memLimit;
 
         CFNode oldLeavesList = this.leafListStart.getNextLeaf(); // remember:
-                                                                 // the node
-                                                                 // this.leafListStart
-                                                                 // is a
-                                                                 // dummy
-                                                                 // node
-                                                                 // (place
-                                                                 // holder
-                                                                 // for
-                                                                 // beginning
-                                                                 // of leaf
-                                                                 // list)
+        // the node
+        // this.leafListStart
+        // is a
+        // dummy
+        // node
+        // (place
+        // holder
+        // for
+        // beginning
+        // of leaf
+        // list)
 
         if (discardOldTree) {
             this.root = null;
             System.gc(); // removes the old tree. Only the old leaves will be
-                         // kept
+            // kept
         }
 
         CFNode leaf = oldLeavesList;
@@ -583,9 +554,8 @@ public class CFTree implements ClusterTree {
     }
 
     /**
-     * 
      * @return a list of subcluster, and for each subcluster a list of pattern
-     *         vector indexes that belong to it
+     * vector indexes that belong to it
      */
     public ArrayList<ArrayList<Integer>> getSubclusterMembers() {
 
@@ -626,11 +596,11 @@ public class CFTree implements ClusterTree {
 
     /**
      * Retrieves the subcluster id of the closest leaf entry to e
-     *
+     * <p>
      * the entry to be mapped
-     * 
+     *
      * @return a positive integer, if the leaf entries were enumerated using
-     *         finishedInsertingData(), otherwise -1
+     * finishedInsertingData(), otherwise -1
      */
     public int mapToClosestSubcluster(double[] x) {
 
@@ -643,9 +613,9 @@ public class CFTree implements ClusterTree {
     /**
      * Computes an estimate of the cost of running an O(n^2) algorithm to split
      * each subcluster in more fine-grained clusters
-     * 
+     *
      * @return sqrt(sum_i[(n_i)^2]), where n_i is the number of members of the
-     *         i-th subcluster
+     * i-th subcluster
      */
     public double computeSumLambdaSquared() {
 
@@ -674,7 +644,7 @@ public class CFTree implements ClusterTree {
 
     /**
      * Counts the nodes of the tree (including leaves)
-     * 
+     *
      * @return the number of nodes in the tree
      */
     public int countNodes() {
@@ -687,7 +657,7 @@ public class CFTree implements ClusterTree {
 
     /**
      * Counts the number of CFEntries in the tree
-     * 
+     *
      * @return the number of entries in the tree
      */
     public int countEntries() {
@@ -701,7 +671,7 @@ public class CFTree implements ClusterTree {
     /**
      * Counts the number of leaf entries (i.e., the number of sub-clusters in
      * the tree)
-     * 
+     *
      * @return the number of leaf entries (i.e., the number of sub-clusters)
      */
     public int countLeafEntries() {
@@ -792,9 +762,71 @@ public class CFTree implements ClusterTree {
 
     @Override
     public void build(Dataset dataset) {
+
+        double[][] startedSeeds = createSeeds(dataset);
+        for (double[] sift : startedSeeds) {
+            this.insertEntry(sift);
+        }
         dataset.scanSifts((sift) -> {
             this.insertEntry(sift);
         });
+    }
+
+    class KmeansPoint implements Clusterable {
+
+        private final double[] point;
+
+        public KmeansPoint(double[] sift) {
+            this.point = sift;
+        }
+
+        @Override
+        public double[] getPoint() {
+            return point;
+        }
+    }
+
+    private double[][] createSeeds(Dataset dataset) {
+        int n = 10000;
+        int k = 1000;
+
+//        int n = 100;
+//        int k = 10;
+
+        double[][] result = new double[k][];
+
+
+        ArrayList<Integer> integers = new ArrayList<>();
+        for (int i = 0; i < dataset.getFeaturesSize(); i++) {
+            integers.add(i);
+        }
+
+        Collections.shuffle(integers);
+        List<Integer> indexes = integers.subList(0, n);
+
+
+        KMeansPlusPlusClusterer<KmeansPoint> kmeansPointKMeansPlusPlusClusterer = new KMeansPlusPlusClusterer<>(k);
+        List<CentroidCluster<KmeansPoint>> clusters = kmeansPointKMeansPlusPlusClusterer.cluster(getPoints(dataset, indexes));
+
+        for (int i = 0; i < result.length; i++) {
+            result[i] = clusters.get(i).getCenter().getPoint();
+        }
+
+        return result;
+
+    }
+
+    private Collection<KmeansPoint> getPoints(Dataset dataset, List<Integer> indexes) {
+        double[][] sifts = dataset.getSifts(indexes);
+
+
+
+        List<KmeansPoint> result = new ArrayList<KmeansPoint>();
+        for (double[] sift : sifts) {
+            result.add(new KmeansPoint(sift));
+        }
+
+        return result;
     }
 
 
@@ -806,12 +838,12 @@ public class CFTree implements ClusterTree {
         this.entriesAmount = 0;
 
         int id = 0;
-        while ( l != null ) {
-            if ( !l.isDummy() ) {
-                for ( CFEntry e : l.getEntries() ) {
-                    e.setSubclusterID( id );
-                    if ( e.getN() == 0 ) {
-                        System.out.println( e );
+        while (l != null) {
+            if (!l.isDummy()) {
+                for (CFEntry e : l.getEntries()) {
+                    e.setSubclusterID(id);
+                    if (e.getN() == 0) {
+                        System.out.println(e);
                     }
                     id++;
                 }
@@ -822,7 +854,7 @@ public class CFTree implements ClusterTree {
     }
 
 
-    public void setLeavesLimit( Integer leavesLimit ) {
+    public void setLeavesLimit(Integer leavesLimit) {
 
         this.leavesLimit = leavesLimit;
     }

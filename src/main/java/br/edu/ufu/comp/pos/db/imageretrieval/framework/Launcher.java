@@ -22,17 +22,17 @@ import java.util.Date;
 public class Launcher {
 
     static {
-        SimpleDateFormat startLauncherDateFormat = new SimpleDateFormat( "yyyy-MM-dd-hh-mm-ss" );
-        String startLauncherDate = startLauncherDateFormat.format( new Date() );
-        MDC.put( "launcher-date", startLauncherDate );
-        MDC.put( "log-id", MDC.get( "launcher-date" ) + "-0-startup" );
+        SimpleDateFormat startLauncherDateFormat = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
+        String startLauncherDate = startLauncherDateFormat.format(new Date());
+        MDC.put("launcher-date", startLauncherDate);
+        MDC.put("log-id", MDC.get("launcher-date") + "-0-startup");
     }
 
-    final static Logger logger = LoggerFactory.getLogger( Launcher.class );
+    final static Logger logger = LoggerFactory.getLogger(Launcher.class);
 
 
-    public static void main( String[] args )
-        throws IOException {
+    public static void main(String[] args)
+            throws IOException {
 
 //        cbirch.framework.Framework framework = new cbirch.framework.Framework();
 //
@@ -44,39 +44,43 @@ public class Launcher {
 //        double mAP = framework.run( dataset, cfTree, 4 );
 //        logger.info("map = " + mAP);
 
-        exec( args );
+        exec(args);
     }
 
 
-    public static void exec( String[] args )
-        throws IOException {
+    public static void exec(String[] args)
+            throws IOException {
 
         Result result = new Result();
         try {
-            callExperiment( args );
-        } catch ( Exception e ) {
-            result.setError( e );
+            callExperiment(args);
+        } catch (Exception e) {
+            result.setError(e);
             e.printStackTrace();
         } finally {
-             result.save();
+            result.save();
         }
 
     }
 
 
-    private static void callExperiment( String[] args ) {
+    private static void callExperiment(String[] args) {
 
-        if ( args.length == 0 ) {
-            throw new IllegalArgumentException( "tree name is required" );
+
+        args = new String[]{"birch", "normalized", "oxford", "75", "0", new Long(1024 * 4).toString(), "0"};
+
+        if (args.length == 0) {
+            throw new IllegalArgumentException("tree name is required");
         }
 
-        Dataset dataset = new DatasetFactory().create( args );
 
-        ClusterTree tree = new TreeFactory().create( args );
+        Dataset dataset = new DatasetFactory().create(args);
+
+        ClusterTree tree = new TreeFactory().create(args);
 
         int k = 4;
 
-        new Framework().run( dataset, tree, k );
+        new Framework().run(dataset, tree, k);
     }
 
 }
