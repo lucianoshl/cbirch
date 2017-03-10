@@ -16,6 +16,12 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>de.tototec</groupId>
+            <artifactId>de.tototec.cmdoption</artifactId>
+            <version>0.4.2</version>
+        </dependency>
         <dependency>
             <groupId>org.uncommons.maths</groupId>
             <artifactId>uncommons-maths</artifactId>
