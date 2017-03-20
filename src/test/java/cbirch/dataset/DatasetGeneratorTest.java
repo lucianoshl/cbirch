@@ -11,7 +11,7 @@ public class DatasetGeneratorTest {
 
     @Test
     public void testGenerate(){
-//        new DatasetGenerator(new LoweSiftExtractor(),"leedsbutterfly").generate();
+        new DatasetGenerator(new LoweSiftExtractor(),"leedsbutterfly").generate();
     }
 
 }

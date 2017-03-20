@@ -4,28 +4,39 @@ package cbirch.utils;
 import lombok.SneakyThrows;
 import magick.ImageInfo;
 import magick.MagickImage;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 
 
 /**
- * sudo apt-get install libjmagick6-java libjmagick6-jni sudo ln -s
- * /usr/lib/jni/libJMagick.so /usr/lib/libJMagick.so
+ * sudo apt-get install libjmagick6-java libjmagick6-jni
+ */
+
+/**
+ * sudo ln -s /usr/lib/jni/libJMagick.so /usr/lib/libJMagick.so
  */
 public class ImageUtils {
 
     @SneakyThrows
-    public static void convert( File origin, File dest, String format ) {
+    public static void convert( File origin, File destFolder, String format ) {
 
-        String inputfileName = origin.getAbsolutePath(); // Input BMP file
-        ImageInfo info = new ImageInfo( inputfileName ); // Get BMP file
-        MagickImage magick_converter = new MagickImage( info ); // Create
+        File target = new File(destFolder, FilenameUtils.removeExtension(origin.getName()) + "." + format);
 
-        String outFile = new File( dest, origin.getName() ).getAbsolutePath();
+        BinaryUtils.execute("/usr/bin/convert", origin.getAbsolutePath(), target.getAbsolutePath());
 
-        outFile = outFile.substring( 0, outFile.lastIndexOf( '.' ) ) + ".pgm";
-        magick_converter.setFileName( outFile ); // set output file format
-        magick_converter.writeImage( info ); // do the conversion
+//        ImageInfo originImageInfo = new ImageInfo( origin.getAbsolutePath() ); // Get BMP file
+//        MagickImage magick_converter = new MagickImage( originImageInfo ); // Create
+//
+//        String outFile = new File( destFolder, origin.getName() ).getAbsolutePath();
+//
+//        outFile = outFile.substring( 0, outFile.lastIndexOf( '.' ) ) + "." + format;
+//        magick_converter.setFileName( outFile ); // set output file format
+//        boolean success = magick_converter.writeImage(originImageInfo);// do the conversion
+//        if (!success){
+//            throw new IllegalStateException("Erro ao converter arquivo");
+//        }
+
     }
 
 
