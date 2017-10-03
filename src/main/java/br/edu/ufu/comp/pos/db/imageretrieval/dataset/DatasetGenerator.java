@@ -2,6 +2,7 @@ package br.edu.ufu.comp.pos.db.imageretrieval.dataset;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.RandomAccessFile;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -55,6 +56,9 @@ public abstract class DatasetGenerator {
         fileDescriptor.createNewFile();
         FileWriter writer = new FileWriter(fileDescriptor);
 
+        RandomAccessFile randomAccessFile = new RandomAccessFile(binFile, "rw");
+        randomAccessFile.seek(0);
+
         for (int i = 0; i < images.length; i++) {
             File file = images[i];
             byte[] sifts = SiftExtractor.extract(file);
@@ -62,14 +66,18 @@ public abstract class DatasetGenerator {
 
             writer.write(file.getName() + " " + sifts.length / 128);
 
-            FileUtils.writeByteArrayToFile(binFile, sifts, true);
+//            FileUtils.writeByteArrayToFile(binFile, sifts, true);
+            randomAccessFile.write(sifts);
+            System.out.println("LENGTH: "+ randomAccessFile.length());
 
             if (i + 1 < images.length) {
                 writer.write("\n");
             }
         }
 
-        FileUtils.writeByteArrayToFile(binFile, new byte[12], true);
+        randomAccessFile.write(new byte[12]);
+//        FileUtils.writeByteArrayToFile(binFile, new byte[12], true);
+        randomAccessFile.close();
         writer.close();
 
     }

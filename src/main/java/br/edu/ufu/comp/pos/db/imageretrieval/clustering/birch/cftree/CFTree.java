@@ -763,10 +763,10 @@ public class CFTree implements ClusterTree {
     @Override
     public void build(Dataset dataset) {
 
-        double[][] startedSeeds = createSeeds(dataset);
-        for (double[] sift : startedSeeds) {
-            this.insertEntry(sift);
-        }
+//        double[][] startedSeeds = createSeeds(dataset);
+//        for (double[] sift : startedSeeds) {
+//            this.insertEntry(sift);
+//        }
         dataset.scanSifts((sift) -> {
             this.insertEntry(sift);
         });

@@ -1,12 +1,14 @@
 package cbirch.dataset;
 
 
+import cbirch.sift.LoweSiftExtractor;
 import cbirch.sift.SiftExtractor;
 import cbirch.utils.ImageUtils;
 import lombok.SneakyThrows;
 import magick.ImageInfo;
 import magick.MagickImage;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +25,13 @@ import static cbirch.utils.ImageUtils.getExtension;
  */
 public class DatasetGenerator {
 
+    public static void main(String[] args) {
+        if (StringUtils.isEmpty(args[0])) {
+            return;
+        }
+        new DatasetGenerator(new LoweSiftExtractor(), args[0]).generate();
+    }
+
     final static Logger logger = LoggerFactory.getLogger( DatasetGenerator.class );
 
     private final SiftExtractor extractor;
@@ -38,7 +47,7 @@ public class DatasetGenerator {
 
     public DatasetGenerator( SiftExtractor extractor, String rawName ) {
         this.extractor = extractor;
-        this.workspaceFolder = new File( System.getProperty( "cbirch_workspace" ) );
+        this.workspaceFolder = new File( System.getenv().get( "cbirch_workspace" ) );
         String extension = extractor.supportedTypes().get( 0 );
         String dsname = String.format( "%s-%s-%s", rawName, extension, extractor.identifier() );
         this.datasetFolder = new File( new File( this.workspaceFolder, "datasets" ), dsname );

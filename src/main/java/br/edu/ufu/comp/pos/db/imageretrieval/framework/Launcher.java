@@ -67,7 +67,7 @@ public class Launcher {
     private static void callExperiment(String[] args) {
 
 
-        args = new String[]{"birch", "normalized", "oxford", "75", "0", new Long(1024 * 4).toString(), "0"};
+        args = new String[]{"birch", "non-normalized", "ukbench-books", "75", "0", new Long(1024 * 2).toString(), "0"};
 
         if (args.length == 0) {
             throw new IllegalArgumentException("tree name is required");

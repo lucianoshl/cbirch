@@ -3,6 +3,7 @@ package br.edu.ufu.comp.pos.db.imageretrieval.dataset.image;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.sift.Sift;
@@ -41,7 +42,9 @@ public class Image {
 			byte[] buffer = new byte[128];
 			for (int i = 0; i < size; i++) {
 				randomAccessFile.read(buffer);
-				c.accept(siftReader.extract(buffer));
+				double[] result = siftReader.extract(buffer);
+//				System.out.println(Arrays.toString(result));
+				c.accept(result);
 			}
 			randomAccessFile.close();
 		} catch (IOException e) {

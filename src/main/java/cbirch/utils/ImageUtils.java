@@ -9,8 +9,8 @@ import java.io.File;
 
 
 /**
- * sudo apt-get install libjmagick6-java libjmagick6-jni sudo ln -s
- * /usr/lib/jni/libJMagick.so /usr/lib/libJMagick.so
+ * sudo apt-get install libjmagick6-java libjmagick6-jni
+ * sudo ln -s /usr/lib/jni/libJMagick.so /usr/lib/libJMagick.so
  */
 public class ImageUtils {
 

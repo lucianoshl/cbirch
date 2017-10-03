@@ -56,7 +56,7 @@ public class GeneratedDataset extends Dataset {
             String[] split = line.split(" ");
             String fileName = split[0];
             Integer siftSize = Integer.valueOf(split[1]);
-            c.accept(new OxfordImage(testBinFile, new File(images, fileName), offset, siftSize, siftReader));
+            c.accept(new OxfordImage(trainBinFile, new File(images, fileName), offset, siftSize, siftReader));
             offset += siftSize * 128;
         }
 
@@ -111,7 +111,11 @@ public class GeneratedDataset extends Dataset {
 
     @Override
     public void scanSifts(Consumer<double[]> c) {
-        throw new UnsupportedOperationException();
+        scanTrainSet((image) -> {
+//            System.out.println("Image: " + image.getImage().getName() + " start");
+            image.scan(c);
+//            System.out.println("Image: " + image.getImage().getName() + " end");
+        });
     }
 
     @Override
