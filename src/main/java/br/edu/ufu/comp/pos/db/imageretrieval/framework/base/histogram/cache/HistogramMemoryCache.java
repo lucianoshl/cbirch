@@ -32,6 +32,11 @@ public class HistogramMemoryCache implements HistogramCache {
         return cache.containsKey(uuid);
     }
 
+    @Override
+    public int size(){
+        return cache.keySet().size();
+    }
+
     public long memoryUsage() {
         return memory;
     }

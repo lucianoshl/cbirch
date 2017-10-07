@@ -51,4 +51,9 @@ public class HistogramDiskCache implements HistogramCache {
         return index.containsKey(uuid);
     }
 
+    @Override
+    public int size() {
+        return index.size();
+    }
+
 }

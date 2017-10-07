@@ -45,4 +45,9 @@ public class HistogramEhCache implements HistogramCache {
         return histogramCache.containsKey(uuid);
     }
 
+    @Override
+    public int size() {
+        throw new UnsupportedOperationException();
+    }
+
 }

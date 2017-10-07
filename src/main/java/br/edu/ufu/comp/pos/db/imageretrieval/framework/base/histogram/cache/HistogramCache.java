@@ -18,4 +18,5 @@ public interface HistogramCache {
         return Files.createTempDirectory("histogram-cache").toFile();
     }
 
+    int size();
 }
