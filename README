@@ -1,1 +1,1 @@
-mvn clean install exec:exec -Dexec.args="-classpath %classpath -Xmx6656m -javaagent:$(pwd)/SizeOf.jar br.edu.ufu.comp.pos.db.imageretrieval.framework.Launcher birch oxford 100 10 3072"
+mvn clean install exec:exec -Dexec.args="-classpath %classpath -Xmx30720m -javaagent:$(pwd)/SizeOf.jar br.edu.ufu.comp.pos.db.imageretrieval.framework.Launcher birch oxford 100 10 3072"

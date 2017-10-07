@@ -64,7 +64,9 @@ public class Index {
 
         logger.debug("candidates number : " + candidates.size());
 
-        return this.histograms.getSimilar(Histogram.create(query, tree), candidates, k);
+        List<Histogram> result = this.histograms.getSimilar(Histogram.create(query, tree), candidates, k);
+        System.gc();
+        return result;
     }
 
 }

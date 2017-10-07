@@ -56,6 +56,7 @@ public class Histograms {
 			double distance = histogram.normalize(this).distance(normalizedQuery);
 			sortList.add(new HistogramDistance(histogram, distance));
 		}
+		System.gc();
 
 		sortList.sort((b, a) -> {
 			return Double.compare(a.getDistance(), b.getDistance());
