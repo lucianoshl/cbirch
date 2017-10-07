@@ -23,6 +23,7 @@ public class HistogramHybridCache implements HistogramCache {
 
     @Override
     public void put(int uuid, double[] content) {
+        System.out.println("usage=" + memory.memoryUsage() + " inMemory:" + inMemory);
         if (memory.memoryUsage() <= inMemory) {
             memory.put(uuid, content);
         } else {

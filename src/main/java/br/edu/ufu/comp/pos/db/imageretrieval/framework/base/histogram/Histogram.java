@@ -19,7 +19,7 @@ public class Histogram {
 	private static int GENERATOR = 0;
 	private int uuid = ++GENERATOR;
 
-	 HistogramCache cache = new HistogramHybridCache(1 * 1024 * 1024 * 1024);
+	 HistogramCache cache = new HistogramHybridCache( 512 * 1024 * 1024);
 //	HistogramCache cache = new HistogramDiskCache();
 //	HistogramCache cache = new HistogramMemoryCache();
 
