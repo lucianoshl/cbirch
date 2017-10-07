@@ -2,6 +2,7 @@ package br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram;
 
 import java.util.Arrays;
 
+import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.cache.HistogramHybridCache;
 import br.edu.ufu.comp.pos.db.imageretrieval.framework.base.histogram.cache.HistogramMemoryCache;
 import org.apache.commons.math3.ml.distance.CosineSimilarity;
 import org.apache.commons.math3.ml.distance.DistanceMeasure;
@@ -18,9 +19,9 @@ public class Histogram {
 	private static int GENERATOR = 0;
 	private int uuid = ++GENERATOR;
 
-	// HistogramCache cache = new HistogramHybridCache(512 * 1024 * 1024);
+	 HistogramCache cache = new HistogramHybridCache(4 * 1024 * 1024 * 1024);
 //	HistogramCache cache = new HistogramDiskCache();
-	HistogramCache cache = new HistogramMemoryCache();
+//	HistogramCache cache = new HistogramMemoryCache();
 
 
 
