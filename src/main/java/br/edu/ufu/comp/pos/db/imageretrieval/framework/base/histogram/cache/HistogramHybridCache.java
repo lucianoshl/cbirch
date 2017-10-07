@@ -4,10 +4,13 @@ public class HistogramHybridCache implements HistogramCache {
 
     private HistogramMemoryCache memory;
     private HistogramDiskCache disk;
-    private long inMemory;
+    private long memoryCacheSize;
 
     public HistogramHybridCache(long memory) {
-        this.inMemory = memory;
+        if (memory == 0l){
+            throw new IllegalStateException("Hybrid cache size = 0");
+        }
+        this.memoryCacheSize = memory;
         this.memory = new HistogramMemoryCache();
         this.disk = new HistogramDiskCache();
     }
@@ -23,7 +26,8 @@ public class HistogramHybridCache implements HistogramCache {
 
     @Override
     public void put(int uuid, double[] content) {
-        if (memory.memoryUsage() <= inMemory) {
+        System.out.println("usage=" + memory.memoryUsage() + " memoryCacheSize:" + memoryCacheSize);
+        if (memory.memoryUsage() <= memoryCacheSize) {
             memory.put(uuid, content);
         } else {
             disk.put(uuid, content);
