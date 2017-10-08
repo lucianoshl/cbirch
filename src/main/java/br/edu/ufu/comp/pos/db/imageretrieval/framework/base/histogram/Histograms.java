@@ -27,6 +27,7 @@ public class Histograms {
 
 	public Histograms(int wordsSize) {
 		this.wordsSize = wordsSize;
+		Histogram.cache.clear();
 	}
 
 	public void add(Histogram histogram) {

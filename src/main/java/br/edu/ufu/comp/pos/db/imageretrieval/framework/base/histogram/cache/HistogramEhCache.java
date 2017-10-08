@@ -50,4 +50,8 @@ public class HistogramEhCache implements HistogramCache {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public void clear() {
+        histogramCache.clear();
+    }
 }

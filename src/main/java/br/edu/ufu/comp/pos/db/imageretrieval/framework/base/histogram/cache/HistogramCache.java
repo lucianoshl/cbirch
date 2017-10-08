@@ -19,4 +19,8 @@ public interface HistogramCache {
     }
 
     int size();
+
+    default void clear(){
+        throw new UnsupportedOperationException();
+    };
 }

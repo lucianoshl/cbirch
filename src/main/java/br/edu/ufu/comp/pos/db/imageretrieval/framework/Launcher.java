@@ -9,6 +9,7 @@ import cbirch.clustering.ClusteringMethod;
 import cbirch.clustering.birch.CFTree;
 import cbirch.dataset.BasicDataset;
 import cbirch.dataset.OxfordDataset;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.ml.distance.EuclideanDistance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,13 +67,19 @@ public class Launcher {
 
     private static void callExperiment(String[] args) {
 
+        if (args.length == 0 || StringUtils.isBlank(args[0])){
+            throw new IllegalArgumentException("O dataset deve ser informado");
+        }
 
-        args = new String[]{"birch", "normalized", "ukbench-00-1000", "75", "0", new Long(1024 * 4).toString(), "0"};
+        System.out.print("Running dataset: " +args[0]);
+
+
+
+        args = new String[]{"birch", "normalized", args[0], "75", "0", new Long(1024 * 4).toString(), "0"};
 
         if (args.length == 0) {
             throw new IllegalArgumentException("tree name is required");
         }
-
 
         Dataset dataset = new DatasetFactory().create(args);
 
