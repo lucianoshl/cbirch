@@ -21,7 +21,7 @@ public class HistogramEhCache implements HistogramCache {
                 .withCache("histogramCache",
                         CacheConfigurationBuilder.newCacheConfigurationBuilder(Integer.class, double[].class)
                                 .withResourcePools(ResourcePoolsBuilder.newResourcePoolsBuilder()//
-                                        .heap(15, MemoryUnit.GB)//
+                                        .heap(13, MemoryUnit.GB)//
                                         .disk(1, MemoryUnit.TB, false))
                                 .withExpiry(Expirations.noExpiration()).build())
                 .build(true);
